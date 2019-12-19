@@ -1,0 +1,97 @@
+{
+    "name": "Envoy",
+    "description": "Envoy is visitor management software for modern offices. Easily manage visitor registration, deliveries, and document signing \u2013 all from an iPad. Try it free!",
+    "image": "http:\/\/kinlane-productions.s3.amazonaws.com\/screen-capture-api\/19407-envoy-(slackbot).jpg",
+    "tags": [
+        "bots",
+        "checkins",
+        "have api",
+        "office management",
+        "slack",
+        "visitors",
+        "webhook implementations"
+    ],
+    "created": "2019-12-19",
+    "modified": "2019-12-19",
+    "url": "https:\/\/raw.githubusercontent.com\/api-evangelist\/envoy\/master\/apis.json",
+    "specificationVersion": "0.14",
+    "apis": [
+        {
+            "name": "Envoy",
+            "description": null,
+            "image": "http:\/\/kinlane-productions.s3.amazonaws.com\/screen-capture-api\/19407-envoy-(slackbot).jpg",
+            "humanURL": "https:\/\/envoy.com",
+            "baseURL": "",
+            "tags": [],
+            "properties": [
+                {
+                    "type": "x-openapi",
+                    "url": "https:\/\/raw.githubusercontent.com\/api-evangelist\/1forge\/master\/envoy-openapi.json"
+                },
+                {
+                    "type": "x-postman-collecction",
+                    "url": "https:\/\/raw.githubusercontent.com\/api-evangelist\/1forge\/master\/envoy-postman-collection.json"
+                }
+            ]
+        }
+    ],
+    "include": [],
+    "x-common": [
+        {
+            "type": "Blog",
+            "url": "https:\/\/envoy.com\/blog\/"
+        },
+        {
+            "type": "Blog",
+            "url": "https:\/\/medium.com\/envoy-design"
+        },
+        {
+            "type": "Crunchbase",
+            "url": "https:\/\/crunchbase.com\/organization\/envoy"
+        },
+        {
+            "type": "Developers",
+            "url": "https:\/\/developers.envoy.com\/"
+        },
+        {
+            "type": "Github",
+            "url": "https:\/\/github.com\/envoy"
+        },
+        {
+            "type": "Pricing",
+            "url": "https:\/\/envoy.com\/pricing\/"
+        },
+        {
+            "type": "Privacy",
+            "url": "https:\/\/envoy.co\/privacypolicy\/"
+        },
+        {
+            "type": "Privacy Policy",
+            "url": "https:\/\/envoy.com\/privacypolicy\/"
+        },
+        {
+            "type": "Security",
+            "url": "https:\/\/envoy.com\/security-details\/"
+        },
+        {
+            "type": "Status",
+            "url": "https:\/\/status.envoy.com\/"
+        },
+        {
+            "type": "Terms of Service",
+            "url": "https:\/\/envoy.com\/tos\/"
+        },
+        {
+            "type": "Twitter",
+            "url": "https:\/\/twitter.com\/envoy"
+        },
+        {
+            "type": "Webhooks",
+            "url": "https:\/\/developers.envoy.com\/#webhooks"
+        },
+        {
+            "type": "Website",
+            "url": "https:\/\/envoy.com"
+        }
+    ]
+}
