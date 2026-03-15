@@ -1,0 +1,521 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://www.envoyproxy.io/schemas/route-configuration",
+  "title": "Envoy Route Configuration",
+  "description": "A route configuration specifies how HTTP requests are routed to upstream clusters. It consists of virtual hosts, each containing domain matching rules and ordered route entries that define match criteria and actions.",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string",
+      "description": "Name of the route configuration."
+    },
+    "virtual_hosts": {
+      "type": "array",
+      "description": "An ordered list of virtual hosts that make up the route table.",
+      "items": {
+        "$ref": "#/$defs/VirtualHost"
+      }
+    },
+    "internal_only_headers": {
+      "type": "array",
+      "description": "Headers that will be stripped from requests coming from external sources.",
+      "items": {
+        "type": "string"
+      }
+    },
+    "response_headers_to_add": {
+      "type": "array",
+      "description": "Headers to add to all responses.",
+      "items": {
+        "$ref": "#/$defs/HeaderValueOption"
+      }
+    },
+    "response_headers_to_remove": {
+      "type": "array",
+      "description": "Headers to remove from all responses.",
+      "items": {
+        "type": "string"
+      }
+    },
+    "request_headers_to_add": {
+      "type": "array",
+      "description": "Headers to add to all requests.",
+      "items": {
+        "$ref": "#/$defs/HeaderValueOption"
+      }
+    },
+    "request_headers_to_remove": {
+      "type": "array",
+      "description": "Headers to remove from all requests.",
+      "items": {
+        "type": "string"
+      }
+    },
+    "most_specific_header_mutations_wins": {
+      "type": "boolean",
+      "description": "Whether the most specific header mutation wins when there are conflicts."
+    },
+    "validate_clusters": {
+      "type": "boolean",
+      "description": "Whether to validate that referenced clusters exist."
+    },
+    "max_direct_response_body_size_bytes": {
+      "type": "integer",
+      "description": "Maximum size of direct response body."
+    }
+  },
+  "required": ["name", "virtual_hosts"],
+  "$defs": {
+    "VirtualHost": {
+      "type": "object",
+      "description": "A virtual host groups routes under a set of domain names.",
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "Logical name for the virtual host."
+        },
+        "domains": {
+          "type": "array",
+          "description": "List of domains (host/authority header) that will match this virtual host. Wildcards are supported.",
+          "items": {
+            "type": "string"
+          },
+          "minItems": 1
+        },
+        "routes": {
+          "type": "array",
+          "description": "List of routes matched in order.",
+          "items": {
+            "$ref": "#/$defs/Route"
+          }
+        },
+        "require_tls": {
+          "type": "string",
+          "description": "Whether TLS is required for this virtual host.",
+          "enum": ["NONE", "EXTERNAL_ONLY", "ALL"]
+        },
+        "rate_limits": {
+          "type": "array",
+          "description": "Rate limit configurations for the virtual host.",
+          "items": {
+            "$ref": "#/$defs/RateLimit"
+          }
+        },
+        "request_headers_to_add": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/HeaderValueOption"
+          }
+        },
+        "request_headers_to_remove": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "response_headers_to_add": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/HeaderValueOption"
+          }
+        },
+        "response_headers_to_remove": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "cors": {
+          "$ref": "#/$defs/CorsPolicy"
+        },
+        "retry_policy": {
+          "$ref": "#/$defs/RetryPolicy"
+        },
+        "hedge_policy": {
+          "type": "object",
+          "properties": {
+            "initial_requests": { "type": "integer" },
+            "additional_request_chance": {
+              "type": "object",
+              "properties": {
+                "numerator": { "type": "integer" },
+                "denominator": { "type": "string" }
+              }
+            }
+          }
+        }
+      },
+      "required": ["name", "domains", "routes"]
+    },
+    "Route": {
+      "type": "object",
+      "description": "A route entry that matches requests and specifies an action.",
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "Name assigned to the route for logging and debugging."
+        },
+        "match": {
+          "type": "object",
+          "description": "Matching criteria for the route.",
+          "properties": {
+            "prefix": {
+              "type": "string",
+              "description": "Match requests with this URL path prefix."
+            },
+            "path": {
+              "type": "string",
+              "description": "Match requests with this exact URL path."
+            },
+            "safe_regex": {
+              "type": "object",
+              "description": "Match requests with a regex URL path.",
+              "properties": {
+                "google_re2": { "type": "object" },
+                "regex": { "type": "string" }
+              }
+            },
+            "case_sensitive": {
+              "type": "boolean",
+              "description": "Whether path matching is case sensitive.",
+              "default": true
+            },
+            "headers": {
+              "type": "array",
+              "description": "Header match criteria.",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "name": { "type": "string" },
+                  "string_match": { "type": "object" },
+                  "exact_match": { "type": "string" },
+                  "prefix_match": { "type": "string" },
+                  "suffix_match": { "type": "string" },
+                  "present_match": { "type": "boolean" },
+                  "invert_match": { "type": "boolean" }
+                },
+                "required": ["name"]
+              }
+            },
+            "query_parameters": {
+              "type": "array",
+              "description": "Query parameter match criteria.",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "name": { "type": "string" },
+                  "string_match": { "type": "object" },
+                  "present_match": { "type": "boolean" }
+                },
+                "required": ["name"]
+              }
+            },
+            "grpc": {
+              "type": "object",
+              "description": "Match only gRPC requests."
+            }
+          }
+        },
+        "route": {
+          "type": "object",
+          "description": "Forward the request to an upstream cluster.",
+          "properties": {
+            "cluster": {
+              "type": "string",
+              "description": "Target upstream cluster name."
+            },
+            "weighted_clusters": {
+              "type": "object",
+              "description": "Route to multiple clusters with weights.",
+              "properties": {
+                "clusters": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "name": { "type": "string" },
+                      "weight": { "type": "integer" }
+                    },
+                    "required": ["name", "weight"]
+                  }
+                },
+                "total_weight": { "type": "integer" }
+              }
+            },
+            "cluster_header": {
+              "type": "string",
+              "description": "Route to cluster specified by a request header."
+            },
+            "timeout": {
+              "type": "string",
+              "description": "Request timeout for this route."
+            },
+            "idle_timeout": {
+              "type": "string",
+              "description": "Idle timeout for this route."
+            },
+            "retry_policy": {
+              "$ref": "#/$defs/RetryPolicy"
+            },
+            "prefix_rewrite": {
+              "type": "string",
+              "description": "Rewrite the URL prefix before forwarding."
+            },
+            "regex_rewrite": {
+              "type": "object",
+              "properties": {
+                "pattern": {
+                  "type": "object",
+                  "properties": {
+                    "google_re2": { "type": "object" },
+                    "regex": { "type": "string" }
+                  }
+                },
+                "substitution": { "type": "string" }
+              }
+            },
+            "host_rewrite_literal": {
+              "type": "string",
+              "description": "Rewrite the host header before forwarding."
+            },
+            "auto_host_rewrite": {
+              "type": "boolean",
+              "description": "Automatically rewrite host to upstream host."
+            },
+            "hash_policy": {
+              "type": "array",
+              "description": "Hash policies for ring hash and maglev load balancers.",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "header": {
+                    "type": "object",
+                    "properties": {
+                      "header_name": { "type": "string" }
+                    }
+                  },
+                  "cookie": {
+                    "type": "object",
+                    "properties": {
+                      "name": { "type": "string" },
+                      "ttl": { "type": "string" },
+                      "path": { "type": "string" }
+                    }
+                  },
+                  "connection_properties": {
+                    "type": "object",
+                    "properties": {
+                      "source_ip": { "type": "boolean" }
+                    }
+                  },
+                  "terminal": { "type": "boolean" }
+                }
+              }
+            },
+            "rate_limits": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/RateLimit"
+              }
+            }
+          }
+        },
+        "redirect": {
+          "type": "object",
+          "description": "Return an HTTP redirect response.",
+          "properties": {
+            "https_redirect": { "type": "boolean" },
+            "scheme_redirect": { "type": "string" },
+            "host_redirect": { "type": "string" },
+            "port_redirect": { "type": "integer" },
+            "path_redirect": { "type": "string" },
+            "prefix_rewrite": { "type": "string" },
+            "response_code": {
+              "type": "integer",
+              "enum": [301, 302, 303, 307, 308]
+            },
+            "strip_query": { "type": "boolean" }
+          }
+        },
+        "direct_response": {
+          "type": "object",
+          "description": "Return a direct response without proxying.",
+          "properties": {
+            "status": {
+              "type": "integer",
+              "description": "HTTP response status code.",
+              "minimum": 100,
+              "maximum": 599
+            },
+            "body": {
+              "type": "object",
+              "properties": {
+                "inline_string": { "type": "string" },
+                "inline_bytes": { "type": "string" },
+                "filename": { "type": "string" }
+              }
+            }
+          },
+          "required": ["status"]
+        },
+        "metadata": {
+          "type": "object",
+          "description": "Route metadata for access logging and extensions.",
+          "additionalProperties": true
+        },
+        "decorator": {
+          "type": "object",
+          "description": "Decorator for the matched route for tracing.",
+          "properties": {
+            "operation": {
+              "type": "string",
+              "description": "Operation name for tracing."
+            }
+          }
+        },
+        "request_headers_to_add": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/HeaderValueOption" }
+        },
+        "response_headers_to_add": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/HeaderValueOption" }
+        }
+      },
+      "required": ["match"]
+    },
+    "RetryPolicy": {
+      "type": "object",
+      "description": "HTTP retry policy.",
+      "properties": {
+        "retry_on": {
+          "type": "string",
+          "description": "Comma-separated retry conditions (e.g., '5xx,connect-failure,retriable-4xx')."
+        },
+        "num_retries": {
+          "type": "integer",
+          "description": "Maximum number of retries.",
+          "minimum": 0
+        },
+        "per_try_timeout": {
+          "type": "string",
+          "description": "Timeout per retry attempt."
+        },
+        "per_try_idle_timeout": {
+          "type": "string"
+        },
+        "retry_back_off": {
+          "type": "object",
+          "properties": {
+            "base_interval": { "type": "string" },
+            "max_interval": { "type": "string" }
+          }
+        },
+        "retriable_status_codes": {
+          "type": "array",
+          "items": { "type": "integer" }
+        },
+        "retriable_headers": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "name": { "type": "string" },
+              "exact_match": { "type": "string" }
+            }
+          }
+        },
+        "retry_host_predicate": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "name": { "type": "string" }
+            }
+          }
+        },
+        "host_selection_retry_max_attempts": {
+          "type": "integer"
+        }
+      }
+    },
+    "RateLimit": {
+      "type": "object",
+      "description": "Rate limit configuration.",
+      "properties": {
+        "stage": {
+          "type": "integer"
+        },
+        "disable_key": {
+          "type": "string"
+        },
+        "actions": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "source_cluster": { "type": "object" },
+              "destination_cluster": { "type": "object" },
+              "request_headers": {
+                "type": "object",
+                "properties": {
+                  "header_name": { "type": "string" },
+                  "descriptor_key": { "type": "string" }
+                }
+              },
+              "remote_address": { "type": "object" },
+              "generic_key": {
+                "type": "object",
+                "properties": {
+                  "descriptor_value": { "type": "string" }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "CorsPolicy": {
+      "type": "object",
+      "description": "CORS policy configuration.",
+      "properties": {
+        "allow_origin_string_match": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "exact": { "type": "string" },
+              "prefix": { "type": "string" },
+              "suffix": { "type": "string" },
+              "safe_regex": { "type": "object" },
+              "contains": { "type": "string" }
+            }
+          }
+        },
+        "allow_methods": { "type": "string" },
+        "allow_headers": { "type": "string" },
+        "expose_headers": { "type": "string" },
+        "max_age": { "type": "string" },
+        "allow_credentials": { "type": "boolean" }
+      }
+    },
+    "HeaderValueOption": {
+      "type": "object",
+      "description": "Header name/value pair with append control.",
+      "properties": {
+        "header": {
+          "type": "object",
+          "properties": {
+            "key": { "type": "string" },
+            "value": { "type": "string" }
+          },
+          "required": ["key", "value"]
+        },
+        "append": {
+          "type": "boolean",
+          "description": "Whether to append to existing headers."
+        },
+        "append_action": {
+          "type": "string",
+          "enum": ["APPEND_IF_EXISTS_OR_ADD", "ADD_IF_ABSENT", "OVERWRITE_IF_EXISTS_OR_ADD", "OVERWRITE_IF_EXISTS"]
+        }
+      }
+    }
+  }
+}

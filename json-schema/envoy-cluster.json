@@ -1,0 +1,328 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://www.envoyproxy.io/schemas/cluster",
+  "title": "Envoy Cluster",
+  "description": "An upstream cluster represents a group of logically similar upstream hosts that Envoy connects to. Clusters define how Envoy discovers, health checks, load balances, and connects to upstream services.",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string",
+      "description": "Unique name for the cluster, used to reference it in route configurations and stats."
+    },
+    "type": {
+      "type": "string",
+      "description": "The service discovery type to use for resolving cluster member endpoints.",
+      "enum": ["STATIC", "STRICT_DNS", "LOGICAL_DNS", "EDS", "ORIGINAL_DST"]
+    },
+    "connect_timeout": {
+      "type": "string",
+      "description": "Timeout for new network connections to upstream hosts (e.g., '5s').",
+      "pattern": "^[0-9]+(\\.[0-9]+)?s$"
+    },
+    "lb_policy": {
+      "type": "string",
+      "description": "The load balancing algorithm used to select an upstream host.",
+      "enum": ["ROUND_ROBIN", "LEAST_REQUEST", "RING_HASH", "RANDOM", "MAGLEV", "CLUSTER_PROVIDED"]
+    },
+    "load_assignment": {
+      "type": "object",
+      "description": "Endpoint assignment for STATIC and EDS clusters.",
+      "properties": {
+        "cluster_name": {
+          "type": "string"
+        },
+        "endpoints": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "locality": {
+                "type": "object",
+                "properties": {
+                  "region": { "type": "string" },
+                  "zone": { "type": "string" },
+                  "sub_zone": { "type": "string" }
+                }
+              },
+              "lb_endpoints": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "endpoint": {
+                      "type": "object",
+                      "properties": {
+                        "address": {
+                          "type": "object",
+                          "properties": {
+                            "socket_address": {
+                              "type": "object",
+                              "properties": {
+                                "address": { "type": "string" },
+                                "port_value": {
+                                  "type": "integer",
+                                  "minimum": 0,
+                                  "maximum": 65535
+                                }
+                              },
+                              "required": ["address", "port_value"]
+                            }
+                          }
+                        }
+                      }
+                    },
+                    "health_status": {
+                      "type": "string",
+                      "enum": ["UNKNOWN", "HEALTHY", "UNHEALTHY", "DRAINING", "TIMEOUT", "DEGRADED"]
+                    },
+                    "load_balancing_weight": {
+                      "type": "integer",
+                      "minimum": 1
+                    }
+                  }
+                }
+              },
+              "priority": {
+                "type": "integer",
+                "minimum": 0
+              }
+            }
+          }
+        }
+      }
+    },
+    "eds_cluster_config": {
+      "type": "object",
+      "description": "Configuration for using EDS to discover cluster members.",
+      "properties": {
+        "eds_config": {
+          "type": "object",
+          "properties": {
+            "api_config_source": {
+              "type": "object",
+              "properties": {
+                "api_type": {
+                  "type": "string",
+                  "enum": ["REST", "GRPC", "DELTA_GRPC"]
+                },
+                "grpc_services": {
+                  "type": "array",
+                  "items": {
+                    "type": "object"
+                  }
+                },
+                "cluster_names": {
+                  "type": "array",
+                  "items": { "type": "string" }
+                }
+              }
+            },
+            "ads": { "type": "object" },
+            "path": { "type": "string" },
+            "resource_api_version": {
+              "type": "string",
+              "enum": ["AUTO", "V2", "V3"]
+            }
+          }
+        },
+        "service_name": {
+          "type": "string",
+          "description": "Alternative service name used to look up endpoints via EDS."
+        }
+      }
+    },
+    "health_checks": {
+      "type": "array",
+      "description": "Health checking configuration for cluster members.",
+      "items": {
+        "type": "object",
+        "properties": {
+          "timeout": { "type": "string" },
+          "interval": { "type": "string" },
+          "unhealthy_threshold": { "type": "integer" },
+          "healthy_threshold": { "type": "integer" },
+          "http_health_check": {
+            "type": "object",
+            "properties": {
+              "host": { "type": "string" },
+              "path": { "type": "string" },
+              "expected_statuses": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "start": { "type": "integer" },
+                    "end": { "type": "integer" }
+                  }
+                }
+              }
+            }
+          },
+          "tcp_health_check": { "type": "object" },
+          "grpc_health_check": {
+            "type": "object",
+            "properties": {
+              "service_name": { "type": "string" }
+            }
+          }
+        }
+      }
+    },
+    "circuit_breakers": {
+      "type": "object",
+      "description": "Circuit breaking limits for the cluster.",
+      "properties": {
+        "thresholds": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "priority": {
+                "type": "string",
+                "enum": ["DEFAULT", "HIGH"]
+              },
+              "max_connections": { "type": "integer" },
+              "max_pending_requests": { "type": "integer" },
+              "max_requests": { "type": "integer" },
+              "max_retries": { "type": "integer" },
+              "track_remaining": { "type": "boolean" }
+            }
+          }
+        }
+      }
+    },
+    "outlier_detection": {
+      "type": "object",
+      "description": "Outlier detection configuration for ejecting unhealthy hosts.",
+      "properties": {
+        "consecutive_5xx": {
+          "type": "integer",
+          "description": "Number of consecutive 5xx responses before ejection."
+        },
+        "consecutive_gateway_failure": {
+          "type": "integer",
+          "description": "Number of consecutive gateway failures before ejection."
+        },
+        "interval": {
+          "type": "string",
+          "description": "Time interval between ejection analysis sweeps."
+        },
+        "base_ejection_time": {
+          "type": "string",
+          "description": "Base time for which a host is ejected."
+        },
+        "max_ejection_percent": {
+          "type": "integer",
+          "description": "Maximum percentage of hosts in the cluster that can be ejected.",
+          "minimum": 0,
+          "maximum": 100
+        },
+        "enforcing_consecutive_5xx": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 100
+        },
+        "enforcing_success_rate": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 100
+        },
+        "success_rate_minimum_hosts": {
+          "type": "integer"
+        },
+        "success_rate_request_volume": {
+          "type": "integer"
+        },
+        "success_rate_stdev_factor": {
+          "type": "integer"
+        }
+      }
+    },
+    "transport_socket": {
+      "type": "object",
+      "description": "Transport socket configuration for upstream connections (e.g., TLS).",
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "Name of the transport socket implementation."
+        },
+        "typed_config": {
+          "type": "object",
+          "description": "Transport socket specific configuration."
+        }
+      }
+    },
+    "dns_lookup_family": {
+      "type": "string",
+      "description": "DNS IP address resolution policy for STRICT_DNS and LOGICAL_DNS clusters.",
+      "enum": ["AUTO", "V4_ONLY", "V6_ONLY", "V4_PREFERRED", "ALL"]
+    },
+    "dns_resolvers": {
+      "type": "array",
+      "description": "Custom DNS resolvers for the cluster.",
+      "items": {
+        "type": "object",
+        "properties": {
+          "socket_address": {
+            "type": "object",
+            "properties": {
+              "address": { "type": "string" },
+              "port_value": { "type": "integer" }
+            }
+          }
+        }
+      }
+    },
+    "respect_dns_ttl": {
+      "type": "boolean",
+      "description": "Whether to respect DNS TTL values for DNS-based clusters."
+    },
+    "dns_refresh_rate": {
+      "type": "string",
+      "description": "DNS refresh rate for DNS-based clusters."
+    },
+    "per_connection_buffer_limit_bytes": {
+      "type": "integer",
+      "description": "Soft limit on size of the cluster's connections read and write buffers."
+    },
+    "metadata": {
+      "type": "object",
+      "description": "Metadata for the cluster, used for stats, logging, and access control.",
+      "additionalProperties": true
+    },
+    "common_lb_config": {
+      "type": "object",
+      "description": "Common configuration shared by all load balancer implementations.",
+      "properties": {
+        "healthy_panic_threshold": {
+          "type": "object",
+          "properties": {
+            "value": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 100
+            }
+          }
+        },
+        "locality_weighted_lb_config": {
+          "type": "object"
+        },
+        "zone_aware_lb_config": {
+          "type": "object",
+          "properties": {
+            "routing_enabled": {
+              "type": "object",
+              "properties": {
+                "value": { "type": "number" }
+              }
+            },
+            "min_cluster_size": {
+              "type": "integer"
+            }
+          }
+        }
+      }
+    }
+  },
+  "required": ["name", "type"]
+}

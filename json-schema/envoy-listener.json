@@ -1,0 +1,204 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://www.envoyproxy.io/schemas/listener",
+  "title": "Envoy Listener",
+  "description": "A listener configuration defines a network address and port where Envoy accepts connections, along with filter chains that process those connections through a pipeline of network and HTTP filters.",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string",
+      "description": "Unique name for the listener."
+    },
+    "address": {
+      "type": "object",
+      "description": "The address the listener listens on for new connections.",
+      "properties": {
+        "socket_address": {
+          "type": "object",
+          "properties": {
+            "protocol": {
+              "type": "string",
+              "enum": ["TCP", "UDP"],
+              "default": "TCP"
+            },
+            "address": {
+              "type": "string",
+              "description": "IP address or hostname to bind to."
+            },
+            "port_value": {
+              "type": "integer",
+              "description": "Port number to bind to.",
+              "minimum": 0,
+              "maximum": 65535
+            }
+          },
+          "required": ["address", "port_value"]
+        },
+        "pipe": {
+          "type": "object",
+          "properties": {
+            "path": {
+              "type": "string",
+              "description": "Unix domain socket path."
+            },
+            "mode": {
+              "type": "integer"
+            }
+          }
+        }
+      }
+    },
+    "filter_chains": {
+      "type": "array",
+      "description": "Filter chains to process connections received by the listener.",
+      "items": {
+        "type": "object",
+        "properties": {
+          "filter_chain_match": {
+            "type": "object",
+            "description": "Match criteria for selecting this filter chain.",
+            "properties": {
+              "destination_port": {
+                "type": "integer"
+              },
+              "prefix_ranges": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "address_prefix": { "type": "string" },
+                    "prefix_len": { "type": "integer" }
+                  }
+                }
+              },
+              "server_names": {
+                "type": "array",
+                "description": "SNI domains to match.",
+                "items": { "type": "string" }
+              },
+              "transport_protocol": {
+                "type": "string",
+                "description": "Transport protocol to match (e.g., 'tls', 'raw_buffer')."
+              },
+              "application_protocols": {
+                "type": "array",
+                "description": "ALPN protocols to match.",
+                "items": { "type": "string" }
+              }
+            }
+          },
+          "filters": {
+            "type": "array",
+            "description": "Network filters in the chain.",
+            "items": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string",
+                  "description": "Name of the filter (e.g., 'envoy.filters.network.http_connection_manager')."
+                },
+                "typed_config": {
+                  "type": "object",
+                  "description": "Filter-specific typed configuration."
+                }
+              },
+              "required": ["name"]
+            }
+          },
+          "transport_socket": {
+            "type": "object",
+            "description": "Transport socket for this filter chain (e.g., TLS).",
+            "properties": {
+              "name": {
+                "type": "string"
+              },
+              "typed_config": {
+                "type": "object"
+              }
+            }
+          }
+        }
+      }
+    },
+    "listener_filters": {
+      "type": "array",
+      "description": "Filters applied at the listener level before filter chain matching.",
+      "items": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Name of the listener filter (e.g., 'envoy.filters.listener.tls_inspector')."
+          },
+          "typed_config": {
+            "type": "object"
+          }
+        },
+        "required": ["name"]
+      }
+    },
+    "traffic_direction": {
+      "type": "string",
+      "description": "Specifies the intended direction of traffic for the listener.",
+      "enum": ["UNSPECIFIED", "INBOUND", "OUTBOUND"]
+    },
+    "per_connection_buffer_limit_bytes": {
+      "type": "integer",
+      "description": "Soft limit on read and write buffer size per connection."
+    },
+    "bind_to_port": {
+      "type": "boolean",
+      "description": "Whether the listener should bind to the port. Used for virtual listeners.",
+      "default": true
+    },
+    "enable_reuse_port": {
+      "type": "boolean",
+      "description": "Whether to use SO_REUSEPORT for the listener socket."
+    },
+    "tcp_backlog_size": {
+      "type": "integer",
+      "description": "The maximum length of the TCP pending connections queue."
+    },
+    "transparent": {
+      "type": "boolean",
+      "description": "Whether the listener should use transparent mode."
+    },
+    "freebind": {
+      "type": "boolean",
+      "description": "Whether to set IP_FREEBIND socket option."
+    },
+    "access_log": {
+      "type": "array",
+      "description": "Access log configuration for the listener.",
+      "items": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "typed_config": {
+            "type": "object"
+          },
+          "filter": {
+            "type": "object"
+          }
+        }
+      }
+    },
+    "connection_balance_config": {
+      "type": "object",
+      "description": "Balances connections across worker threads.",
+      "properties": {
+        "exact_balance": {
+          "type": "object"
+        }
+      }
+    },
+    "metadata": {
+      "type": "object",
+      "description": "Metadata for the listener.",
+      "additionalProperties": true
+    }
+  },
+  "required": ["name", "address", "filter_chains"]
+}

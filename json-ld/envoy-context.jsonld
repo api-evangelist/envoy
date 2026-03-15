@@ -1,0 +1,124 @@
+{
+  "@context": {
+    "@version": 1.1,
+    "envoy": "https://www.envoyproxy.io/schemas/",
+    "schema": "https://schema.org/",
+    "xsd": "http://www.w3.org/2001/XMLSchema#",
+    "cncf": "https://www.cncf.io/schemas/",
+    "Cluster": {
+      "@id": "envoy:Cluster",
+      "@context": {
+        "name": {"@id": "schema:name", "@type": "xsd:string"},
+        "type": {"@id": "envoy:discoveryType", "@type": "xsd:string"},
+        "connect_timeout": {"@id": "envoy:connectTimeout", "@type": "xsd:string"},
+        "lb_policy": {"@id": "envoy:loadBalancingPolicy", "@type": "xsd:string"},
+        "load_assignment": {"@id": "envoy:loadAssignment", "@type": "@json"},
+        "health_checks": {"@id": "envoy:healthChecks", "@container": "@list"},
+        "circuit_breakers": {"@id": "envoy:circuitBreakers", "@type": "@json"},
+        "outlier_detection": {"@id": "envoy:outlierDetection", "@type": "@json"},
+        "dns_lookup_family": {"@id": "envoy:dnsLookupFamily", "@type": "xsd:string"},
+        "metadata": {"@id": "envoy:metadata", "@type": "@json"}
+      }
+    },
+    "Listener": {
+      "@id": "envoy:Listener",
+      "@context": {
+        "name": {"@id": "schema:name", "@type": "xsd:string"},
+        "address": {"@id": "envoy:address", "@type": "@json"},
+        "filter_chains": {"@id": "envoy:filterChains", "@container": "@list"},
+        "listener_filters": {"@id": "envoy:listenerFilters", "@container": "@list"},
+        "traffic_direction": {"@id": "envoy:trafficDirection", "@type": "xsd:string"},
+        "per_connection_buffer_limit_bytes": {"@id": "envoy:perConnectionBufferLimitBytes", "@type": "xsd:integer"},
+        "bind_to_port": {"@id": "envoy:bindToPort", "@type": "xsd:boolean"},
+        "metadata": {"@id": "envoy:metadata", "@type": "@json"}
+      }
+    },
+    "RouteConfiguration": {
+      "@id": "envoy:RouteConfiguration",
+      "@context": {
+        "name": {"@id": "schema:name", "@type": "xsd:string"},
+        "virtual_hosts": {"@id": "envoy:virtualHosts", "@container": "@list"},
+        "internal_only_headers": {"@id": "envoy:internalOnlyHeaders", "@container": "@list"},
+        "response_headers_to_add": {"@id": "envoy:responseHeadersToAdd", "@container": "@list"},
+        "request_headers_to_add": {"@id": "envoy:requestHeadersToAdd", "@container": "@list"}
+      }
+    },
+    "VirtualHost": {
+      "@id": "envoy:VirtualHost",
+      "@context": {
+        "name": {"@id": "schema:name", "@type": "xsd:string"},
+        "domains": {"@id": "envoy:domains", "@container": "@list"},
+        "routes": {"@id": "envoy:routes", "@container": "@list"},
+        "require_tls": {"@id": "envoy:requireTls", "@type": "xsd:string"},
+        "cors": {"@id": "envoy:corsPolicy", "@type": "@json"},
+        "retry_policy": {"@id": "envoy:retryPolicy", "@type": "@json"}
+      }
+    },
+    "Route": {
+      "@id": "envoy:Route",
+      "@context": {
+        "name": {"@id": "schema:name", "@type": "xsd:string"},
+        "match": {"@id": "envoy:routeMatch", "@type": "@json"},
+        "route": {"@id": "envoy:routeAction", "@type": "@json"},
+        "redirect": {"@id": "envoy:redirectAction", "@type": "@json"},
+        "direct_response": {"@id": "envoy:directResponseAction", "@type": "@json"},
+        "decorator": {"@id": "envoy:decorator", "@type": "@json"},
+        "metadata": {"@id": "envoy:metadata", "@type": "@json"}
+      }
+    },
+    "Bootstrap": {
+      "@id": "envoy:Bootstrap",
+      "@context": {
+        "node": {"@id": "envoy:node", "@type": "@json"},
+        "static_resources": {"@id": "envoy:staticResources", "@type": "@json"},
+        "dynamic_resources": {"@id": "envoy:dynamicResources", "@type": "@json"},
+        "admin": {"@id": "envoy:adminConfig", "@type": "@json"},
+        "stats_config": {"@id": "envoy:statsConfig", "@type": "@json"},
+        "tracing": {"@id": "envoy:tracingConfig", "@type": "@json"},
+        "overload_manager": {"@id": "envoy:overloadManager", "@type": "@json"},
+        "layered_runtime": {"@id": "envoy:layeredRuntime", "@type": "@json"}
+      }
+    },
+    "Endpoint": {
+      "@id": "envoy:Endpoint",
+      "@context": {
+        "address": {"@id": "envoy:address", "@type": "@json"},
+        "health_status": {"@id": "envoy:healthStatus", "@type": "xsd:string"},
+        "load_balancing_weight": {"@id": "envoy:loadBalancingWeight", "@type": "xsd:integer"},
+        "locality": {"@id": "envoy:locality", "@type": "@json"}
+      }
+    },
+    "HealthCheck": {
+      "@id": "envoy:HealthCheck",
+      "@context": {
+        "timeout": {"@id": "envoy:timeout", "@type": "xsd:string"},
+        "interval": {"@id": "envoy:interval", "@type": "xsd:string"},
+        "unhealthy_threshold": {"@id": "envoy:unhealthyThreshold", "@type": "xsd:integer"},
+        "healthy_threshold": {"@id": "envoy:healthyThreshold", "@type": "xsd:integer"},
+        "http_health_check": {"@id": "envoy:httpHealthCheck", "@type": "@json"},
+        "tcp_health_check": {"@id": "envoy:tcpHealthCheck", "@type": "@json"},
+        "grpc_health_check": {"@id": "envoy:grpcHealthCheck", "@type": "@json"}
+      }
+    },
+    "FilterChain": {
+      "@id": "envoy:FilterChain",
+      "@context": {
+        "filter_chain_match": {"@id": "envoy:filterChainMatch", "@type": "@json"},
+        "filters": {"@id": "envoy:filters", "@container": "@list"},
+        "transport_socket": {"@id": "envoy:transportSocket", "@type": "@json"}
+      }
+    },
+    "ServerInfo": {
+      "@id": "envoy:ServerInfo",
+      "@context": {
+        "version": {"@id": "schema:softwareVersion", "@type": "xsd:string"},
+        "state": {"@id": "envoy:serverState", "@type": "xsd:string"},
+        "uptime_current_epoch": {"@id": "envoy:uptimeCurrentEpoch", "@type": "xsd:string"},
+        "uptime_all_epochs": {"@id": "envoy:uptimeAllEpochs", "@type": "xsd:string"},
+        "hot_restart_version": {"@id": "envoy:hotRestartVersion", "@type": "xsd:string"},
+        "command_line_options": {"@id": "envoy:commandLineOptions", "@type": "@json"},
+        "node": {"@id": "envoy:node", "@type": "@json"}
+      }
+    }
+  }
+}

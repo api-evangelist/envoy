@@ -3,10 +3,86 @@ description: Envoy is a high-performance, open-source edge and service proxy des
   for cloud-native applications and microservice architectures. It provides advanced
   load balancing, observability, and traffic management features, and serves as the
   data plane for many service mesh implementations including Istio.
-url: null
+url: https://www.envoyproxy.io/
 tags:
+- Proxy
+- Service Mesh
+- Load Balancing
+- Cloud Native
 - Envoy
 created: '2025'
 modified: '2025'
-apis: []
-common: []
+apis:
+- aid: envoy:envoy-admin-api
+  name: Envoy Admin API
+  tags:
+  - Admin
+  - Management
+  - Observability
+  humanURL: https://www.envoyproxy.io/docs/envoy/latest/operations/admin
+  properties:
+  - url: https://www.envoyproxy.io/docs/envoy/latest/operations/admin
+    type: Documentation
+  - url: properties/envoy-admin-api-openapi.yml
+    type: OpenAPI
+  description: >-
+    The Envoy Admin API provides local administrative access to a running
+    Envoy proxy instance. It exposes endpoints for inspecting clusters,
+    listeners, configuration, statistics, health status, certificates, and
+    runtime settings. It also supports operations like draining listeners,
+    changing log levels, and shutting down the server.
+- aid: envoy:envoy-xds-api
+  name: Envoy xDS APIs
+  tags:
+  - xDS
+  - Discovery Service
+  - Dynamic Configuration
+  - gRPC
+  humanURL: https://www.envoyproxy.io/docs/envoy/latest/api-docs/xds_protocol
+  properties:
+  - url: https://www.envoyproxy.io/docs/envoy/latest/api-docs/xds_protocol
+    type: Documentation
+  - url: https://www.envoyproxy.io/docs/envoy/latest/api-v3/api
+    type: API Reference
+  description: >-
+    The xDS (x Discovery Service) APIs provide dynamic configuration for
+    Envoy proxies via a management server. This includes Listener Discovery
+    Service (LDS), Route Discovery Service (RDS), Cluster Discovery Service
+    (CDS), Endpoint Discovery Service (EDS), Secret Discovery Service (SDS),
+    and Aggregated Discovery Service (ADS). These gRPC and REST APIs allow
+    control planes to push configuration updates to Envoy without restarts.
+common:
+- url: https://www.envoyproxy.io/
+  type: Website
+- url: https://www.envoyproxy.io/docs/envoy/latest/
+  type: Documentation
+- url: https://www.envoyproxy.io/docs/envoy/latest/start/start
+  type: Getting Started
+- url: https://www.envoyproxy.io/docs/envoy/latest/api-v3/api
+  type: API Reference
+- url: https://www.envoyproxy.io/docs/envoy/latest/configuration/configuration
+  type: Configuration Reference
+- url: https://github.com/envoyproxy/envoy
+  type: GitHub Repository
+- url: https://github.com/envoyproxy
+  type: GitHub Organization
+- url: https://www.envoyproxy.io/community
+  type: Community
+- url: https://envoyproxy.slack.com/
+  type: Slack
+- url: https://blog.envoyproxy.io/
+  type: Blog
+- url: https://github.com/envoyproxy/envoy/releases
+  type: Change Log
+- url: https://x.com/EnvoyProxy
+  type: X (Twitter)
+- url: json-schema/envoy-bootstrap.json
+  type: JSON Schema
+- url: json-schema/envoy-cluster.json
+  type: JSON Schema
+- url: json-schema/envoy-listener.json
+  type: JSON Schema
+- url: json-schema/envoy-route-configuration.json
+  type: JSON Schema
+- url: json-ld/envoy-context.jsonld
+  type: JSON-LD Context

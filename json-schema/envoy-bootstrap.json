@@ -1,0 +1,1042 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://www.envoyproxy.io/schemas/bootstrap",
+  "title": "Envoy Bootstrap Configuration",
+  "description": "The bootstrap configuration for an Envoy proxy instance, defining the static and dynamic resources, admin interface, and runtime settings needed to start the proxy.",
+  "type": "object",
+  "properties": {
+    "node": {
+      "type": "object",
+      "description": "Node identity to present to the management server and for instance identification.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "An opaque node identifier for the Envoy node."
+        },
+        "cluster": {
+          "type": "string",
+          "description": "The cluster that the Envoy node belongs to."
+        },
+        "metadata": {
+          "type": "object",
+          "description": "Opaque metadata extending the node identifier.",
+          "additionalProperties": true
+        },
+        "locality": {
+          "$ref": "#/$defs/Locality"
+        },
+        "user_agent_name": {
+          "type": "string",
+          "description": "Free-form string that identifies the entity requesting config."
+        },
+        "extensions": {
+          "type": "array",
+          "description": "List of extensions and their versions supported by the node.",
+          "items": {
+            "type": "object",
+            "properties": {
+              "name": {
+                "type": "string"
+              },
+              "category": {
+                "type": "string"
+              },
+              "version": {
+                "type": "object"
+              }
+            }
+          }
+        }
+      }
+    },
+    "static_resources": {
+      "type": "object",
+      "description": "Statically specified resources including listeners, clusters, and secrets.",
+      "properties": {
+        "listeners": {
+          "type": "array",
+          "description": "Statically configured listeners.",
+          "items": {
+            "$ref": "#/$defs/Listener"
+          }
+        },
+        "clusters": {
+          "type": "array",
+          "description": "Statically configured upstream clusters.",
+          "items": {
+            "$ref": "#/$defs/Cluster"
+          }
+        },
+        "secrets": {
+          "type": "array",
+          "description": "Statically configured secrets.",
+          "items": {
+            "type": "object"
+          }
+        }
+      }
+    },
+    "dynamic_resources": {
+      "type": "object",
+      "description": "xDS configuration sources for dynamic resources.",
+      "properties": {
+        "lds_config": {
+          "$ref": "#/$defs/ConfigSource",
+          "description": "Listener Discovery Service (LDS) configuration source."
+        },
+        "cds_config": {
+          "$ref": "#/$defs/ConfigSource",
+          "description": "Cluster Discovery Service (CDS) configuration source."
+        },
+        "ads_config": {
+          "$ref": "#/$defs/ApiConfigSource",
+          "description": "Aggregated Discovery Service (ADS) configuration."
+        }
+      }
+    },
+    "admin": {
+      "type": "object",
+      "description": "Configuration for the local administration HTTP server.",
+      "properties": {
+        "access_log_path": {
+          "type": "string",
+          "description": "Path to the admin access log file."
+        },
+        "access_log": {
+          "type": "array",
+          "description": "Configuration for admin access logging.",
+          "items": {
+            "type": "object"
+          }
+        },
+        "profile_path": {
+          "type": "string",
+          "description": "Path to save profiling data."
+        },
+        "address": {
+          "$ref": "#/$defs/Address",
+          "description": "The address the admin server listens on."
+        }
+      }
+    },
+    "stats_config": {
+      "type": "object",
+      "description": "Configuration for internal processing of statistics.",
+      "properties": {
+        "stats_tags": {
+          "type": "array",
+          "description": "Tags to add to all statistics.",
+          "items": {
+            "type": "object",
+            "properties": {
+              "tag_name": {
+                "type": "string"
+              },
+              "regex": {
+                "type": "string"
+              },
+              "fixed_value": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "use_all_default_tags": {
+          "type": "boolean",
+          "description": "Use the default list of stat tags."
+        },
+        "stats_matcher": {
+          "type": "object",
+          "description": "Controls which stats are emitted.",
+          "properties": {
+            "reject_all": {
+              "type": "boolean"
+            },
+            "exclusion_list": {
+              "type": "object",
+              "properties": {
+                "patterns": {
+                  "type": "array",
+                  "items": {
+                    "type": "object"
+                  }
+                }
+              }
+            },
+            "inclusion_list": {
+              "type": "object",
+              "properties": {
+                "patterns": {
+                  "type": "array",
+                  "items": {
+                    "type": "object"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "stats_sinks": {
+      "type": "array",
+      "description": "Optional set of statistics sinks.",
+      "items": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "typed_config": {
+            "type": "object"
+          }
+        }
+      }
+    },
+    "stats_flush_interval": {
+      "type": "string",
+      "description": "Duration between stats sink flushes (e.g., '5s').",
+      "pattern": "^[0-9]+(\\.[0-9]+)?s$"
+    },
+    "tracing": {
+      "type": "object",
+      "description": "Configuration for an external tracing provider.",
+      "properties": {
+        "http": {
+          "type": "object",
+          "properties": {
+            "name": {
+              "type": "string"
+            },
+            "typed_config": {
+              "type": "object"
+            }
+          }
+        }
+      }
+    },
+    "overload_manager": {
+      "type": "object",
+      "description": "Configuration for the overload manager.",
+      "properties": {
+        "refresh_interval": {
+          "type": "string"
+        },
+        "resource_monitors": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "name": {
+                "type": "string"
+              },
+              "typed_config": {
+                "type": "object"
+              }
+            }
+          }
+        },
+        "actions": {
+          "type": "array",
+          "items": {
+            "type": "object"
+          }
+        }
+      }
+    },
+    "layered_runtime": {
+      "type": "object",
+      "description": "Configuration for the runtime configuration provider.",
+      "properties": {
+        "layers": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "name": {
+                "type": "string"
+              },
+              "static_layer": {
+                "type": "object"
+              },
+              "disk_layer": {
+                "type": "object",
+                "properties": {
+                  "symlink_root": {
+                    "type": "string"
+                  },
+                  "subdirectory": {
+                    "type": "string"
+                  }
+                }
+              },
+              "admin_layer": {
+                "type": "object"
+              },
+              "rtds_layer": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string"
+                  },
+                  "rtds_config": {
+                    "$ref": "#/$defs/ConfigSource"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "$defs": {
+    "Locality": {
+      "type": "object",
+      "description": "Identifies location of where the Envoy node is running.",
+      "properties": {
+        "region": {
+          "type": "string",
+          "description": "Region this zone belongs to."
+        },
+        "zone": {
+          "type": "string",
+          "description": "Availability zone identifier."
+        },
+        "sub_zone": {
+          "type": "string",
+          "description": "Sub-zone within the zone."
+        }
+      }
+    },
+    "Address": {
+      "type": "object",
+      "description": "Addresses specify either a logical or physical address and port.",
+      "properties": {
+        "socket_address": {
+          "type": "object",
+          "properties": {
+            "protocol": {
+              "type": "string",
+              "enum": ["TCP", "UDP"],
+              "default": "TCP"
+            },
+            "address": {
+              "type": "string",
+              "description": "The address to bind to (IP or hostname)."
+            },
+            "port_value": {
+              "type": "integer",
+              "description": "The port to bind to.",
+              "minimum": 0,
+              "maximum": 65535
+            }
+          },
+          "required": ["address", "port_value"]
+        },
+        "pipe": {
+          "type": "object",
+          "properties": {
+            "path": {
+              "type": "string",
+              "description": "Unix domain socket path."
+            },
+            "mode": {
+              "type": "integer",
+              "description": "File mode for the socket."
+            }
+          }
+        }
+      }
+    },
+    "Listener": {
+      "type": "object",
+      "description": "An Envoy listener configuration.",
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "Unique name for this listener."
+        },
+        "address": {
+          "$ref": "#/$defs/Address",
+          "description": "The address the listener listens on."
+        },
+        "filter_chains": {
+          "type": "array",
+          "description": "A list of filter chains to apply to connections.",
+          "items": {
+            "$ref": "#/$defs/FilterChain"
+          }
+        },
+        "listener_filters": {
+          "type": "array",
+          "description": "Listener-level filters applied before filter chain matching.",
+          "items": {
+            "type": "object",
+            "properties": {
+              "name": {
+                "type": "string"
+              },
+              "typed_config": {
+                "type": "object"
+              }
+            }
+          }
+        },
+        "per_connection_buffer_limit_bytes": {
+          "type": "integer",
+          "description": "Soft limit on size of the listener's new connection read and write buffers."
+        },
+        "traffic_direction": {
+          "type": "string",
+          "description": "Traffic direction for this listener.",
+          "enum": ["UNSPECIFIED", "INBOUND", "OUTBOUND"]
+        }
+      },
+      "required": ["name", "address", "filter_chains"]
+    },
+    "FilterChain": {
+      "type": "object",
+      "description": "A filter chain wraps a set of match criteria, an option TLS context, and a set of filters.",
+      "properties": {
+        "filter_chain_match": {
+          "type": "object",
+          "description": "Criteria for matching a connection to this filter chain.",
+          "properties": {
+            "destination_port": {
+              "type": "integer"
+            },
+            "server_names": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "transport_protocol": {
+              "type": "string"
+            },
+            "application_protocols": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "filters": {
+          "type": "array",
+          "description": "Network filters applied to the connection.",
+          "items": {
+            "type": "object",
+            "properties": {
+              "name": {
+                "type": "string"
+              },
+              "typed_config": {
+                "type": "object"
+              }
+            },
+            "required": ["name"]
+          }
+        },
+        "transport_socket": {
+          "type": "object",
+          "description": "Transport socket configuration (e.g., TLS).",
+          "properties": {
+            "name": {
+              "type": "string"
+            },
+            "typed_config": {
+              "type": "object"
+            }
+          }
+        }
+      }
+    },
+    "Cluster": {
+      "type": "object",
+      "description": "An upstream cluster configuration.",
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "Name of the cluster."
+        },
+        "type": {
+          "type": "string",
+          "description": "Service discovery type.",
+          "enum": ["STATIC", "STRICT_DNS", "LOGICAL_DNS", "EDS", "ORIGINAL_DST"]
+        },
+        "connect_timeout": {
+          "type": "string",
+          "description": "Connection timeout (e.g., '5s')."
+        },
+        "lb_policy": {
+          "type": "string",
+          "description": "Load balancing policy.",
+          "enum": ["ROUND_ROBIN", "LEAST_REQUEST", "RING_HASH", "RANDOM", "MAGLEV", "CLUSTER_PROVIDED"]
+        },
+        "load_assignment": {
+          "$ref": "#/$defs/ClusterLoadAssignment",
+          "description": "Endpoint assignment for STATIC and EDS clusters."
+        },
+        "eds_cluster_config": {
+          "type": "object",
+          "description": "EDS configuration for this cluster.",
+          "properties": {
+            "eds_config": {
+              "$ref": "#/$defs/ConfigSource"
+            },
+            "service_name": {
+              "type": "string"
+            }
+          }
+        },
+        "health_checks": {
+          "type": "array",
+          "description": "Health checking configuration.",
+          "items": {
+            "$ref": "#/$defs/HealthCheck"
+          }
+        },
+        "circuit_breakers": {
+          "type": "object",
+          "description": "Circuit breaking configuration.",
+          "properties": {
+            "thresholds": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "priority": {
+                    "type": "string",
+                    "enum": ["DEFAULT", "HIGH"]
+                  },
+                  "max_connections": {
+                    "type": "integer"
+                  },
+                  "max_pending_requests": {
+                    "type": "integer"
+                  },
+                  "max_requests": {
+                    "type": "integer"
+                  },
+                  "max_retries": {
+                    "type": "integer"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "outlier_detection": {
+          "type": "object",
+          "description": "Outlier detection configuration for removing unhealthy hosts.",
+          "properties": {
+            "consecutive_5xx": {
+              "type": "integer"
+            },
+            "interval": {
+              "type": "string"
+            },
+            "base_ejection_time": {
+              "type": "string"
+            },
+            "max_ejection_percent": {
+              "type": "integer"
+            }
+          }
+        },
+        "transport_socket": {
+          "type": "object",
+          "description": "Transport socket configuration for upstream connections.",
+          "properties": {
+            "name": {
+              "type": "string"
+            },
+            "typed_config": {
+              "type": "object"
+            }
+          }
+        },
+        "dns_lookup_family": {
+          "type": "string",
+          "description": "DNS lookup family for STRICT_DNS and LOGICAL_DNS clusters.",
+          "enum": ["AUTO", "V4_ONLY", "V6_ONLY", "V4_PREFERRED", "ALL"]
+        }
+      },
+      "required": ["name", "type"]
+    },
+    "ClusterLoadAssignment": {
+      "type": "object",
+      "description": "Endpoint assignments for a cluster.",
+      "properties": {
+        "cluster_name": {
+          "type": "string",
+          "description": "Name of the cluster."
+        },
+        "endpoints": {
+          "type": "array",
+          "description": "List of locality-level endpoint groups.",
+          "items": {
+            "type": "object",
+            "properties": {
+              "locality": {
+                "$ref": "#/$defs/Locality"
+              },
+              "lb_endpoints": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "endpoint": {
+                      "type": "object",
+                      "properties": {
+                        "address": {
+                          "$ref": "#/$defs/Address"
+                        }
+                      }
+                    },
+                    "health_status": {
+                      "type": "string",
+                      "enum": ["UNKNOWN", "HEALTHY", "UNHEALTHY", "DRAINING", "TIMEOUT", "DEGRADED"]
+                    },
+                    "load_balancing_weight": {
+                      "type": "integer",
+                      "minimum": 1
+                    }
+                  }
+                }
+              },
+              "priority": {
+                "type": "integer"
+              }
+            }
+          }
+        }
+      }
+    },
+    "HealthCheck": {
+      "type": "object",
+      "description": "Health check configuration.",
+      "properties": {
+        "timeout": {
+          "type": "string",
+          "description": "The time to wait for a health check response."
+        },
+        "interval": {
+          "type": "string",
+          "description": "The interval between health checks."
+        },
+        "unhealthy_threshold": {
+          "type": "integer",
+          "description": "Number of unhealthy checks before a host is marked unhealthy."
+        },
+        "healthy_threshold": {
+          "type": "integer",
+          "description": "Number of healthy checks before a host is marked healthy."
+        },
+        "http_health_check": {
+          "type": "object",
+          "properties": {
+            "host": {
+              "type": "string"
+            },
+            "path": {
+              "type": "string"
+            },
+            "expected_statuses": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "start": {
+                    "type": "integer"
+                  },
+                  "end": {
+                    "type": "integer"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "tcp_health_check": {
+          "type": "object",
+          "properties": {
+            "send": {
+              "type": "object"
+            },
+            "receive": {
+              "type": "array",
+              "items": {
+                "type": "object"
+              }
+            }
+          }
+        },
+        "grpc_health_check": {
+          "type": "object",
+          "properties": {
+            "service_name": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    },
+    "ConfigSource": {
+      "type": "object",
+      "description": "Configuration source for xDS API.",
+      "properties": {
+        "path": {
+          "type": "string",
+          "description": "Path on the filesystem to source from."
+        },
+        "path_config_source": {
+          "type": "object",
+          "properties": {
+            "path": {
+              "type": "string"
+            },
+            "watched_directory": {
+              "type": "object"
+            }
+          }
+        },
+        "api_config_source": {
+          "$ref": "#/$defs/ApiConfigSource"
+        },
+        "ads": {
+          "type": "object",
+          "description": "Use ADS for this resource."
+        },
+        "resource_api_version": {
+          "type": "string",
+          "enum": ["AUTO", "V2", "V3"]
+        }
+      }
+    },
+    "ApiConfigSource": {
+      "type": "object",
+      "description": "API configuration source for xDS.",
+      "properties": {
+        "api_type": {
+          "type": "string",
+          "description": "API type (REST, gRPC, delta gRPC).",
+          "enum": ["DEPRECATED_AND_UNAVAILABLE_DO_NOT_USE", "REST", "GRPC", "DELTA_GRPC", "AGGREGATED_GRPC", "AGGREGATED_DELTA_GRPC"]
+        },
+        "transport_api_version": {
+          "type": "string",
+          "enum": ["AUTO", "V2", "V3"]
+        },
+        "cluster_names": {
+          "type": "array",
+          "description": "Cluster names for REST API sources.",
+          "items": {
+            "type": "string"
+          }
+        },
+        "grpc_services": {
+          "type": "array",
+          "description": "gRPC services for gRPC API sources.",
+          "items": {
+            "type": "object",
+            "properties": {
+              "envoy_grpc": {
+                "type": "object",
+                "properties": {
+                  "cluster_name": {
+                    "type": "string"
+                  }
+                }
+              },
+              "google_grpc": {
+                "type": "object"
+              },
+              "timeout": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "refresh_delay": {
+          "type": "string",
+          "description": "Polling interval for REST APIs."
+        },
+        "set_node_on_first_message_only": {
+          "type": "boolean"
+        }
+      }
+    },
+    "RouteConfiguration": {
+      "type": "object",
+      "description": "Route configuration for HTTP connection manager.",
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "Name of the route configuration."
+        },
+        "virtual_hosts": {
+          "type": "array",
+          "description": "List of virtual hosts that make up the route table.",
+          "items": {
+            "$ref": "#/$defs/VirtualHost"
+          }
+        },
+        "internal_only_headers": {
+          "type": "array",
+          "description": "Headers that will be removed from external requests.",
+          "items": {
+            "type": "string"
+          }
+        },
+        "response_headers_to_add": {
+          "type": "array",
+          "description": "Headers to add to responses.",
+          "items": {
+            "$ref": "#/$defs/HeaderValueOption"
+          }
+        },
+        "response_headers_to_remove": {
+          "type": "array",
+          "description": "Headers to remove from responses.",
+          "items": {
+            "type": "string"
+          }
+        },
+        "request_headers_to_add": {
+          "type": "array",
+          "description": "Headers to add to requests.",
+          "items": {
+            "$ref": "#/$defs/HeaderValueOption"
+          }
+        }
+      },
+      "required": ["name", "virtual_hosts"]
+    },
+    "VirtualHost": {
+      "type": "object",
+      "description": "A virtual host configuration.",
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "Logical name of the virtual host."
+        },
+        "domains": {
+          "type": "array",
+          "description": "List of domains that will match this virtual host.",
+          "items": {
+            "type": "string"
+          }
+        },
+        "routes": {
+          "type": "array",
+          "description": "List of routes that will be matched in order.",
+          "items": {
+            "$ref": "#/$defs/Route"
+          }
+        },
+        "require_tls": {
+          "type": "string",
+          "enum": ["NONE", "EXTERNAL_ONLY", "ALL"]
+        },
+        "rate_limits": {
+          "type": "array",
+          "items": {
+            "type": "object"
+          }
+        },
+        "cors": {
+          "type": "object",
+          "description": "CORS policy for the virtual host."
+        },
+        "retry_policy": {
+          "$ref": "#/$defs/RetryPolicy"
+        }
+      },
+      "required": ["name", "domains", "routes"]
+    },
+    "Route": {
+      "type": "object",
+      "description": "A route entry.",
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "Name of the route."
+        },
+        "match": {
+          "type": "object",
+          "description": "Route matching parameters.",
+          "properties": {
+            "prefix": {
+              "type": "string"
+            },
+            "path": {
+              "type": "string"
+            },
+            "safe_regex": {
+              "type": "object",
+              "properties": {
+                "google_re2": {
+                  "type": "object"
+                },
+                "regex": {
+                  "type": "string"
+                }
+              }
+            },
+            "headers": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string"
+                  },
+                  "string_match": {
+                    "type": "object"
+                  }
+                }
+              }
+            },
+            "case_sensitive": {
+              "type": "boolean"
+            }
+          }
+        },
+        "route": {
+          "type": "object",
+          "description": "Route action: forward to upstream cluster.",
+          "properties": {
+            "cluster": {
+              "type": "string"
+            },
+            "weighted_clusters": {
+              "type": "object",
+              "properties": {
+                "clusters": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "name": {
+                        "type": "string"
+                      },
+                      "weight": {
+                        "type": "integer"
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "timeout": {
+              "type": "string"
+            },
+            "retry_policy": {
+              "$ref": "#/$defs/RetryPolicy"
+            },
+            "prefix_rewrite": {
+              "type": "string"
+            },
+            "host_rewrite_literal": {
+              "type": "string"
+            }
+          }
+        },
+        "redirect": {
+          "type": "object",
+          "description": "Route action: return redirect.",
+          "properties": {
+            "host_redirect": {
+              "type": "string"
+            },
+            "path_redirect": {
+              "type": "string"
+            },
+            "prefix_rewrite": {
+              "type": "string"
+            },
+            "response_code": {
+              "type": "integer"
+            },
+            "https_redirect": {
+              "type": "boolean"
+            }
+          }
+        },
+        "direct_response": {
+          "type": "object",
+          "description": "Route action: return direct response.",
+          "properties": {
+            "status": {
+              "type": "integer"
+            },
+            "body": {
+              "type": "object",
+              "properties": {
+                "inline_string": {
+                  "type": "string"
+                },
+                "filename": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      },
+      "required": ["match"]
+    },
+    "RetryPolicy": {
+      "type": "object",
+      "description": "HTTP retry policy.",
+      "properties": {
+        "retry_on": {
+          "type": "string",
+          "description": "Conditions under which retry takes place (e.g., '5xx,connect-failure')."
+        },
+        "num_retries": {
+          "type": "integer",
+          "description": "Maximum number of retries."
+        },
+        "per_try_timeout": {
+          "type": "string",
+          "description": "Timeout per retry attempt."
+        },
+        "retry_back_off": {
+          "type": "object",
+          "properties": {
+            "base_interval": {
+              "type": "string"
+            },
+            "max_interval": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    },
+    "HeaderValueOption": {
+      "type": "object",
+      "description": "Header name/value pair plus option to control append behavior.",
+      "properties": {
+        "header": {
+          "type": "object",
+          "properties": {
+            "key": {
+              "type": "string"
+            },
+            "value": {
+              "type": "string"
+            }
+          },
+          "required": ["key", "value"]
+        },
+        "append": {
+          "type": "boolean"
+        }
+      }
+    }
+  }
+}
