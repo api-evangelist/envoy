@@ -75,6 +75,12 @@ apis:
         url: https://www.envoyproxy.io/docs/envoy/latest/api/api
       - type: GitHubRepository
         url: https://github.com/envoyproxy/envoy
+      - type: JSONSchema
+        url: json-schema/envoy-cluster.json
+      - type: JSONSchema
+        url: json-schema/envoy-listener.json
+      - type: JSONSchema
+        url: json-schema/envoy-route-configuration.json
   - aid: envoy:envoy-gateway-api
     name: Envoy Gateway API
     description: >-
@@ -144,6 +150,12 @@ common:
     url: https://www.envoyproxy.io/community
   - type: JSONSchema
     url: json-schema/envoy-bootstrap.json
+  - type: JSONSchema
+    url: json-schema/envoy-cluster.json
+  - type: JSONSchema
+    url: json-schema/envoy-listener.json
+  - type: JSONSchema
+    url: json-schema/envoy-route-configuration.json
   - type: JSON-LD
     url: json-ld/envoy-context.jsonld
 maintainers:
