@@ -1,0 +1,478 @@
+openapi: 3.1.0
+info:
+  title: Envoy AI Gateway API
+  description: >-
+    The Envoy AI Gateway provides a unified proxy layer for accessing Generative
+    AI services built on top of Envoy Gateway. It exposes OpenAI-compatible and
+    Anthropic-compatible API endpoints, enabling applications to route LLM traffic
+    across multiple AI backends including OpenAI, AWS Bedrock, Google Gemini, and
+    others. The gateway handles backend rate limiting, policy control, token-based
+    quota management, and security configuration via Kubernetes custom resources.
+  version: '0.2.0'
+  contact:
+    name: Envoy AI Gateway Community
+    url: https://aigateway.envoyproxy.io/
+  termsOfService: https://aigateway.envoyproxy.io/
+externalDocs:
+  description: Envoy AI Gateway Documentation
+  url: https://aigateway.envoyproxy.io/docs/
+servers:
+  - url: https://{gateway-host}
+    description: Envoy AI Gateway instance
+    variables:
+      gateway-host:
+        default: localhost:8080
+        description: >-
+          Hostname and port of the Envoy AI Gateway instance as configured
+          in the AIGatewayRoute Kubernetes custom resource
+tags:
+  - name: Chat
+    description: >-
+      Chat completions endpoints compatible with the OpenAI Chat API.
+      Routes requests to configured AI backends based on AIGatewayRoute
+      rules.
+  - name: Models
+    description: >-
+      Model listing endpoints for discovering available AI models configured
+      in the gateway routes.
+  - name: Text Completions
+    description: >-
+      Legacy text completions endpoints compatible with the OpenAI
+      completions API.
+security:
+  - bearerAuth: []
+paths:
+  /v1/chat/completions:
+    post:
+      operationId: createChatCompletion
+      summary: Create a chat completion
+      description: >-
+        Creates a chat completion response for the provided messages using an
+        AI model routed through the gateway. The request format is compatible
+        with the OpenAI Chat Completions API. The gateway selects a backend
+        based on the AIGatewayRoute rules, which may include header-based
+        routing, model-based routing, and backend traffic policies for rate
+        limiting and token quota management. Supports streaming via
+        server-sent events when stream is set to true.
+      tags:
+        - Chat
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ChatCompletionRequest'
+      responses:
+        '200':
+          description: >-
+            Chat completion response. When stream is false, returns a complete
+            ChatCompletion object. When stream is true, returns a stream of
+            server-sent events with ChatCompletionChunk objects.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ChatCompletion'
+            text/event-stream:
+              schema:
+                type: string
+                description: >-
+                  Server-sent events stream where each event contains a
+                  ChatCompletionChunk JSON object prefixed with data:
+        '400':
+          description: >-
+            Bad request. The request body is malformed, required fields are
+            missing, or the model name is invalid.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: >-
+            Unauthorized. The bearer token is missing or invalid.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '429':
+          description: >-
+            Rate limit exceeded. The request was rejected due to backend
+            rate limiting or token quota policies configured in the
+            BackendTrafficPolicy.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '502':
+          description: >-
+            Bad gateway. The upstream AI backend returned an error or
+            was unreachable.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /v1/completions:
+    post:
+      operationId: createCompletion
+      summary: Create a text completion
+      description: >-
+        Creates a text completion for the provided prompt using an AI model
+        routed through the gateway. The request format is compatible with the
+        OpenAI legacy Completions API. This endpoint is primarily provided for
+        backward compatibility; the chat completions endpoint is preferred
+        for modern applications.
+      tags:
+        - Text Completions
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CompletionRequest'
+      responses:
+        '200':
+          description: Text completion response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Completion'
+        '400':
+          description: Bad request due to malformed input or invalid parameters
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Unauthorized due to missing or invalid bearer token
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '429':
+          description: Rate limit or token quota exceeded
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /v1/models:
+    get:
+      operationId: listModels
+      summary: List available models
+      description: >-
+        Returns a list of AI models available through the gateway as configured
+        in AIGatewayRoute resources. The available models correspond to the
+        model names that the gateway has been configured to route to upstream
+        AI backends.
+      tags:
+        - Models
+      responses:
+        '200':
+          description: List of available models
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModelList'
+        '401':
+          description: Unauthorized due to missing or invalid bearer token
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      description: >-
+        Bearer token authentication. The token is configured per route in
+        the AIGatewayRoute Kubernetes custom resource. For AI provider
+        backends, the gateway may automatically translate the bearer token
+        to the appropriate provider-specific authentication mechanism.
+  schemas:
+    ChatCompletionRequest:
+      type: object
+      description: >-
+        Request body for the chat completions endpoint, compatible with the
+        OpenAI Chat Completions API format.
+      required:
+        - model
+        - messages
+      properties:
+        model:
+          type: string
+          description: >-
+            ID of the model to use. The gateway routes requests based on
+            this model name to the appropriate AI backend as configured in
+            AIGatewayRoute rules.
+          example: gpt-4
+        messages:
+          type: array
+          description: >-
+            List of messages comprising the conversation so far. The messages
+            are forwarded to the upstream AI backend in order.
+          minItems: 1
+          items:
+            $ref: '#/components/schemas/ChatMessage'
+        temperature:
+          type: number
+          description: >-
+            Sampling temperature between 0 and 2. Higher values make output
+            more random; lower values make it more deterministic.
+          minimum: 0
+          maximum: 2
+        top_p:
+          type: number
+          description: >-
+            Nucleus sampling parameter. The model considers tokens with
+            top_p probability mass.
+          minimum: 0
+          maximum: 1
+        n:
+          type: integer
+          description: >-
+            Number of chat completion choices to generate for each input
+            message.
+          minimum: 1
+          default: 1
+        stream:
+          type: boolean
+          description: >-
+            If true, partial message deltas are sent as server-sent events
+            as they become available. The stream ends with data: [DONE].
+          default: false
+        max_tokens:
+          type: integer
+          description: >-
+            Maximum number of tokens to generate in the chat completion.
+            The total token count of messages plus max_tokens cannot exceed
+            the model's context length.
+          minimum: 1
+        presence_penalty:
+          type: number
+          description: >-
+            Penalty for using tokens that appear in the text so far.
+            Positive values increase the model's likelihood to discuss new
+            topics.
+          minimum: -2
+          maximum: 2
+        frequency_penalty:
+          type: number
+          description: >-
+            Penalty for using tokens based on their frequency in the text
+            so far. Positive values decrease the model's tendency to repeat
+            the same lines.
+          minimum: -2
+          maximum: 2
+        user:
+          type: string
+          description: >-
+            A unique identifier representing the end user. Passed through
+            to the upstream AI provider for abuse monitoring.
+    ChatMessage:
+      type: object
+      description: A single message in a chat conversation
+      required:
+        - role
+        - content
+      properties:
+        role:
+          type: string
+          description: >-
+            The role of the message author. System messages provide
+            instructions, user messages are from the human, and assistant
+            messages are prior model responses.
+          enum:
+            - system
+            - user
+            - assistant
+            - tool
+        content:
+          description: >-
+            The text content of the message. May be a string or an array of
+            content parts for multi-modal inputs.
+          oneOf:
+            - type: string
+            - type: array
+              items:
+                type: object
+        name:
+          type: string
+          description: >-
+            An optional name for the participant. Provides the model
+            information to differentiate between participants of the same
+            role.
+    ChatCompletion:
+      type: object
+      description: A completed chat response from the AI model
+      properties:
+        id:
+          type: string
+          description: Unique identifier for this chat completion
+        object:
+          type: string
+          description: Object type, always chat.completion
+          enum:
+            - chat.completion
+        created:
+          type: integer
+          description: Unix timestamp of when the completion was created
+        model:
+          type: string
+          description: The model that generated the completion
+        choices:
+          type: array
+          description: List of completion choices generated
+          items:
+            type: object
+            properties:
+              index:
+                type: integer
+                description: Index of this choice in the list
+              message:
+                $ref: '#/components/schemas/ChatMessage'
+              finish_reason:
+                type: string
+                description: >-
+                  Reason the model stopped generating tokens. stop means
+                  the model hit a natural stop point, length means the
+                  max_tokens limit was reached, and tool_calls means the
+                  model called a tool.
+                enum:
+                  - stop
+                  - length
+                  - tool_calls
+                  - content_filter
+        usage:
+          $ref: '#/components/schemas/UsageInfo'
+    CompletionRequest:
+      type: object
+      description: Request body for the legacy text completions endpoint
+      required:
+        - model
+        - prompt
+      properties:
+        model:
+          type: string
+          description: ID of the model to use for text completion
+        prompt:
+          description: The prompt text to generate completion for
+          oneOf:
+            - type: string
+            - type: array
+              items:
+                type: string
+        max_tokens:
+          type: integer
+          description: Maximum number of tokens to generate
+          minimum: 1
+        temperature:
+          type: number
+          description: Sampling temperature
+          minimum: 0
+          maximum: 2
+        stream:
+          type: boolean
+          description: >-
+            If true, partial completions are streamed as server-sent events
+          default: false
+    Completion:
+      type: object
+      description: A completed text completion response from the AI model
+      properties:
+        id:
+          type: string
+          description: Unique identifier for this completion
+        object:
+          type: string
+          description: Object type, always text_completion
+          enum:
+            - text_completion
+        created:
+          type: integer
+          description: Unix timestamp of when the completion was created
+        model:
+          type: string
+          description: The model that generated the completion
+        choices:
+          type: array
+          description: List of completion choices generated
+          items:
+            type: object
+            properties:
+              text:
+                type: string
+                description: The generated text
+              index:
+                type: integer
+                description: Index of this choice
+              finish_reason:
+                type: string
+                description: Reason the model stopped generating
+                enum:
+                  - stop
+                  - length
+        usage:
+          $ref: '#/components/schemas/UsageInfo'
+    UsageInfo:
+      type: object
+      description: Token usage statistics for the API request
+      properties:
+        prompt_tokens:
+          type: integer
+          description: Number of tokens in the input prompt
+        completion_tokens:
+          type: integer
+          description: Number of tokens in the generated completion
+        total_tokens:
+          type: integer
+          description: Total number of tokens used (prompt + completion)
+    ModelList:
+      type: object
+      description: List of models available through the AI Gateway
+      properties:
+        object:
+          type: string
+          description: Object type, always list
+          enum:
+            - list
+        data:
+          type: array
+          description: List of model objects
+          items:
+            $ref: '#/components/schemas/Model'
+    Model:
+      type: object
+      description: An AI model available through the gateway
+      properties:
+        id:
+          type: string
+          description: >-
+            Model identifier used in API requests. Corresponds to model
+            names configured in AIGatewayRoute rules.
+        object:
+          type: string
+          description: Object type, always model
+          enum:
+            - model
+        created:
+          type: integer
+          description: Unix timestamp of when the model was created
+        owned_by:
+          type: string
+          description: Organization that owns the model
+    ErrorResponse:
+      type: object
+      description: Error response returned when an API request fails
+      properties:
+        error:
+          type: object
+          description: Error details
+          properties:
+            message:
+              type: string
+              description: Human-readable error message describing what went wrong
+            type:
+              type: string
+              description: Error type identifier
+            code:
+              type: string
+              description: Error code for programmatic handling

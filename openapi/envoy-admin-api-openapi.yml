@@ -1,0 +1,884 @@
+openapi: 3.1.0
+info:
+  title: Envoy Admin API
+  description: >-
+    The Envoy Admin API provides local administrative access to a running Envoy
+    proxy instance. It exposes endpoints for inspecting configuration, checking
+    health, viewing statistics, managing log levels, and controlling the runtime
+    state of the proxy. The Admin API is typically bound to a local interface
+    (default port 9901) and is not intended for external exposure in production
+    environments.
+  version: '1.31.0'
+  contact:
+    name: Envoy Proxy Community
+    url: https://www.envoyproxy.io/community
+  termsOfService: https://www.envoyproxy.io/
+externalDocs:
+  description: Envoy Admin Interface Documentation
+  url: https://www.envoyproxy.io/docs/envoy/latest/operations/admin
+servers:
+  - url: http://localhost:9901
+    description: Default Envoy Admin Interface
+tags:
+  - name: Server
+    description: Server management, lifecycle, and information endpoints
+  - name: Clusters
+    description: Upstream cluster inspection and status endpoints
+  - name: Configuration
+    description: Configuration dump and inspection endpoints
+  - name: Listeners
+    description: Listener inspection and drain endpoints
+  - name: Statistics
+    description: Statistics, metrics, and Prometheus endpoints
+  - name: Health
+    description: Health check management endpoints
+  - name: Logging
+    description: Log level management endpoints
+  - name: Runtime
+    description: Runtime settings management endpoints
+  - name: Certificates
+    description: TLS certificate inspection endpoints
+paths:
+  /server_info:
+    get:
+      operationId: getServerInfo
+      summary: Get server information
+      description: >-
+        Returns information about the running Envoy server including version
+        string, current state, uptime for the current epoch and all epochs,
+        hot restart compatibility version, and command line options used at
+        startup.
+      tags:
+        - Server
+      responses:
+        '200':
+          description: Server information retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServerInfo'
+  /clusters:
+    get:
+      operationId: getClusters
+      summary: Get upstream cluster information
+      description: >-
+        Returns information about all configured upstream clusters including
+        host addresses, health status, statistics counters and gauges, and
+        load balancing weights. Supports JSON or text output format.
+      tags:
+        - Clusters
+      parameters:
+        - $ref: '#/components/parameters/FormatParam'
+      responses:
+        '200':
+          description: Cluster information retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ClustersResponse'
+            text/plain:
+              schema:
+                type: string
+  /config_dump:
+    get:
+      operationId: getConfigDump
+      summary: Dump current Envoy configuration
+      description: >-
+        Returns the currently loaded Envoy configuration as a JSON object
+        containing bootstrap, clusters, listeners, routes, secrets, and
+        endpoints. Supports filtering by resource type and name regex to
+        reduce output size.
+      tags:
+        - Configuration
+      parameters:
+        - name: resource
+          in: query
+          description: >-
+            Filter by resource type. Valid values include static_clusters,
+            dynamic_active_clusters, static_listeners, dynamic_active_listeners,
+            dynamic_route_configs, static_route_configs, and bootstrap.
+          required: false
+          schema:
+            type: string
+            enum:
+              - static_clusters
+              - dynamic_active_clusters
+              - static_listeners
+              - dynamic_active_listeners
+              - dynamic_route_configs
+              - static_route_configs
+              - bootstrap
+        - name: name_regex
+          in: query
+          description: Filter resources by name using a regular expression pattern.
+          required: false
+          schema:
+            type: string
+        - name: include_eds
+          in: query
+          description: Include EDS endpoint assignment data in the config dump.
+          required: false
+          schema:
+            type: boolean
+            default: false
+      responses:
+        '200':
+          description: Configuration dump retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ConfigDump'
+  /listeners:
+    get:
+      operationId: getListeners
+      summary: Get listener information
+      description: >-
+        Returns information about all configured listeners including their
+        names, bound addresses and ports, and associated statistics. Supports
+        JSON or text output format.
+      tags:
+        - Listeners
+      parameters:
+        - $ref: '#/components/parameters/FormatParam'
+      responses:
+        '200':
+          description: Listener information retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListenersResponse'
+            text/plain:
+              schema:
+                type: string
+  /stats:
+    get:
+      operationId: getStats
+      summary: Get Envoy statistics
+      description: >-
+        Returns all recorded statistics including counters, gauges, and
+        histograms for the Envoy instance. Supports filtering by stat name
+        pattern and type, and can return data in text, JSON, or Prometheus
+        exposition format.
+      tags:
+        - Statistics
+      parameters:
+        - name: format
+          in: query
+          description: Output format for statistics data.
+          required: false
+          schema:
+            type: string
+            enum:
+              - json
+              - text
+              - prometheus
+            default: text
+        - name: filter
+          in: query
+          description: Regex pattern to filter stat names.
+          required: false
+          schema:
+            type: string
+        - name: type
+          in: query
+          description: Filter statistics by type.
+          required: false
+          schema:
+            type: string
+            enum:
+              - Counters
+              - Gauges
+              - Histograms
+        - name: usedonly
+          in: query
+          description: >-
+            When true, only return statistics that have been written to at
+            least once.
+          required: false
+          schema:
+            type: boolean
+            default: false
+      responses:
+        '200':
+          description: Statistics retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StatsResponse'
+            text/plain:
+              schema:
+                type: string
+  /stats/prometheus:
+    get:
+      operationId: getStatsPrometheus
+      summary: Get statistics in Prometheus format
+      description: >-
+        Returns all statistics formatted for Prometheus scraping using the
+        standard Prometheus text exposition format. Supports filtering and
+        can optionally return only stats that have been used.
+      tags:
+        - Statistics
+      parameters:
+        - name: usedonly
+          in: query
+          description: >-
+            When true, only return statistics that have been written to at
+            least once.
+          required: false
+          schema:
+            type: boolean
+            default: false
+        - name: filter
+          in: query
+          description: Regex pattern to filter stat names.
+          required: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Prometheus-formatted statistics
+          content:
+            text/plain:
+              schema:
+                type: string
+  /stats/recentlookups:
+    get:
+      operationId: getRecentLookups
+      summary: Get recently looked-up stat names
+      description: >-
+        Returns a list of the most recently looked-up stat names along with
+        lookup counts. Useful for debugging stat name patterns.
+      tags:
+        - Statistics
+      responses:
+        '200':
+          description: Recently looked-up stat names
+          content:
+            text/plain:
+              schema:
+                type: string
+  /health_check/fail:
+    post:
+      operationId: setHealthCheckFail
+      summary: Force health check failure
+      description: >-
+        Forces the Envoy server to fail all health checks from upstream load
+        balancers. This is useful for draining traffic before a planned
+        shutdown. The server continues to proxy existing connections.
+      tags:
+        - Health
+      responses:
+        '200':
+          description: Health check set to failing state
+          content:
+            text/plain:
+              schema:
+                type: string
+  /health_check/ok:
+    post:
+      operationId: setHealthCheckOk
+      summary: Restore health check passing
+      description: >-
+        Restores the Envoy server to pass health checks from upstream load
+        balancers after a prior call to /health_check/fail. The server will
+        resume receiving new traffic.
+      tags:
+        - Health
+      responses:
+        '200':
+          description: Health check restored to passing state
+          content:
+            text/plain:
+              schema:
+                type: string
+  /ready:
+    get:
+      operationId: getReady
+      summary: Get server readiness status
+      description: >-
+        Returns whether the Envoy server is ready to accept connections and
+        proxy traffic. Returns HTTP 200 when ready and HTTP 503 when the
+        server is not yet initialized or is shutting down.
+      tags:
+        - Health
+      responses:
+        '200':
+          description: Server is ready to accept connections
+          content:
+            text/plain:
+              schema:
+                type: string
+        '503':
+          description: Server is not ready (initializing or draining)
+          content:
+            text/plain:
+              schema:
+                type: string
+  /logging:
+    get:
+      operationId: getLogging
+      summary: Get current log levels
+      description: >-
+        Returns the current logging levels for all named loggers configured
+        in the Envoy instance. Logger names correspond to subsystems such
+        as http, router, upstream, conn_handler, and others.
+      tags:
+        - Logging
+      responses:
+        '200':
+          description: Current log levels for all loggers
+          content:
+            text/plain:
+              schema:
+                type: string
+    post:
+      operationId: setLogging
+      summary: Change log levels
+      description: >-
+        Dynamically changes the logging level for one or all loggers without
+        restarting Envoy. Use the level query parameter to set all loggers
+        or the paths parameter to set a specific logger at logger_name:level
+        format.
+      tags:
+        - Logging
+      parameters:
+        - name: level
+          in: query
+          description: >-
+            Set log level for all loggers simultaneously. One of trace, debug,
+            info, warning, error, critical, or off.
+          required: false
+          schema:
+            type: string
+            enum:
+              - trace
+              - debug
+              - info
+              - warning
+              - error
+              - critical
+              - 'off'
+        - name: paths
+          in: query
+          description: >-
+            Set log level for a specific logger using logger_name:level format.
+            Can be specified multiple times for multiple loggers.
+          required: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Log levels updated successfully
+          content:
+            text/plain:
+              schema:
+                type: string
+        '400':
+          description: Invalid log level or logger name specified
+          content:
+            text/plain:
+              schema:
+                type: string
+  /runtime:
+    get:
+      operationId: getRuntime
+      summary: Get runtime settings
+      description: >-
+        Returns the current runtime settings showing all layers, their
+        configured values, and the final merged value for each key. Runtime
+        values control various Envoy behaviors without requiring a restart.
+      tags:
+        - Runtime
+      responses:
+        '200':
+          description: Runtime settings retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RuntimeResponse'
+  /runtime_modify:
+    post:
+      operationId: modifyRuntime
+      summary: Modify runtime settings
+      description: >-
+        Adds or modifies runtime values in the admin overriding layer. Values
+        are passed as query parameters where the key is the runtime feature
+        flag name and the value is the new setting. Use the value - (dash)
+        to remove a previously set override.
+      tags:
+        - Runtime
+      responses:
+        '200':
+          description: Runtime settings modified successfully
+          content:
+            text/plain:
+              schema:
+                type: string
+        '400':
+          description: Invalid runtime key or value specified
+          content:
+            text/plain:
+              schema:
+                type: string
+  /drain_listeners:
+    post:
+      operationId: drainListeners
+      summary: Drain listeners
+      description: >-
+        Initiates graceful draining of all listeners, stopping new connections
+        from being accepted while allowing existing connections to complete.
+        Useful before shutting down an Envoy instance or removing it from a
+        load balancer.
+      tags:
+        - Listeners
+      parameters:
+        - name: inboundonly
+          in: query
+          description: When true, only drain inbound listeners.
+          required: false
+          schema:
+            type: boolean
+            default: false
+        - name: graceful
+          in: query
+          description: >-
+            When true, perform a graceful drain that allows time for
+            connections to complete.
+          required: false
+          schema:
+            type: boolean
+            default: false
+      responses:
+        '200':
+          description: Listener drain initiated
+          content:
+            text/plain:
+              schema:
+                type: string
+  /quitquitquit:
+    post:
+      operationId: shutdownServer
+      summary: Shutdown Envoy server
+      description: >-
+        Initiates a clean shutdown of the Envoy server process. The server
+        will drain connections and exit. This endpoint requires the admin
+        interface to have this feature enabled in configuration.
+      tags:
+        - Server
+      responses:
+        '200':
+          description: Server shutdown initiated
+          content:
+            text/plain:
+              schema:
+                type: string
+  /certs:
+    get:
+      operationId: getCertificates
+      summary: Get TLS certificate information
+      description: >-
+        Returns information about all TLS certificates currently loaded by
+        Envoy including certificate paths, serial numbers, subject alternative
+        names, validity dates, and days until expiration.
+      tags:
+        - Certificates
+      responses:
+        '200':
+          description: TLS certificate information retrieved
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CertificatesResponse'
+  /memory:
+    get:
+      operationId: getMemory
+      summary: Get memory allocation information
+      description: >-
+        Returns current memory usage statistics for the Envoy process including
+        allocated memory, heap size, and physical memory used. Useful for
+        monitoring memory consumption and debugging memory issues.
+      tags:
+        - Server
+      responses:
+        '200':
+          description: Memory usage information retrieved
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MemoryResponse'
+  /hot_restart_version:
+    get:
+      operationId: getHotRestartVersion
+      summary: Get hot restart compatibility version
+      description: >-
+        Returns the hot restart compatibility version string. Two Envoy
+        instances can perform a hot restart if their hot restart versions
+        match.
+      tags:
+        - Server
+      responses:
+        '200':
+          description: Hot restart version string
+          content:
+            text/plain:
+              schema:
+                type: string
+  /reset_counters:
+    post:
+      operationId: resetCounters
+      summary: Reset all statistics counters
+      description: >-
+        Resets all statistics counters to zero. Does not affect gauges or
+        histograms. Useful for testing and debugging scenarios where you
+        want a clean baseline for counter metrics.
+      tags:
+        - Statistics
+      responses:
+        '200':
+          description: Counters reset successfully
+          content:
+            text/plain:
+              schema:
+                type: string
+components:
+  parameters:
+    FormatParam:
+      name: format
+      in: query
+      description: Output format for the response data.
+      required: false
+      schema:
+        type: string
+        enum:
+          - json
+          - text
+        default: text
+  schemas:
+    ServerInfo:
+      type: object
+      description: Information about the running Envoy server instance
+      properties:
+        version:
+          type: string
+          description: Envoy version string including build hash
+        state:
+          type: string
+          description: Current operational state of the server
+          enum:
+            - LIVE
+            - DRAINING
+            - PRE_INITIALIZING
+            - INITIALIZING
+        uptime_current_epoch:
+          type: string
+          description: >-
+            Uptime of the current Envoy epoch in seconds since last hot
+            restart
+        uptime_all_epochs:
+          type: string
+          description: >-
+            Total uptime in seconds across all hot restart epochs since
+            the process started
+        hot_restart_version:
+          type: string
+          description: >-
+            Hot restart compatibility version string used to verify
+            compatibility between old and new Envoy instances
+        command_line_options:
+          type: object
+          description: Command line options used when starting the Envoy process
+          properties:
+            restart_epoch:
+              type: integer
+              description: Hot restart epoch number
+            config_path:
+              type: string
+              description: Path to the bootstrap configuration file
+            log_level:
+              type: string
+              description: Initial log level setting
+            service_cluster:
+              type: string
+              description: Service cluster name
+            service_node:
+              type: string
+              description: Service node identifier
+            concurrency:
+              type: integer
+              description: Number of worker threads
+        node:
+          type: object
+          description: Node identity information
+          properties:
+            id:
+              type: string
+              description: Node identifier string
+            cluster:
+              type: string
+              description: Cluster name this node belongs to
+            metadata:
+              type: object
+              description: Opaque metadata associated with this node
+            locality:
+              type: object
+              description: Geographic locality information for this node
+    ClustersResponse:
+      type: object
+      description: Information about all configured upstream clusters
+      properties:
+        cluster_statuses:
+          type: array
+          description: List of cluster status objects
+          items:
+            $ref: '#/components/schemas/ClusterStatus'
+    ClusterStatus:
+      type: object
+      description: Status of an individual upstream cluster
+      properties:
+        name:
+          type: string
+          description: Cluster name
+        added_via_api:
+          type: boolean
+          description: Whether the cluster was dynamically added via xDS API
+        success_rate_ejection_threshold:
+          type: number
+          description: >-
+            Success rate outlier detection ejection threshold as a
+            percentage
+        host_statuses:
+          type: array
+          description: Status of individual hosts within the cluster
+          items:
+            $ref: '#/components/schemas/HostStatus'
+    HostStatus:
+      type: object
+      description: Status of an individual upstream host within a cluster
+      properties:
+        address:
+          type: object
+          description: Network address of the host
+          properties:
+            socket_address:
+              type: object
+              properties:
+                address:
+                  type: string
+                  description: IP address or hostname
+                port_value:
+                  type: integer
+                  description: Port number
+        stats:
+          type: array
+          description: Statistics for this host
+          items:
+            type: object
+            properties:
+              name:
+                type: string
+                description: Stat name
+              value:
+                type: string
+                description: Stat value
+              type:
+                type: string
+                description: Stat type (Counter, Gauge, Histogram)
+        health_status:
+          type: object
+          description: Current health status of this host
+          properties:
+            eds_health_status:
+              type: string
+              description: Health status as reported by EDS
+              enum:
+                - HEALTHY
+                - UNHEALTHY
+                - DRAINING
+                - TIMEOUT
+                - DEGRADED
+            failed_active_health_check:
+              type: boolean
+              description: Whether active health checking has marked this host unhealthy
+            failed_outlier_check:
+              type: boolean
+              description: Whether outlier detection has ejected this host
+        weight:
+          type: integer
+          description: Load balancing weight for this host
+        locality:
+          type: object
+          description: Geographic locality of this host
+          properties:
+            region:
+              type: string
+            zone:
+              type: string
+            sub_zone:
+              type: string
+    ConfigDump:
+      type: object
+      description: >-
+        Complete Envoy configuration dump containing all static and dynamic
+        resource configurations
+      properties:
+        configs:
+          type: array
+          description: List of typed configuration objects
+          items:
+            type: object
+            properties:
+              '@type':
+                type: string
+                description: >-
+                  Protobuf type URL identifying the configuration type
+                  (e.g., type.googleapis.com/envoy.admin.v3.BootstrapConfigDump)
+    ListenersResponse:
+      type: object
+      description: Information about all configured listeners
+      properties:
+        listener_statuses:
+          type: array
+          description: List of listener status objects
+          items:
+            type: object
+            properties:
+              name:
+                type: string
+                description: Listener name
+              local_address:
+                type: object
+                description: Address this listener is bound to
+                properties:
+                  socket_address:
+                    type: object
+                    properties:
+                      address:
+                        type: string
+                        description: IP address or hostname
+                      port_value:
+                        type: integer
+                        description: Port number
+              additional_local_addresses:
+                type: array
+                description: Additional addresses this listener is bound to
+                items:
+                  type: object
+    StatsResponse:
+      type: object
+      description: Envoy statistics as structured JSON
+      properties:
+        stats:
+          type: array
+          description: List of statistic entries
+          items:
+            type: object
+            properties:
+              name:
+                type: string
+                description: Fully-qualified statistic name
+              value:
+                type: integer
+                description: Current value of the statistic
+              type:
+                type: string
+                description: Statistic type
+                enum:
+                  - Counter
+                  - Gauge
+                  - Histogram
+    RuntimeResponse:
+      type: object
+      description: Runtime settings showing all layers and merged values
+      properties:
+        layers:
+          type: array
+          description: Ordered list of runtime layer names
+          items:
+            type: string
+        entries:
+          type: object
+          description: Map of runtime key to merged and per-layer values
+          additionalProperties:
+            type: object
+            properties:
+              final_value:
+                type: string
+                description: The final merged value after applying all layers
+              layer_values:
+                type: array
+                description: Values from each layer in order
+                items:
+                  type: string
+    CertificatesResponse:
+      type: object
+      description: Information about all TLS certificates loaded by Envoy
+      properties:
+        certificates:
+          type: array
+          description: List of certificate chain entries
+          items:
+            type: object
+            properties:
+              ca_cert:
+                type: array
+                description: CA certificate details
+                items:
+                  $ref: '#/components/schemas/CertificateDetails'
+              cert_chain:
+                type: array
+                description: Certificate chain details
+                items:
+                  $ref: '#/components/schemas/CertificateDetails'
+    CertificateDetails:
+      type: object
+      description: Details of a single TLS certificate
+      properties:
+        path:
+          type: string
+          description: Filesystem path to the certificate file
+        serial_number:
+          type: string
+          description: Certificate serial number in hex
+        subject_alt_names:
+          type: array
+          description: Subject alternative names in the certificate
+          items:
+            type: object
+            properties:
+              dns:
+                type: string
+                description: DNS SAN entry
+              uri:
+                type: string
+                description: URI SAN entry
+              ip_address:
+                type: string
+                description: IP address SAN entry
+        days_until_expiration:
+          type: string
+          description: Number of days until the certificate expires
+        valid_from:
+          type: string
+          description: Certificate validity start date in ISO 8601 format
+        expiration_time:
+          type: string
+          description: Certificate expiration date in ISO 8601 format
+    MemoryResponse:
+      type: object
+      description: Memory usage statistics for the Envoy process
+      properties:
+        allocated:
+          type: string
+          description: Total bytes allocated by the process
+        heap_size:
+          type: string
+          description: Current heap size in bytes
+        pageheap_unmapped:
+          type: string
+          description: Bytes in the page heap that are unmapped
+        pageheap_free:
+          type: string
+          description: Bytes in the page heap that are free
+        total_thread_cache:
+          type: string
+          description: Total bytes in all thread caches
