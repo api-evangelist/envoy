@@ -8,10 +8,10 @@ description: >-
 type: Index
 image: https://kinlane-productions.s3.amazonaws.com/apis-json/apis-json-logo.jpg
 tags:
+  - Cloud Native
+  - Load Balancing
   - Proxy
   - Service Mesh
-  - Load Balancing
-  - Cloud Native
 url: https://www.envoyproxy.io/
 created: '2025-01-01'
 modified: '2026-03-18'
@@ -45,10 +45,10 @@ apis:
       proxies at runtime without restarts.
     humanURL: https://www.envoyproxy.io/docs/envoy/latest/api-docs/xds_protocol
     tags:
-      - xDS
       - Discovery Service
-      - gRPC
       - Dynamic Configuration
+      - gRPC
+      - xDS
     properties:
       - type: Documentation
         url: https://www.envoyproxy.io/docs/envoy/latest/api-docs/xds_protocol
@@ -66,10 +66,10 @@ apis:
       is defined using Protocol Buffers and published in the envoy-api repository.
     humanURL: https://www.envoyproxy.io/docs/envoy/latest/api/api
     tags:
-      - Protobuf
       - Configuration
       - Extensions
       - Filters
+      - Protobuf
     properties:
       - type: Documentation
         url: https://www.envoyproxy.io/docs/envoy/latest/api/api
@@ -91,10 +91,10 @@ apis:
       traffic management without requiring direct Envoy configuration knowledge.
     humanURL: https://gateway.envoyproxy.io/
     tags:
+      - Cloud Native
       - Gateway
       - Kubernetes
       - Traffic Management
-      - Cloud Native
     properties:
       - type: Documentation
         url: https://gateway.envoyproxy.io/docs/
@@ -115,9 +115,9 @@ apis:
     humanURL: https://aigateway.envoyproxy.io/
     tags:
       - AI
-      - LLM
-      - Gateway
       - Cloud Native
+      - Gateway
+      - LLM
     properties:
       - type: Documentation
         url: https://aigateway.envoyproxy.io/docs/

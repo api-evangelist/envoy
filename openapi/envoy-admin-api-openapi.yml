@@ -20,24 +20,24 @@ servers:
   - url: http://localhost:9901
     description: Default Envoy Admin Interface
 tags:
-  - name: Server
-    description: Server management, lifecycle, and information endpoints
+  - name: Certificates
+    description: TLS certificate inspection endpoints
   - name: Clusters
     description: Upstream cluster inspection and status endpoints
   - name: Configuration
     description: Configuration dump and inspection endpoints
-  - name: Listeners
-    description: Listener inspection and drain endpoints
-  - name: Statistics
-    description: Statistics, metrics, and Prometheus endpoints
   - name: Health
     description: Health check management endpoints
+  - name: Listeners
+    description: Listener inspection and drain endpoints
   - name: Logging
     description: Log level management endpoints
   - name: Runtime
     description: Runtime settings management endpoints
-  - name: Certificates
-    description: TLS certificate inspection endpoints
+  - name: Server
+    description: Server management, lifecycle, and information endpoints
+  - name: Statistics
+    description: Statistics, metrics, and Prometheus endpoints
 paths:
   /server_info:
     get:
