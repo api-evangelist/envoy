@@ -21,7 +21,7 @@ paths:
   /server_info:
     get:
       operationId: getServerInfo
-      summary: Get server information
+      summary: Envoy Get server information
       description: >-
         Returns information about the running Envoy server including version,
         state, uptime, command line options, and hot restart version.
@@ -37,7 +37,7 @@ paths:
   /clusters:
     get:
       operationId: getClusters
-      summary: Get upstream cluster information
+      summary: Envoy Get upstream cluster information
       description: >-
         Returns information about all configured upstream clusters including
         hosts, health status, statistics, and load balancing weights.
@@ -108,7 +108,7 @@ paths:
   /listeners:
     get:
       operationId: getListeners
-      summary: Get listener information
+      summary: Envoy Get listener information
       description: >-
         Returns information about all configured listeners including
         addresses, filter chains, and associated statistics.
@@ -187,7 +187,7 @@ paths:
   /stats/prometheus:
     get:
       operationId: getStatsPrometheus
-      summary: Get statistics in Prometheus format
+      summary: Envoy Get statistics in Prometheus format
       description: >-
         Returns all statistics formatted for Prometheus scraping, using the
         standard Prometheus exposition format.
@@ -215,7 +215,7 @@ paths:
   /health_check/fail:
     post:
       operationId: setHealthCheckFail
-      summary: Set health check to failing
+      summary: Envoy Set health check to failing
       description: >-
         Forces the server to fail health checks. This is useful for draining
         connections prior to shutting down the server.
@@ -231,7 +231,7 @@ paths:
   /health_check/ok:
     post:
       operationId: setHealthCheckOk
-      summary: Set health check to passing
+      summary: Envoy Set health check to passing
       description: >-
         Restores the server to pass health checks after a prior call to
         /health_check/fail.
@@ -247,7 +247,7 @@ paths:
   /ready:
     get:
       operationId: getReady
-      summary: Get server readiness
+      summary: Envoy Get server readiness
       description: >-
         Returns whether the server is ready to accept connections. Returns
         200 OK when ready, 503 when not ready.
@@ -269,7 +269,7 @@ paths:
   /logging:
     get:
       operationId: getLogging
-      summary: Get current log levels
+      summary: Envoy Get current log levels
       description: >-
         Returns the current logging levels for all loggers configured in
         the Envoy instance.
@@ -284,7 +284,7 @@ paths:
                 type: string
     post:
       operationId: setLogging
-      summary: Change log levels
+      summary: Envoy Change log levels
       description: >-
         Dynamically changes the logging level for one or all loggers. Use
         query parameters to specify logger name and level.
@@ -319,7 +319,7 @@ paths:
   /runtime:
     get:
       operationId: getRuntime
-      summary: Get runtime settings
+      summary: Envoy Get runtime settings
       description: >-
         Returns the current runtime settings including all layers and their
         values.
@@ -335,7 +335,7 @@ paths:
   /runtime_modify:
     post:
       operationId: modifyRuntime
-      summary: Modify runtime settings
+      summary: Envoy Modify runtime settings
       description: >-
         Adds or modifies runtime values in the admin layer. Values are
         passed as query parameters.
@@ -351,7 +351,7 @@ paths:
   /drain_listeners:
     post:
       operationId: drainListeners
-      summary: Drain listeners
+      summary: Envoy Drain listeners
       description: >-
         Drains all listeners, preventing new connections from being accepted.
         Existing connections are allowed to complete.
@@ -380,7 +380,7 @@ paths:
   /quitquitquit:
     post:
       operationId: shutdownServer
-      summary: Shutdown server
+      summary: Envoy Shutdown server
       description: >-
         Initiates a clean shutdown of the Envoy server process.
       tags:
@@ -395,7 +395,7 @@ paths:
   /certs:
     get:
       operationId: getCertificates
-      summary: Get certificate information
+      summary: Envoy Get certificate information
       description: >-
         Returns information about all loaded TLS certificates including
         paths, serial numbers, and expiration dates.

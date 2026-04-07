@@ -45,7 +45,7 @@ paths:
   /v1/chat/completions:
     post:
       operationId: createChatCompletion
-      summary: Create a chat completion
+      summary: Envoy Create a chat completion
       description: >-
         Creates a chat completion response for the provided messages using an
         AI model routed through the gateway. The request format is compatible
@@ -113,7 +113,7 @@ paths:
   /v1/completions:
     post:
       operationId: createCompletion
-      summary: Create a text completion
+      summary: Envoy Create a text completion
       description: >-
         Creates a text completion for the provided prompt using an AI model
         routed through the gateway. The request format is compatible with the
@@ -156,7 +156,7 @@ paths:
   /v1/models:
     get:
       operationId: listModels
-      summary: List available models
+      summary: Envoy List available models
       description: >-
         Returns a list of AI models available through the gateway as configured
         in AIGatewayRoute resources. The available models correspond to the

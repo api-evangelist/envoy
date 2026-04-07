@@ -42,7 +42,7 @@ paths:
   /server_info:
     get:
       operationId: getServerInfo
-      summary: Get server information
+      summary: Envoy Get server information
       description: >-
         Returns information about the running Envoy server including version
         string, current state, uptime for the current epoch and all epochs,
@@ -60,7 +60,7 @@ paths:
   /clusters:
     get:
       operationId: getClusters
-      summary: Get upstream cluster information
+      summary: Envoy Get upstream cluster information
       description: >-
         Returns information about all configured upstream clusters including
         host addresses, health status, statistics counters and gauges, and
@@ -131,7 +131,7 @@ paths:
   /listeners:
     get:
       operationId: getListeners
-      summary: Get listener information
+      summary: Envoy Get listener information
       description: >-
         Returns information about all configured listeners including their
         names, bound addresses and ports, and associated statistics. Supports
@@ -211,7 +211,7 @@ paths:
   /stats/prometheus:
     get:
       operationId: getStatsPrometheus
-      summary: Get statistics in Prometheus format
+      summary: Envoy Get statistics in Prometheus format
       description: >-
         Returns all statistics formatted for Prometheus scraping using the
         standard Prometheus text exposition format. Supports filtering and
@@ -244,7 +244,7 @@ paths:
   /stats/recentlookups:
     get:
       operationId: getRecentLookups
-      summary: Get recently looked-up stat names
+      summary: Envoy Get recently looked-up stat names
       description: >-
         Returns a list of the most recently looked-up stat names along with
         lookup counts. Useful for debugging stat name patterns.
@@ -260,7 +260,7 @@ paths:
   /health_check/fail:
     post:
       operationId: setHealthCheckFail
-      summary: Force health check failure
+      summary: Envoy Force health check failure
       description: >-
         Forces the Envoy server to fail all health checks from upstream load
         balancers. This is useful for draining traffic before a planned
@@ -277,7 +277,7 @@ paths:
   /health_check/ok:
     post:
       operationId: setHealthCheckOk
-      summary: Restore health check passing
+      summary: Envoy Restore health check passing
       description: >-
         Restores the Envoy server to pass health checks from upstream load
         balancers after a prior call to /health_check/fail. The server will
@@ -294,7 +294,7 @@ paths:
   /ready:
     get:
       operationId: getReady
-      summary: Get server readiness status
+      summary: Envoy Get server readiness status
       description: >-
         Returns whether the Envoy server is ready to accept connections and
         proxy traffic. Returns HTTP 200 when ready and HTTP 503 when the
@@ -317,7 +317,7 @@ paths:
   /logging:
     get:
       operationId: getLogging
-      summary: Get current log levels
+      summary: Envoy Get current log levels
       description: >-
         Returns the current logging levels for all named loggers configured
         in the Envoy instance. Logger names correspond to subsystems such
@@ -333,7 +333,7 @@ paths:
                 type: string
     post:
       operationId: setLogging
-      summary: Change log levels
+      summary: Envoy Change log levels
       description: >-
         Dynamically changes the logging level for one or all loggers without
         restarting Envoy. Use the level query parameter to set all loggers
@@ -382,7 +382,7 @@ paths:
   /runtime:
     get:
       operationId: getRuntime
-      summary: Get runtime settings
+      summary: Envoy Get runtime settings
       description: >-
         Returns the current runtime settings showing all layers, their
         configured values, and the final merged value for each key. Runtime
@@ -399,7 +399,7 @@ paths:
   /runtime_modify:
     post:
       operationId: modifyRuntime
-      summary: Modify runtime settings
+      summary: Envoy Modify runtime settings
       description: >-
         Adds or modifies runtime values in the admin overriding layer. Values
         are passed as query parameters where the key is the runtime feature
@@ -423,7 +423,7 @@ paths:
   /drain_listeners:
     post:
       operationId: drainListeners
-      summary: Drain listeners
+      summary: Envoy Drain listeners
       description: >-
         Initiates graceful draining of all listeners, stopping new connections
         from being accepted while allowing existing connections to complete.
@@ -475,7 +475,7 @@ paths:
   /certs:
     get:
       operationId: getCertificates
-      summary: Get TLS certificate information
+      summary: Envoy Get TLS certificate information
       description: >-
         Returns information about all TLS certificates currently loaded by
         Envoy including certificate paths, serial numbers, subject alternative
@@ -492,7 +492,7 @@ paths:
   /memory:
     get:
       operationId: getMemory
-      summary: Get memory allocation information
+      summary: Envoy Get memory allocation information
       description: >-
         Returns current memory usage statistics for the Envoy process including
         allocated memory, heap size, and physical memory used. Useful for
@@ -509,7 +509,7 @@ paths:
   /hot_restart_version:
     get:
       operationId: getHotRestartVersion
-      summary: Get hot restart compatibility version
+      summary: Envoy Get hot restart compatibility version
       description: >-
         Returns the hot restart compatibility version string. Two Envoy
         instances can perform a hot restart if their hot restart versions
@@ -526,7 +526,7 @@ paths:
   /reset_counters:
     post:
       operationId: resetCounters
-      summary: Reset all statistics counters
+      summary: Envoy Reset all statistics counters
       description: >-
         Resets all statistics counters to zero. Does not affect gauges or
         histograms. Useful for testing and debugging scenarios where you

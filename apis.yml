@@ -57,7 +57,7 @@ apis:
       - type: GitHubRepository
         url: https://github.com/envoyproxy/envoy
   - aid: envoy:envoy-api-v3
-    name: Envoy API v3
+    name: Envoy API V3
     description: >-
       The Envoy API v3 is the current stable protobuf-based configuration and
       extension API for Envoy proxy. It defines the configuration types for all
