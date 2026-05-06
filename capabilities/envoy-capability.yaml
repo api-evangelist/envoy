@@ -1,0 +1,773 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: Envoy Admin API
+  description: The Envoy Admin API provides local administrative access to a running Envoy proxy instance. It exposes endpoints
+    for inspecting configuration, checking health, viewing statistics, managing log levels, and controlling the runtime state
+    of the proxy. The Admin API is typically bound to a local interface (default port 9901) and is not intended for external
+    exposure in production environments.
+  tags:
+  - Envoy
+  - API
+  created: '2026-05-06'
+  modified: '2026-05-06'
+capability:
+  consumes:
+  - type: http
+    namespace: envoy
+    baseUri: http://localhost:9901
+    description: Envoy Admin API HTTP API.
+    resources:
+    - name: server-info
+      path: /server_info
+      operations:
+      - name: getserverinfo
+        method: GET
+        description: Envoy Get server information
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: clusters
+      path: /clusters
+      operations:
+      - name: getclusters
+        method: GET
+        description: Envoy Get upstream cluster information
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: config-dump
+      path: /config_dump
+      operations:
+      - name: getconfigdump
+        method: GET
+        description: Dump current Envoy configuration
+        inputParameters:
+        - name: resource
+          in: query
+          type: string
+          description: Filter by resource type. Valid values include static_clusters, dynamic_active_clusters, static_listeners,
+            dynamic_active_listeners, dynamic_route_configs, stati
+        - name: name_regex
+          in: query
+          type: string
+          description: Filter resources by name using a regular expression pattern.
+        - name: include_eds
+          in: query
+          type: boolean
+          description: Include EDS endpoint assignment data in the config dump.
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: listeners
+      path: /listeners
+      operations:
+      - name: getlisteners
+        method: GET
+        description: Envoy Get listener information
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: stats
+      path: /stats
+      operations:
+      - name: getstats
+        method: GET
+        description: Get Envoy statistics
+        inputParameters:
+        - name: format
+          in: query
+          type: string
+          description: Output format for statistics data.
+        - name: filter
+          in: query
+          type: string
+          description: Regex pattern to filter stat names.
+        - name: type
+          in: query
+          type: string
+          description: Filter statistics by type.
+        - name: usedonly
+          in: query
+          type: boolean
+          description: When true, only return statistics that have been written to at least once.
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: stats-prometheus
+      path: /stats/prometheus
+      operations:
+      - name: getstatsprometheus
+        method: GET
+        description: Envoy Get statistics in Prometheus format
+        inputParameters:
+        - name: usedonly
+          in: query
+          type: boolean
+          description: When true, only return statistics that have been written to at least once.
+        - name: filter
+          in: query
+          type: string
+          description: Regex pattern to filter stat names.
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: stats-recentlookups
+      path: /stats/recentlookups
+      operations:
+      - name: getrecentlookups
+        method: GET
+        description: Envoy Get recently looked-up stat names
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: health-check-fail
+      path: /health_check/fail
+      operations:
+      - name: sethealthcheckfail
+        method: POST
+        description: Envoy Force health check failure
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: health-check-ok
+      path: /health_check/ok
+      operations:
+      - name: sethealthcheckok
+        method: POST
+        description: Envoy Restore health check passing
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: ready
+      path: /ready
+      operations:
+      - name: getready
+        method: GET
+        description: Envoy Get server readiness status
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: logging
+      path: /logging
+      operations:
+      - name: getlogging
+        method: GET
+        description: Envoy Get current log levels
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+      - name: setlogging
+        method: POST
+        description: Envoy Change log levels
+        inputParameters:
+        - name: level
+          in: query
+          type: string
+          description: Set log level for all loggers simultaneously. One of trace, debug, info, warning, error, critical,
+            or off.
+        - name: paths
+          in: query
+          type: string
+          description: Set log level for a specific logger using logger_name:level format. Can be specified multiple times
+            for multiple loggers.
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: runtime
+      path: /runtime
+      operations:
+      - name: getruntime
+        method: GET
+        description: Envoy Get runtime settings
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: runtime-modify
+      path: /runtime_modify
+      operations:
+      - name: modifyruntime
+        method: POST
+        description: Envoy Modify runtime settings
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: drain-listeners
+      path: /drain_listeners
+      operations:
+      - name: drainlisteners
+        method: POST
+        description: Envoy Drain listeners
+        inputParameters:
+        - name: inboundonly
+          in: query
+          type: boolean
+          description: When true, only drain inbound listeners.
+        - name: graceful
+          in: query
+          type: boolean
+          description: When true, perform a graceful drain that allows time for connections to complete.
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: quitquitquit
+      path: /quitquitquit
+      operations:
+      - name: shutdownserver
+        method: POST
+        description: Shutdown Envoy server
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: certs
+      path: /certs
+      operations:
+      - name: getcertificates
+        method: GET
+        description: Envoy Get TLS certificate information
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: memory
+      path: /memory
+      operations:
+      - name: getmemory
+        method: GET
+        description: Envoy Get memory allocation information
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: hot-restart-version
+      path: /hot_restart_version
+      operations:
+      - name: gethotrestartversion
+        method: GET
+        description: Envoy Get hot restart compatibility version
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: reset-counters
+      path: /reset_counters
+      operations:
+      - name: resetcounters
+        method: POST
+        description: Envoy Reset all statistics counters
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+  exposes:
+  - type: rest
+    port: 8080
+    namespace: envoy-rest
+    description: REST adapter for Envoy Admin API.
+    resources:
+    - path: /server_info
+      name: getserverinfo
+      operations:
+      - method: GET
+        name: getserverinfo
+        description: Envoy Get server information
+        call: envoy.getserverinfo
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /clusters
+      name: getclusters
+      operations:
+      - method: GET
+        name: getclusters
+        description: Envoy Get upstream cluster information
+        call: envoy.getclusters
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /config_dump
+      name: getconfigdump
+      operations:
+      - method: GET
+        name: getconfigdump
+        description: Dump current Envoy configuration
+        call: envoy.getconfigdump
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /listeners
+      name: getlisteners
+      operations:
+      - method: GET
+        name: getlisteners
+        description: Envoy Get listener information
+        call: envoy.getlisteners
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /stats
+      name: getstats
+      operations:
+      - method: GET
+        name: getstats
+        description: Get Envoy statistics
+        call: envoy.getstats
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /stats/prometheus
+      name: getstatsprometheus
+      operations:
+      - method: GET
+        name: getstatsprometheus
+        description: Envoy Get statistics in Prometheus format
+        call: envoy.getstatsprometheus
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /stats/recentlookups
+      name: getrecentlookups
+      operations:
+      - method: GET
+        name: getrecentlookups
+        description: Envoy Get recently looked-up stat names
+        call: envoy.getrecentlookups
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /health_check/fail
+      name: sethealthcheckfail
+      operations:
+      - method: POST
+        name: sethealthcheckfail
+        description: Envoy Force health check failure
+        call: envoy.sethealthcheckfail
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /health_check/ok
+      name: sethealthcheckok
+      operations:
+      - method: POST
+        name: sethealthcheckok
+        description: Envoy Restore health check passing
+        call: envoy.sethealthcheckok
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /ready
+      name: getready
+      operations:
+      - method: GET
+        name: getready
+        description: Envoy Get server readiness status
+        call: envoy.getready
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /logging
+      name: getlogging
+      operations:
+      - method: GET
+        name: getlogging
+        description: Envoy Get current log levels
+        call: envoy.getlogging
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /logging
+      name: setlogging
+      operations:
+      - method: POST
+        name: setlogging
+        description: Envoy Change log levels
+        call: envoy.setlogging
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /runtime
+      name: getruntime
+      operations:
+      - method: GET
+        name: getruntime
+        description: Envoy Get runtime settings
+        call: envoy.getruntime
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /runtime_modify
+      name: modifyruntime
+      operations:
+      - method: POST
+        name: modifyruntime
+        description: Envoy Modify runtime settings
+        call: envoy.modifyruntime
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /drain_listeners
+      name: drainlisteners
+      operations:
+      - method: POST
+        name: drainlisteners
+        description: Envoy Drain listeners
+        call: envoy.drainlisteners
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /quitquitquit
+      name: shutdownserver
+      operations:
+      - method: POST
+        name: shutdownserver
+        description: Shutdown Envoy server
+        call: envoy.shutdownserver
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /certs
+      name: getcertificates
+      operations:
+      - method: GET
+        name: getcertificates
+        description: Envoy Get TLS certificate information
+        call: envoy.getcertificates
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /memory
+      name: getmemory
+      operations:
+      - method: GET
+        name: getmemory
+        description: Envoy Get memory allocation information
+        call: envoy.getmemory
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /hot_restart_version
+      name: gethotrestartversion
+      operations:
+      - method: GET
+        name: gethotrestartversion
+        description: Envoy Get hot restart compatibility version
+        call: envoy.gethotrestartversion
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /reset_counters
+      name: resetcounters
+      operations:
+      - method: POST
+        name: resetcounters
+        description: Envoy Reset all statistics counters
+        call: envoy.resetcounters
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    port: 9090
+    namespace: envoy-mcp
+    transport: http
+    description: MCP adapter for Envoy Admin API for AI agent use.
+    tools:
+    - name: getserverinfo
+      description: Envoy Get server information
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: envoy.getserverinfo
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: getclusters
+      description: Envoy Get upstream cluster information
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: envoy.getclusters
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: getconfigdump
+      description: Dump current Envoy configuration
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: envoy.getconfigdump
+      with:
+        resource: tools.resource
+        name_regex: tools.name_regex
+        include_eds: tools.include_eds
+      inputParameters:
+      - name: resource
+        type: string
+        description: Filter by resource type. Valid values include static_clusters, dynamic_active_clusters, static_listeners,
+          dynamic_active_listeners, dynamic_route_configs, stati
+      - name: name_regex
+        type: string
+        description: Filter resources by name using a regular expression pattern.
+      - name: include_eds
+        type: boolean
+        description: Include EDS endpoint assignment data in the config dump.
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: getlisteners
+      description: Envoy Get listener information
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: envoy.getlisteners
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: getstats
+      description: Get Envoy statistics
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: envoy.getstats
+      with:
+        format: tools.format
+        filter: tools.filter
+        type: tools.type
+        usedonly: tools.usedonly
+      inputParameters:
+      - name: format
+        type: string
+        description: Output format for statistics data.
+      - name: filter
+        type: string
+        description: Regex pattern to filter stat names.
+      - name: type
+        type: string
+        description: Filter statistics by type.
+      - name: usedonly
+        type: boolean
+        description: When true, only return statistics that have been written to at least once.
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: getstatsprometheus
+      description: Envoy Get statistics in Prometheus format
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: envoy.getstatsprometheus
+      with:
+        usedonly: tools.usedonly
+        filter: tools.filter
+      inputParameters:
+      - name: usedonly
+        type: boolean
+        description: When true, only return statistics that have been written to at least once.
+      - name: filter
+        type: string
+        description: Regex pattern to filter stat names.
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: getrecentlookups
+      description: Envoy Get recently looked-up stat names
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: envoy.getrecentlookups
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: sethealthcheckfail
+      description: Envoy Force health check failure
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: envoy.sethealthcheckfail
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: sethealthcheckok
+      description: Envoy Restore health check passing
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: envoy.sethealthcheckok
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: getready
+      description: Envoy Get server readiness status
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: envoy.getready
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: getlogging
+      description: Envoy Get current log levels
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: envoy.getlogging
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: setlogging
+      description: Envoy Change log levels
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: envoy.setlogging
+      with:
+        level: tools.level
+        paths: tools.paths
+      inputParameters:
+      - name: level
+        type: string
+        description: Set log level for all loggers simultaneously. One of trace, debug, info, warning, error, critical, or
+          off.
+      - name: paths
+        type: string
+        description: Set log level for a specific logger using logger_name:level format. Can be specified multiple times for
+          multiple loggers.
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: getruntime
+      description: Envoy Get runtime settings
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: envoy.getruntime
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: modifyruntime
+      description: Envoy Modify runtime settings
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: envoy.modifyruntime
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: drainlisteners
+      description: Envoy Drain listeners
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: envoy.drainlisteners
+      with:
+        inboundonly: tools.inboundonly
+        graceful: tools.graceful
+      inputParameters:
+      - name: inboundonly
+        type: boolean
+        description: When true, only drain inbound listeners.
+      - name: graceful
+        type: boolean
+        description: When true, perform a graceful drain that allows time for connections to complete.
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: shutdownserver
+      description: Shutdown Envoy server
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: envoy.shutdownserver
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: getcertificates
+      description: Envoy Get TLS certificate information
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: envoy.getcertificates
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: getmemory
+      description: Envoy Get memory allocation information
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: envoy.getmemory
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: gethotrestartversion
+      description: Envoy Get hot restart compatibility version
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: envoy.gethotrestartversion
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: resetcounters
+      description: Envoy Reset all statistics counters
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: envoy.resetcounters
+      outputParameters:
+      - type: object
+        mapping: $.
