@@ -100,7 +100,7 @@ apis:
         url: https://gateway.envoyproxy.io/docs/
       - type: Reference
         url: https://gateway.envoyproxy.io/docs/concepts/gateway-api/
-      - type: Getting Started
+      - type: GettingStarted
         url: https://gateway.envoyproxy.io/docs/
       - type: GitHubRepository
         url: https://github.com/envoyproxy/gateway
@@ -123,11 +123,11 @@ apis:
         url: https://aigateway.envoyproxy.io/docs/
       - type: Reference
         url: https://aigateway.envoyproxy.io/docs/api/
-      - type: Getting Started
+      - type: GettingStarted
         url: https://aigateway.envoyproxy.io/docs/getting-started/basic-usage/
       - type: GitHubRepository
         url: https://github.com/envoyproxy/ai-gateway
-      - type: Change Log
+      - type: ChangeLog
         url: https://aigateway.envoyproxy.io/release-notes/
       - type: OpenAPI
         url: openapi/envoy-ai-gateway-openapi.yml
@@ -136,13 +136,13 @@ common:
     url: https://www.envoyproxy.io/
   - type: Documentation
     url: https://www.envoyproxy.io/docs/envoy/latest/
-  - type: Getting Started
+  - type: GettingStarted
     url: https://www.envoyproxy.io/docs/envoy/latest/start/start
   - type: Blog
     url: https://blog.envoyproxy.io/
-  - type: Change Log
+  - type: ChangeLog
     url: https://github.com/envoyproxy/envoy/releases
-  - type: GitHub Organization
+  - type: GitHubOrganization
     url: https://github.com/envoyproxy
   - type: GitHubRepository
     url: https://github.com/envoyproxy/envoy
@@ -156,7 +156,7 @@ common:
     url: json-schema/envoy-listener.json
   - type: JSONSchema
     url: json-schema/envoy-route-configuration.json
-  - type: JSON-LD
+  - type: JSONLD
     url: json-ld/envoy-context.jsonld
 maintainers:
   - FN: Kin Lane
