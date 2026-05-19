@@ -1,0 +1,89 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: Envoy Admin API — Configuration
+  description: 'Envoy Admin API — Configuration. 1 operations. Lead operation: Dump current Envoy configuration. Self-contained
+    Naftiko capability covering one Envoy business surface.'
+  tags:
+  - Envoy
+  - Configuration
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    ENVOY_API_KEY: ENVOY_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: admin-configuration
+    baseUri: http://localhost:9901
+    description: Envoy Admin API — Configuration business capability. Self-contained, no shared references.
+    resources:
+    - name: config_dump
+      path: /config_dump
+      operations:
+      - name: getconfigdump
+        method: GET
+        description: Dump current Envoy configuration
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: resource
+          in: query
+          type: string
+          description: Filter by resource type. Valid values include static_clusters, dynamic_active_clusters, static_listeners,
+            dynamic_active_listeners, dynamic_route_configs, stati
+        - name: name_regex
+          in: query
+          type: string
+          description: Filter resources by name using a regular expression pattern.
+        - name: include_eds
+          in: query
+          type: boolean
+          description: Include EDS endpoint assignment data in the config dump.
+  exposes:
+  - type: rest
+    namespace: admin-configuration-rest
+    port: 8080
+    description: REST adapter for Envoy Admin API — Configuration. One Spectral-compliant resource per consumed operation,
+      prefixed with /v1.
+    resources:
+    - path: /v1/config-dump
+      name: config-dump
+      description: REST surface for config_dump.
+      operations:
+      - method: GET
+        name: getconfigdump
+        description: Dump current Envoy configuration
+        call: admin-configuration.getconfigdump
+        with:
+          resource: rest.resource
+          name_regex: rest.name_regex
+          include_eds: rest.include_eds
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: admin-configuration-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for Envoy Admin API — Configuration. One tool per consumed operation, routed inline through this
+      capability's consumes block.
+    tools:
+    - name: dump-current-envoy-configuration
+      description: Dump current Envoy configuration
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: admin-configuration.getconfigdump
+      with:
+        resource: tools.resource
+        name_regex: tools.name_regex
+        include_eds: tools.include_eds
+      outputParameters:
+      - type: object
+        mapping: $.

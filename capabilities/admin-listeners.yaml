@@ -1,0 +1,114 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: Envoy Admin API — Listeners
+  description: 'Envoy Admin API — Listeners. 2 operations. Lead operation: Envoy Drain listeners. Self-contained Naftiko capability
+    covering one Envoy business surface.'
+  tags:
+  - Envoy
+  - Listeners
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    ENVOY_API_KEY: ENVOY_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: admin-listeners
+    baseUri: http://localhost:9901
+    description: Envoy Admin API — Listeners business capability. Self-contained, no shared references.
+    resources:
+    - name: drain_listeners
+      path: /drain_listeners
+      operations:
+      - name: drainlisteners
+        method: POST
+        description: Envoy Drain listeners
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: inboundonly
+          in: query
+          type: boolean
+          description: When true, only drain inbound listeners.
+        - name: graceful
+          in: query
+          type: boolean
+          description: When true, perform a graceful drain that allows time for connections to complete.
+    - name: listeners
+      path: /listeners
+      operations:
+      - name: getlisteners
+        method: GET
+        description: Envoy Get listener information
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+  exposes:
+  - type: rest
+    namespace: admin-listeners-rest
+    port: 8080
+    description: REST adapter for Envoy Admin API — Listeners. One Spectral-compliant resource per consumed operation, prefixed
+      with /v1.
+    resources:
+    - path: /v1/drain-listeners
+      name: drain-listeners
+      description: REST surface for drain_listeners.
+      operations:
+      - method: POST
+        name: drainlisteners
+        description: Envoy Drain listeners
+        call: admin-listeners.drainlisteners
+        with:
+          inboundonly: rest.inboundonly
+          graceful: rest.graceful
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/listeners
+      name: listeners
+      description: REST surface for listeners.
+      operations:
+      - method: GET
+        name: getlisteners
+        description: Envoy Get listener information
+        call: admin-listeners.getlisteners
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: admin-listeners-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for Envoy Admin API — Listeners. One tool per consumed operation, routed inline through this
+      capability's consumes block.
+    tools:
+    - name: envoy-drain-listeners
+      description: Envoy Drain listeners
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: admin-listeners.drainlisteners
+      with:
+        inboundonly: tools.inboundonly
+        graceful: tools.graceful
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: envoy-get-listener-information
+      description: Envoy Get listener information
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: admin-listeners.getlisteners
+      outputParameters:
+      - type: object
+        mapping: $.

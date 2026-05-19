@@ -1,0 +1,80 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: Envoy AI Gateway API — Chat
+  description: 'Envoy AI Gateway API — Chat. 1 operations. Lead operation: Envoy Create a chat completion. Self-contained
+    Naftiko capability covering one Envoy business surface.'
+  tags:
+  - Envoy
+  - Chat
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    ENVOY_API_KEY: ENVOY_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: ai-gateway-chat
+    baseUri: https://{gateway-host}
+    description: Envoy AI Gateway API — Chat business capability. Self-contained, no shared references.
+    resources:
+    - name: v1-chat-completions
+      path: /v1/chat/completions
+      operations:
+      - name: createchatcompletion
+        method: POST
+        description: Envoy Create a chat completion
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    authentication:
+      type: bearer
+      token: '{{env.ENVOY_API_KEY}}'
+  exposes:
+  - type: rest
+    namespace: ai-gateway-chat-rest
+    port: 8080
+    description: REST adapter for Envoy AI Gateway API — Chat. One Spectral-compliant resource per consumed operation, prefixed
+      with /v1.
+    resources:
+    - path: /v1/v1/chat/completions
+      name: v1-chat-completions
+      description: REST surface for v1-chat-completions.
+      operations:
+      - method: POST
+        name: createchatcompletion
+        description: Envoy Create a chat completion
+        call: ai-gateway-chat.createchatcompletion
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: ai-gateway-chat-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for Envoy AI Gateway API — Chat. One tool per consumed operation, routed inline through this
+      capability's consumes block.
+    tools:
+    - name: envoy-create-chat-completion
+      description: Envoy Create a chat completion
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: ai-gateway-chat.createchatcompletion
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.

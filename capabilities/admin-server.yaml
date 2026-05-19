@@ -1,0 +1,163 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: Envoy Admin API — Server
+  description: 'Envoy Admin API — Server. 4 operations. Lead operation: Envoy Get hot restart compatibility version. Self-contained
+    Naftiko capability covering one Envoy business surface.'
+  tags:
+  - Envoy
+  - Server
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    ENVOY_API_KEY: ENVOY_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: admin-server
+    baseUri: http://localhost:9901
+    description: Envoy Admin API — Server business capability. Self-contained, no shared references.
+    resources:
+    - name: hot_restart_version
+      path: /hot_restart_version
+      operations:
+      - name: gethotrestartversion
+        method: GET
+        description: Envoy Get hot restart compatibility version
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: memory
+      path: /memory
+      operations:
+      - name: getmemory
+        method: GET
+        description: Envoy Get memory allocation information
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: quitquitquit
+      path: /quitquitquit
+      operations:
+      - name: shutdownserver
+        method: POST
+        description: Shutdown Envoy server
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: server_info
+      path: /server_info
+      operations:
+      - name: getserverinfo
+        method: GET
+        description: Envoy Get server information
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+  exposes:
+  - type: rest
+    namespace: admin-server-rest
+    port: 8080
+    description: REST adapter for Envoy Admin API — Server. One Spectral-compliant resource per consumed operation, prefixed
+      with /v1.
+    resources:
+    - path: /v1/hot-restart-version
+      name: hot-restart-version
+      description: REST surface for hot_restart_version.
+      operations:
+      - method: GET
+        name: gethotrestartversion
+        description: Envoy Get hot restart compatibility version
+        call: admin-server.gethotrestartversion
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/memory
+      name: memory
+      description: REST surface for memory.
+      operations:
+      - method: GET
+        name: getmemory
+        description: Envoy Get memory allocation information
+        call: admin-server.getmemory
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/quitquitquit
+      name: quitquitquit
+      description: REST surface for quitquitquit.
+      operations:
+      - method: POST
+        name: shutdownserver
+        description: Shutdown Envoy server
+        call: admin-server.shutdownserver
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/server-info
+      name: server-info
+      description: REST surface for server_info.
+      operations:
+      - method: GET
+        name: getserverinfo
+        description: Envoy Get server information
+        call: admin-server.getserverinfo
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: admin-server-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for Envoy Admin API — Server. One tool per consumed operation, routed inline through this capability's
+      consumes block.
+    tools:
+    - name: envoy-get-hot-restart-compatibility
+      description: Envoy Get hot restart compatibility version
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: admin-server.gethotrestartversion
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: envoy-get-memory-allocation-information
+      description: Envoy Get memory allocation information
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: admin-server.getmemory
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: shutdown-envoy-server
+      description: Shutdown Envoy server
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: admin-server.shutdownserver
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: envoy-get-server-information
+      description: Envoy Get server information
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: admin-server.getserverinfo
+      outputParameters:
+      - type: object
+        mapping: $.

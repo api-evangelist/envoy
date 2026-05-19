@@ -1,0 +1,99 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: Envoy Admin API — Runtime
+  description: 'Envoy Admin API — Runtime. 2 operations. Lead operation: Envoy Get runtime settings. Self-contained Naftiko
+    capability covering one Envoy business surface.'
+  tags:
+  - Envoy
+  - Runtime
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    ENVOY_API_KEY: ENVOY_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: admin-runtime
+    baseUri: http://localhost:9901
+    description: Envoy Admin API — Runtime business capability. Self-contained, no shared references.
+    resources:
+    - name: runtime
+      path: /runtime
+      operations:
+      - name: getruntime
+        method: GET
+        description: Envoy Get runtime settings
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: runtime_modify
+      path: /runtime_modify
+      operations:
+      - name: modifyruntime
+        method: POST
+        description: Envoy Modify runtime settings
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+  exposes:
+  - type: rest
+    namespace: admin-runtime-rest
+    port: 8080
+    description: REST adapter for Envoy Admin API — Runtime. One Spectral-compliant resource per consumed operation, prefixed
+      with /v1.
+    resources:
+    - path: /v1/runtime
+      name: runtime
+      description: REST surface for runtime.
+      operations:
+      - method: GET
+        name: getruntime
+        description: Envoy Get runtime settings
+        call: admin-runtime.getruntime
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/runtime-modify
+      name: runtime-modify
+      description: REST surface for runtime_modify.
+      operations:
+      - method: POST
+        name: modifyruntime
+        description: Envoy Modify runtime settings
+        call: admin-runtime.modifyruntime
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: admin-runtime-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for Envoy Admin API — Runtime. One tool per consumed operation, routed inline through this capability's
+      consumes block.
+    tools:
+    - name: envoy-get-runtime-settings
+      description: Envoy Get runtime settings
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: admin-runtime.getruntime
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: envoy-modify-runtime-settings
+      description: Envoy Modify runtime settings
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: admin-runtime.modifyruntime
+      outputParameters:
+      - type: object
+        mapping: $.
