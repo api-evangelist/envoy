@@ -1,0 +1,406 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Envoy Admin API",
+    "version": "1.31.0"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Server",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Envoy Get server information",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "http://localhost:9901/server_info"
+          },
+          "docs": "Returns information about the running Envoy server including version string, current state, uptime for the current epoch and all epochs, hot restart compatibility version, and command line options used at startup."
+        },
+        {
+          "info": {
+            "name": "Shutdown Envoy server",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "http://localhost:9901/quitquitquit"
+          },
+          "docs": "Initiates a clean shutdown of the Envoy server process. The server will drain connections and exit. This endpoint requires the admin interface to have this feature enabled in configuration."
+        },
+        {
+          "info": {
+            "name": "Envoy Get memory allocation information",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "http://localhost:9901/memory"
+          },
+          "docs": "Returns current memory usage statistics for the Envoy process including allocated memory, heap size, and physical memory used. Useful for monitoring memory consumption and debugging memory issues."
+        },
+        {
+          "info": {
+            "name": "Envoy Get hot restart compatibility version",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "http://localhost:9901/hot_restart_version"
+          },
+          "docs": "Returns the hot restart compatibility version string. Two Envoy instances can perform a hot restart if their hot restart versions match."
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Clusters",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Envoy Get upstream cluster information",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "http://localhost:9901/clusters",
+            "params": [
+              {
+                "name": "format",
+                "value": "",
+                "type": "query",
+                "description": "Output format for the response data."
+              }
+            ]
+          },
+          "docs": "Returns information about all configured upstream clusters including host addresses, health status, statistics counters and gauges, and load balancing weights. Supports JSON or text output format."
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Configuration",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Dump current Envoy configuration",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "http://localhost:9901/config_dump",
+            "params": [
+              {
+                "name": "resource",
+                "value": "",
+                "type": "query",
+                "description": "Filter by resource type. Valid values include static_clusters, dynamic_active_clusters, static_listeners, dynamic_active_listeners, dynamic_route_configs, static_route_configs, and bootstrap."
+              },
+              {
+                "name": "name_regex",
+                "value": "",
+                "type": "query",
+                "description": "Filter resources by name using a regular expression pattern."
+              },
+              {
+                "name": "include_eds",
+                "value": "",
+                "type": "query",
+                "description": "Include EDS endpoint assignment data in the config dump."
+              }
+            ]
+          },
+          "docs": "Returns the currently loaded Envoy configuration as a JSON object containing bootstrap, clusters, listeners, routes, secrets, and endpoints. Supports filtering by resource type and name regex to reduce output size."
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Listeners",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Envoy Get listener information",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "http://localhost:9901/listeners",
+            "params": [
+              {
+                "name": "format",
+                "value": "",
+                "type": "query",
+                "description": "Output format for the response data."
+              }
+            ]
+          },
+          "docs": "Returns information about all configured listeners including their names, bound addresses and ports, and associated statistics. Supports JSON or text output format."
+        },
+        {
+          "info": {
+            "name": "Envoy Drain listeners",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "http://localhost:9901/drain_listeners",
+            "params": [
+              {
+                "name": "inboundonly",
+                "value": "",
+                "type": "query",
+                "description": "When true, only drain inbound listeners."
+              },
+              {
+                "name": "graceful",
+                "value": "",
+                "type": "query",
+                "description": "When true, perform a graceful drain that allows time for connections to complete."
+              }
+            ]
+          },
+          "docs": "Initiates graceful draining of all listeners, stopping new connections from being accepted while allowing existing connections to complete. Useful before shutting down an Envoy instance or removing it from a load balancer."
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Statistics",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get Envoy statistics",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "http://localhost:9901/stats",
+            "params": [
+              {
+                "name": "format",
+                "value": "",
+                "type": "query",
+                "description": "Output format for statistics data."
+              },
+              {
+                "name": "filter",
+                "value": "",
+                "type": "query",
+                "description": "Regex pattern to filter stat names."
+              },
+              {
+                "name": "type",
+                "value": "",
+                "type": "query",
+                "description": "Filter statistics by type."
+              },
+              {
+                "name": "usedonly",
+                "value": "",
+                "type": "query",
+                "description": "When true, only return statistics that have been written to at least once."
+              }
+            ]
+          },
+          "docs": "Returns all recorded statistics including counters, gauges, and histograms for the Envoy instance. Supports filtering by stat name pattern and type, and can return data in text, JSON, or Prometheus exposition format."
+        },
+        {
+          "info": {
+            "name": "Envoy Get statistics in Prometheus format",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "http://localhost:9901/stats/prometheus",
+            "params": [
+              {
+                "name": "usedonly",
+                "value": "",
+                "type": "query",
+                "description": "When true, only return statistics that have been written to at least once."
+              },
+              {
+                "name": "filter",
+                "value": "",
+                "type": "query",
+                "description": "Regex pattern to filter stat names."
+              }
+            ]
+          },
+          "docs": "Returns all statistics formatted for Prometheus scraping using the standard Prometheus text exposition format. Supports filtering and can optionally return only stats that have been used."
+        },
+        {
+          "info": {
+            "name": "Envoy Get recently looked-up stat names",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "http://localhost:9901/stats/recentlookups"
+          },
+          "docs": "Returns a list of the most recently looked-up stat names along with lookup counts. Useful for debugging stat name patterns."
+        },
+        {
+          "info": {
+            "name": "Envoy Reset all statistics counters",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "http://localhost:9901/reset_counters"
+          },
+          "docs": "Resets all statistics counters to zero. Does not affect gauges or histograms. Useful for testing and debugging scenarios where you want a clean baseline for counter metrics."
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Health",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Envoy Force health check failure",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "http://localhost:9901/health_check/fail"
+          },
+          "docs": "Forces the Envoy server to fail all health checks from upstream load balancers. This is useful for draining traffic before a planned shutdown. The server continues to proxy existing connections."
+        },
+        {
+          "info": {
+            "name": "Envoy Restore health check passing",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "http://localhost:9901/health_check/ok"
+          },
+          "docs": "Restores the Envoy server to pass health checks from upstream load balancers after a prior call to /health_check/fail. The server will resume receiving new traffic."
+        },
+        {
+          "info": {
+            "name": "Envoy Get server readiness status",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "http://localhost:9901/ready"
+          },
+          "docs": "Returns whether the Envoy server is ready to accept connections and proxy traffic. Returns HTTP 200 when ready and HTTP 503 when the server is not yet initialized or is shutting down."
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Logging",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Envoy Get current log levels",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "http://localhost:9901/logging"
+          },
+          "docs": "Returns the current logging levels for all named loggers configured in the Envoy instance. Logger names correspond to subsystems such as http, router, upstream, conn_handler, and others."
+        },
+        {
+          "info": {
+            "name": "Envoy Change log levels",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "http://localhost:9901/logging",
+            "params": [
+              {
+                "name": "level",
+                "value": "",
+                "type": "query",
+                "description": "Set log level for all loggers simultaneously. One of trace, debug, info, warning, error, critical, or off."
+              },
+              {
+                "name": "paths",
+                "value": "",
+                "type": "query",
+                "description": "Set log level for a specific logger using logger_name:level format. Can be specified multiple times for multiple loggers."
+              }
+            ]
+          },
+          "docs": "Dynamically changes the logging level for one or all loggers without restarting Envoy. Use the level query parameter to set all loggers or the paths parameter to set a specific logger at logger_name:level format."
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Runtime",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Envoy Get runtime settings",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "http://localhost:9901/runtime"
+          },
+          "docs": "Returns the current runtime settings showing all layers, their configured values, and the final merged value for each key. Runtime values control various Envoy behaviors without requiring a restart."
+        },
+        {
+          "info": {
+            "name": "Envoy Modify runtime settings",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "http://localhost:9901/runtime_modify"
+          },
+          "docs": "Adds or modifies runtime values in the admin overriding layer. Values are passed as query parameters where the key is the runtime feature flag name and the value is the new setting. Use the value - (dash) to remove a previously set override."
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Certificates",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Envoy Get TLS certificate information",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "http://localhost:9901/certs"
+          },
+          "docs": "Returns information about all TLS certificates currently loaded by Envoy including certificate paths, serial numbers, subject alternative names, validity dates, and days until expiration."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

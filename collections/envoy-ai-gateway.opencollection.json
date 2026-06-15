@@ -1,0 +1,81 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Envoy AI Gateway API",
+    "version": "0.2.0"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Chat",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Envoy Create a chat completion",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://{gateway-host}/v1/chat/completions",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Creates a chat completion response for the provided messages using an AI model routed through the gateway. The request format is compatible with the OpenAI Chat Completions API. The gateway selects a backend based on the AIGatewayRoute rules, which may include header-based routing, model-based routing, and backend traffic policies for rate limiting and token quota management. Supports streaming via server-sent events when stream is set to true."
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Text Completions",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Envoy Create a text completion",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://{gateway-host}/v1/completions",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Creates a text completion for the provided prompt using an AI model routed through the gateway. The request format is compatible with the OpenAI legacy Completions API. This endpoint is primarily provided for backward compatibility; the chat completions endpoint is preferred for modern applications."
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Models",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Envoy List available models",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://{gateway-host}/v1/models"
+          },
+          "docs": "Returns a list of AI models available through the gateway as configured in AIGatewayRoute resources. The available models correspond to the model names that the gateway has been configured to route to upstream AI backends."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

@@ -1,0 +1,866 @@
+{
+  "item": [
+    {
+      "id": "0d1f31d2-a8da-4ceb-8b27-f4270bbf37aa",
+      "name": "Chat",
+      "description": {
+        "content": "Chat completions endpoints compatible with the OpenAI Chat API. Routes requests to configured AI backends based on AIGatewayRoute rules.",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "b2a6c682-a648-400f-9aa2-3214dd5e3895",
+          "name": "Envoy Create a chat completion",
+          "request": {
+            "name": "Envoy Create a chat completion",
+            "description": {
+              "content": "Creates a chat completion response for the provided messages using an AI model routed through the gateway. The request format is compatible with the OpenAI Chat Completions API. The gateway selects a backend based on the AIGatewayRoute rules, which may include header-based routing, model-based routing, and backend traffic policies for rate limiting and token quota management. Supports streaming via server-sent events when stream is set to true.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v1",
+                "chat",
+                "completions"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "description": "Hostname and port of the Envoy AI Gateway instance as configured in the AIGatewayRoute Kubernetes custom resource",
+                  "type": "any",
+                  "value": "{{gateway-host}}",
+                  "key": "gateway-host"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"model\": \"<string>\",\n  \"messages\": [\n    {\n      \"role\": \"<string>\",\n      \"content\": \"<string>\",\n      \"name\": \"<string>\"\n    }\n  ],\n  \"temperature\": \"<number>\",\n  \"top_p\": \"<number>\",\n  \"n\": 1,\n  \"stream\": false,\n  \"max_tokens\": \"<integer>\",\n  \"presence_penalty\": \"<number>\",\n  \"frequency_penalty\": \"<number>\",\n  \"user\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "f2c6c420-268f-4be4-a18d-7ecbde9404c0",
+              "name": "Chat completion response. When stream is false, returns a complete ChatCompletion object. When stream is true, returns a stream of server-sent events with ChatCompletionChunk objects.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "chat",
+                    "completions"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "description": "Hostname and port of the Envoy AI Gateway instance as configured in the AIGatewayRoute Kubernetes custom resource",
+                      "type": "any",
+                      "value": "{{gateway-host}}",
+                      "key": "gateway-host"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"model\": \"gpt-4\",\n  \"messages\": [\n    {\n      \"role\": \"assistant\",\n      \"content\": \"string\",\n      \"name\": \"string\"\n    }\n  ],\n  \"temperature\": \"<number>\",\n  \"top_p\": \"<number>\",\n  \"n\": 1,\n  \"stream\": false,\n  \"max_tokens\": \"<integer>\",\n  \"presence_penalty\": \"<number>\",\n  \"frequency_penalty\": \"<number>\",\n  \"user\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"string\",\n  \"object\": \"chat.completion\",\n  \"created\": 9086,\n  \"model\": \"string\",\n  \"choices\": [\n    {\n      \"index\": 4721,\n      \"message\": {\n        \"role\": \"system\",\n        \"content\": \"string\",\n        \"name\": \"string\"\n      },\n      \"finish_reason\": \"tool_calls\"\n    },\n    {\n      \"index\": 8223,\n      \"message\": {\n        \"role\": \"assistant\",\n        \"content\": \"string\",\n        \"name\": \"string\"\n      },\n      \"finish_reason\": \"tool_calls\"\n    }\n  ],\n  \"usage\": {\n    \"prompt_tokens\": 1396,\n    \"completion_tokens\": 8827,\n    \"total_tokens\": 8649\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "8d2ddf80-5e6e-4a2d-a379-14de3da4081a",
+              "name": "Bad request. The request body is malformed, required fields are missing, or the model name is invalid.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "chat",
+                    "completions"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "description": "Hostname and port of the Envoy AI Gateway instance as configured in the AIGatewayRoute Kubernetes custom resource",
+                      "type": "any",
+                      "value": "{{gateway-host}}",
+                      "key": "gateway-host"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"model\": \"gpt-4\",\n  \"messages\": [\n    {\n      \"role\": \"assistant\",\n      \"content\": \"string\",\n      \"name\": \"string\"\n    }\n  ],\n  \"temperature\": \"<number>\",\n  \"top_p\": \"<number>\",\n  \"n\": 1,\n  \"stream\": false,\n  \"max_tokens\": \"<integer>\",\n  \"presence_penalty\": \"<number>\",\n  \"frequency_penalty\": \"<number>\",\n  \"user\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"message\": \"string\",\n    \"type\": \"string\",\n    \"code\": \"string\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "1da5110d-b9f8-401f-9c7e-a518c4a60576",
+              "name": "Unauthorized. The bearer token is missing or invalid.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "chat",
+                    "completions"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "description": "Hostname and port of the Envoy AI Gateway instance as configured in the AIGatewayRoute Kubernetes custom resource",
+                      "type": "any",
+                      "value": "{{gateway-host}}",
+                      "key": "gateway-host"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"model\": \"gpt-4\",\n  \"messages\": [\n    {\n      \"role\": \"assistant\",\n      \"content\": \"string\",\n      \"name\": \"string\"\n    }\n  ],\n  \"temperature\": \"<number>\",\n  \"top_p\": \"<number>\",\n  \"n\": 1,\n  \"stream\": false,\n  \"max_tokens\": \"<integer>\",\n  \"presence_penalty\": \"<number>\",\n  \"frequency_penalty\": \"<number>\",\n  \"user\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"message\": \"string\",\n    \"type\": \"string\",\n    \"code\": \"string\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "350f8202-5fb3-473a-b25f-9dfe8030fddd",
+              "name": "Rate limit exceeded. The request was rejected due to backend rate limiting or token quota policies configured in the BackendTrafficPolicy.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "chat",
+                    "completions"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "description": "Hostname and port of the Envoy AI Gateway instance as configured in the AIGatewayRoute Kubernetes custom resource",
+                      "type": "any",
+                      "value": "{{gateway-host}}",
+                      "key": "gateway-host"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"model\": \"gpt-4\",\n  \"messages\": [\n    {\n      \"role\": \"assistant\",\n      \"content\": \"string\",\n      \"name\": \"string\"\n    }\n  ],\n  \"temperature\": \"<number>\",\n  \"top_p\": \"<number>\",\n  \"n\": 1,\n  \"stream\": false,\n  \"max_tokens\": \"<integer>\",\n  \"presence_penalty\": \"<number>\",\n  \"frequency_penalty\": \"<number>\",\n  \"user\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Too Many Requests",
+              "code": 429,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"message\": \"string\",\n    \"type\": \"string\",\n    \"code\": \"string\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "6ea994f2-2ff8-45e5-afd6-a808a522b2cd",
+              "name": "Bad gateway. The upstream AI backend returned an error or was unreachable.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "chat",
+                    "completions"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "description": "Hostname and port of the Envoy AI Gateway instance as configured in the AIGatewayRoute Kubernetes custom resource",
+                      "type": "any",
+                      "value": "{{gateway-host}}",
+                      "key": "gateway-host"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"model\": \"gpt-4\",\n  \"messages\": [\n    {\n      \"role\": \"assistant\",\n      \"content\": \"string\",\n      \"name\": \"string\"\n    }\n  ],\n  \"temperature\": \"<number>\",\n  \"top_p\": \"<number>\",\n  \"n\": 1,\n  \"stream\": false,\n  \"max_tokens\": \"<integer>\",\n  \"presence_penalty\": \"<number>\",\n  \"frequency_penalty\": \"<number>\",\n  \"user\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Gateway",
+              "code": 502,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"message\": \"string\",\n    \"type\": \"string\",\n    \"code\": \"string\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    },
+    {
+      "id": "595c8dc5-dd7c-4d51-a367-cca791ac1a2b",
+      "name": "Models",
+      "description": {
+        "content": "Model listing endpoints for discovering available AI models configured in the gateway routes.",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "afadd20a-d745-432e-b3c4-d3be765fa43b",
+          "name": "Envoy List available models",
+          "request": {
+            "name": "Envoy List available models",
+            "description": {
+              "content": "Returns a list of AI models available through the gateway as configured in AIGatewayRoute resources. The available models correspond to the model names that the gateway has been configured to route to upstream AI backends.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v1",
+                "models"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "description": "Hostname and port of the Envoy AI Gateway instance as configured in the AIGatewayRoute Kubernetes custom resource",
+                  "type": "any",
+                  "value": "{{gateway-host}}",
+                  "key": "gateway-host"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "46bcd452-bf46-426a-8fa4-336f0795b8cb",
+              "name": "List of available models",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "models"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "description": "Hostname and port of the Envoy AI Gateway instance as configured in the AIGatewayRoute Kubernetes custom resource",
+                      "type": "any",
+                      "value": "{{gateway-host}}",
+                      "key": "gateway-host"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"object\": \"list\",\n  \"data\": [\n    {\n      \"id\": \"string\",\n      \"object\": \"model\",\n      \"created\": 3501,\n      \"owned_by\": \"string\"\n    },\n    {\n      \"id\": \"string\",\n      \"object\": \"model\",\n      \"created\": 1067,\n      \"owned_by\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "9307a743-00d6-42d5-be42-7160bf482065",
+              "name": "Unauthorized due to missing or invalid bearer token",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "models"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "description": "Hostname and port of the Envoy AI Gateway instance as configured in the AIGatewayRoute Kubernetes custom resource",
+                      "type": "any",
+                      "value": "{{gateway-host}}",
+                      "key": "gateway-host"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"message\": \"string\",\n    \"type\": \"string\",\n    \"code\": \"string\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    },
+    {
+      "id": "39714fd4-010e-4e93-9912-272cd9b0dfcd",
+      "name": "Text Completions",
+      "description": {
+        "content": "Legacy text completions endpoints compatible with the OpenAI completions API.",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "db8e5e26-eba1-46dc-8d6f-7151fdad63d3",
+          "name": "Envoy Create a text completion",
+          "request": {
+            "name": "Envoy Create a text completion",
+            "description": {
+              "content": "Creates a text completion for the provided prompt using an AI model routed through the gateway. The request format is compatible with the OpenAI legacy Completions API. This endpoint is primarily provided for backward compatibility; the chat completions endpoint is preferred for modern applications.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v1",
+                "completions"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "description": "Hostname and port of the Envoy AI Gateway instance as configured in the AIGatewayRoute Kubernetes custom resource",
+                  "type": "any",
+                  "value": "{{gateway-host}}",
+                  "key": "gateway-host"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"model\": \"<string>\",\n  \"prompt\": \"<string>\",\n  \"max_tokens\": \"<integer>\",\n  \"temperature\": \"<number>\",\n  \"stream\": false\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "6f6a8e4a-bfd1-4094-b1e6-0ecdd0b83f8f",
+              "name": "Text completion response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "completions"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "description": "Hostname and port of the Envoy AI Gateway instance as configured in the AIGatewayRoute Kubernetes custom resource",
+                      "type": "any",
+                      "value": "{{gateway-host}}",
+                      "key": "gateway-host"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"model\": \"<string>\",\n  \"prompt\": \"<string>\",\n  \"max_tokens\": \"<integer>\",\n  \"temperature\": \"<number>\",\n  \"stream\": false\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"string\",\n  \"object\": \"text_completion\",\n  \"created\": 8132,\n  \"model\": \"string\",\n  \"choices\": [\n    {\n      \"text\": \"string\",\n      \"index\": 2047,\n      \"finish_reason\": \"length\"\n    },\n    {\n      \"text\": \"string\",\n      \"index\": 3801,\n      \"finish_reason\": \"stop\"\n    }\n  ],\n  \"usage\": {\n    \"prompt_tokens\": 9115,\n    \"completion_tokens\": 5403,\n    \"total_tokens\": 9911\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "a9a93523-7651-410f-b1ea-92806c6ed6ca",
+              "name": "Bad request due to malformed input or invalid parameters",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "completions"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "description": "Hostname and port of the Envoy AI Gateway instance as configured in the AIGatewayRoute Kubernetes custom resource",
+                      "type": "any",
+                      "value": "{{gateway-host}}",
+                      "key": "gateway-host"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"model\": \"<string>\",\n  \"prompt\": \"<string>\",\n  \"max_tokens\": \"<integer>\",\n  \"temperature\": \"<number>\",\n  \"stream\": false\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"message\": \"string\",\n    \"type\": \"string\",\n    \"code\": \"string\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "669f8f52-534d-4b5a-b703-3827897f6d56",
+              "name": "Unauthorized due to missing or invalid bearer token",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "completions"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "description": "Hostname and port of the Envoy AI Gateway instance as configured in the AIGatewayRoute Kubernetes custom resource",
+                      "type": "any",
+                      "value": "{{gateway-host}}",
+                      "key": "gateway-host"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"model\": \"<string>\",\n  \"prompt\": \"<string>\",\n  \"max_tokens\": \"<integer>\",\n  \"temperature\": \"<number>\",\n  \"stream\": false\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"message\": \"string\",\n    \"type\": \"string\",\n    \"code\": \"string\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "40452671-2901-43ca-9ac8-a2aa330ab43f",
+              "name": "Rate limit or token quota exceeded",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "completions"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "description": "Hostname and port of the Envoy AI Gateway instance as configured in the AIGatewayRoute Kubernetes custom resource",
+                      "type": "any",
+                      "value": "{{gateway-host}}",
+                      "key": "gateway-host"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"model\": \"<string>\",\n  \"prompt\": \"<string>\",\n  \"max_tokens\": \"<integer>\",\n  \"temperature\": \"<number>\",\n  \"stream\": false\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Too Many Requests",
+              "code": 429,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"message\": \"string\",\n    \"type\": \"string\",\n    \"code\": \"string\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "description": {
+        "content": "Hostname and port of the Envoy AI Gateway instance as configured in the AIGatewayRoute Kubernetes custom resource",
+        "type": "text/plain"
+      },
+      "type": "any",
+      "value": "localhost:8080",
+      "key": "gateway-host"
+    },
+    {
+      "type": "string",
+      "value": "https://{{gateway-host}}",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{bearerToken}}"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "d95c9fe1-5cb8-41dc-b578-9dda1535b143",
+    "name": "Envoy AI Gateway API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "The Envoy AI Gateway provides a unified proxy layer for accessing Generative AI services built on top of Envoy Gateway. It exposes OpenAI-compatible and Anthropic-compatible API endpoints, enabling applications to route LLM traffic across multiple AI backends including OpenAI, AWS Bedrock, Google Gemini, and others. The gateway handles backend rate limiting, policy control, token-based quota management, and security configuration via Kubernetes custom resources.\n\nContact Support:\n Name: Envoy AI Gateway Community",
+      "type": "text/plain"
+    }
+  }
+}
