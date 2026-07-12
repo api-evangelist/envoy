@@ -1,0 +1,15 @@
+generated: '2026-07-11'
+method: derived
+source: openapi/envoy-ai-gateway-openapi.yml
+summary:
+  types:
+  - http
+schemes:
+- name: bearerAuth
+  type: http
+  scheme: bearer
+  description: Bearer token authentication. The token is configured per route in the AIGatewayRoute
+    Kubernetes custom resource. For AI provider backends, the gateway may automatically translate
+    the bearer token to the appropriate provider-specific authentication mechanism.
+  sources:
+  - openapi/envoy-ai-gateway-openapi.yml

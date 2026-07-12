@@ -124,6 +124,10 @@ apis:
       - type: OpenAPI
         url: openapi/envoy-ai-gateway-openapi.yml
 common:
+  - type: DomainSecurity
+    url: security/envoy-domain-security.yml
+  - type: Authentication
+    url: authentication/envoy-authentication.yml
   - type: LinkedIn
     url: https://www.linkedin.com/company/envoy-inc
   - type: Website
