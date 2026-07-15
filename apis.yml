@@ -124,6 +124,8 @@ apis:
       - type: OpenAPI
         url: openapi/envoy-ai-gateway-openapi.yml
 common:
+  - type: AgenticAccess
+    url: agentic-access/envoy-agentic-access.yml
   - type: DomainSecurity
     url: security/envoy-domain-security.yml
   - type: Authentication
