@@ -1,0 +1,90 @@
+openapi: 3.1.0
+info:
+  title: Envoy Admin Certificates Models API
+  description: The Envoy Admin API provides local administrative access to a running Envoy proxy instance. It exposes endpoints for inspecting configuration, checking health, viewing statistics, managing log levels, and controlling the runtime state of the proxy. The Admin API is typically bound to a local interface (default port 9901) and is not intended for external exposure in production environments.
+  version: 1.31.0
+  contact:
+    name: Envoy Proxy Community
+    url: https://www.envoyproxy.io/community
+  termsOfService: https://www.envoyproxy.io/
+servers:
+- url: http://localhost:9901
+  description: Default Envoy Admin Interface
+tags:
+- name: Models
+  description: Model listing endpoints for discovering available AI models configured in the gateway routes.
+paths:
+  /v1/models:
+    get:
+      operationId: listModels
+      summary: Envoy List available models
+      description: Returns a list of AI models available through the gateway as configured in AIGatewayRoute resources. The available models correspond to the model names that the gateway has been configured to route to upstream AI backends.
+      tags:
+      - Models
+      responses:
+        '200':
+          description: List of available models
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModelList'
+        '401':
+          description: Unauthorized due to missing or invalid bearer token
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+components:
+  schemas:
+    ModelList:
+      type: object
+      description: List of models available through the AI Gateway
+      properties:
+        object:
+          type: string
+          description: Object type, always list
+          enum:
+          - list
+        data:
+          type: array
+          description: List of model objects
+          items:
+            $ref: '#/components/schemas/Model'
+    ErrorResponse:
+      type: object
+      description: Error response returned when an API request fails
+      properties:
+        error:
+          type: object
+          description: Error details
+          properties:
+            message:
+              type: string
+              description: Human-readable error message describing what went wrong
+            type:
+              type: string
+              description: Error type identifier
+            code:
+              type: string
+              description: Error code for programmatic handling
+    Model:
+      type: object
+      description: An AI model available through the gateway
+      properties:
+        id:
+          type: string
+          description: Model identifier used in API requests. Corresponds to model names configured in AIGatewayRoute rules.
+        object:
+          type: string
+          description: Object type, always model
+          enum:
+          - model
+        created:
+          type: integer
+          description: Unix timestamp of when the model was created
+        owned_by:
+          type: string
+          description: Organization that owns the model
+externalDocs:
+  description: Envoy Admin Interface Documentation
+  url: https://www.envoyproxy.io/docs/envoy/latest/operations/admin

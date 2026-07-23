@@ -1,0 +1,171 @@
+openapi: 3.1.0
+info:
+  title: Envoy Admin Certificates Statistics API
+  description: The Envoy Admin API provides local administrative access to a running Envoy proxy instance. It exposes endpoints for inspecting configuration, checking health, viewing statistics, managing log levels, and controlling the runtime state of the proxy. The Admin API is typically bound to a local interface (default port 9901) and is not intended for external exposure in production environments.
+  version: 1.31.0
+  contact:
+    name: Envoy Proxy Community
+    url: https://www.envoyproxy.io/community
+  termsOfService: https://www.envoyproxy.io/
+servers:
+- url: http://localhost:9901
+  description: Default Envoy Admin Interface
+tags:
+- name: Statistics
+  description: Statistics, metrics, and Prometheus endpoints
+paths:
+  /stats:
+    get:
+      operationId: getStats
+      summary: Get Envoy statistics
+      description: Returns all recorded statistics including counters, gauges, and histograms for the Envoy instance. Supports filtering by stat name pattern and type, and can return data in text, JSON, or Prometheus exposition format.
+      tags:
+      - Statistics
+      parameters:
+      - name: format
+        in: query
+        description: Output format for statistics data.
+        required: false
+        schema:
+          type: string
+          enum:
+          - json
+          - text
+          - prometheus
+          default: text
+      - name: filter
+        in: query
+        description: Regex pattern to filter stat names.
+        required: false
+        schema:
+          type: string
+      - name: type
+        in: query
+        description: Filter statistics by type.
+        required: false
+        schema:
+          type: string
+          enum:
+          - Counters
+          - Gauges
+          - Histograms
+      - name: usedonly
+        in: query
+        description: When true, only return statistics that have been written to at least once.
+        required: false
+        schema:
+          type: boolean
+          default: false
+      responses:
+        '200':
+          description: Statistics retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StatsResponse'
+            text/plain:
+              schema:
+                type: string
+  /stats/prometheus:
+    get:
+      operationId: getStatsPrometheus
+      summary: Envoy Get statistics in Prometheus format
+      description: Returns all statistics formatted for Prometheus scraping using the standard Prometheus text exposition format. Supports filtering and can optionally return only stats that have been used.
+      tags:
+      - Statistics
+      parameters:
+      - name: usedonly
+        in: query
+        description: When true, only return statistics that have been written to at least once.
+        required: false
+        schema:
+          type: boolean
+          default: false
+      - name: filter
+        in: query
+        description: Regex pattern to filter stat names.
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Prometheus-formatted statistics
+          content:
+            text/plain:
+              schema:
+                type: string
+  /stats/recentlookups:
+    get:
+      operationId: getRecentLookups
+      summary: Envoy Get recently looked-up stat names
+      description: Returns a list of the most recently looked-up stat names along with lookup counts. Useful for debugging stat name patterns.
+      tags:
+      - Statistics
+      responses:
+        '200':
+          description: Recently looked-up stat names
+          content:
+            text/plain:
+              schema:
+                type: string
+  /reset_counters:
+    post:
+      operationId: resetCounters
+      summary: Envoy Reset all statistics counters
+      description: Resets all statistics counters to zero. Does not affect gauges or histograms. Useful for testing and debugging scenarios where you want a clean baseline for counter metrics.
+      tags:
+      - Statistics
+      responses:
+        '200':
+          description: Counters reset successfully
+          content:
+            text/plain:
+              schema:
+                type: string
+components:
+  schemas:
+    StatsResponse:
+      type: object
+      description: Envoy statistics as structured JSON
+      properties:
+        stats:
+          type: array
+          description: List of statistic entries
+          items:
+            type: object
+            properties:
+              name:
+                type: string
+                description: Fully-qualified statistic name
+              value:
+                type: integer
+                description: Current value of the statistic
+              type:
+                type: string
+                description: Statistic type
+                enum:
+                - Counter
+                - Gauge
+                - Histogram
+    StatsResponse_2:
+      type: object
+      description: Envoy statistics
+      properties:
+        stats:
+          type: array
+          items:
+            type: object
+            properties:
+              name:
+                type: string
+              value:
+                type: integer
+              type:
+                type: string
+                enum:
+                - Counter
+                - Gauge
+                - Histogram
+externalDocs:
+  description: Envoy Admin Interface Documentation
+  url: https://www.envoyproxy.io/docs/envoy/latest/operations/admin

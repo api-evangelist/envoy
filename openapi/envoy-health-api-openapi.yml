@@ -1,0 +1,67 @@
+openapi: 3.1.0
+info:
+  title: Envoy Admin Certificates Health API
+  description: The Envoy Admin API provides local administrative access to a running Envoy proxy instance. It exposes endpoints for inspecting configuration, checking health, viewing statistics, managing log levels, and controlling the runtime state of the proxy. The Admin API is typically bound to a local interface (default port 9901) and is not intended for external exposure in production environments.
+  version: 1.31.0
+  contact:
+    name: Envoy Proxy Community
+    url: https://www.envoyproxy.io/community
+  termsOfService: https://www.envoyproxy.io/
+servers:
+- url: http://localhost:9901
+  description: Default Envoy Admin Interface
+tags:
+- name: Health
+  description: Health check management endpoints
+paths:
+  /health_check/fail:
+    post:
+      operationId: setHealthCheckFail
+      summary: Envoy Force health check failure
+      description: Forces the Envoy server to fail all health checks from upstream load balancers. This is useful for draining traffic before a planned shutdown. The server continues to proxy existing connections.
+      tags:
+      - Health
+      responses:
+        '200':
+          description: Health check set to failing state
+          content:
+            text/plain:
+              schema:
+                type: string
+  /health_check/ok:
+    post:
+      operationId: setHealthCheckOk
+      summary: Envoy Restore health check passing
+      description: Restores the Envoy server to pass health checks from upstream load balancers after a prior call to /health_check/fail. The server will resume receiving new traffic.
+      tags:
+      - Health
+      responses:
+        '200':
+          description: Health check restored to passing state
+          content:
+            text/plain:
+              schema:
+                type: string
+  /ready:
+    get:
+      operationId: getReady
+      summary: Envoy Get server readiness status
+      description: Returns whether the Envoy server is ready to accept connections and proxy traffic. Returns HTTP 200 when ready and HTTP 503 when the server is not yet initialized or is shutting down.
+      tags:
+      - Health
+      responses:
+        '200':
+          description: Server is ready to accept connections
+          content:
+            text/plain:
+              schema:
+                type: string
+        '503':
+          description: Server is not ready (initializing or draining)
+          content:
+            text/plain:
+              schema:
+                type: string
+externalDocs:
+  description: Envoy Admin Interface Documentation
+  url: https://www.envoyproxy.io/docs/envoy/latest/operations/admin

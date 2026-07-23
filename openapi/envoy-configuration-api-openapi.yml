@@ -1,0 +1,87 @@
+openapi: 3.1.0
+info:
+  title: Envoy Admin Certificates Configuration API
+  description: The Envoy Admin API provides local administrative access to a running Envoy proxy instance. It exposes endpoints for inspecting configuration, checking health, viewing statistics, managing log levels, and controlling the runtime state of the proxy. The Admin API is typically bound to a local interface (default port 9901) and is not intended for external exposure in production environments.
+  version: 1.31.0
+  contact:
+    name: Envoy Proxy Community
+    url: https://www.envoyproxy.io/community
+  termsOfService: https://www.envoyproxy.io/
+servers:
+- url: http://localhost:9901
+  description: Default Envoy Admin Interface
+tags:
+- name: Configuration
+  description: Configuration dump and inspection endpoints
+paths:
+  /config_dump:
+    get:
+      operationId: getConfigDump
+      summary: Dump current Envoy configuration
+      description: Returns the currently loaded Envoy configuration as a JSON object containing bootstrap, clusters, listeners, routes, secrets, and endpoints. Supports filtering by resource type and name regex to reduce output size.
+      tags:
+      - Configuration
+      parameters:
+      - name: resource
+        in: query
+        description: Filter by resource type. Valid values include static_clusters, dynamic_active_clusters, static_listeners, dynamic_active_listeners, dynamic_route_configs, static_route_configs, and bootstrap.
+        required: false
+        schema:
+          type: string
+          enum:
+          - static_clusters
+          - dynamic_active_clusters
+          - static_listeners
+          - dynamic_active_listeners
+          - dynamic_route_configs
+          - static_route_configs
+          - bootstrap
+      - name: name_regex
+        in: query
+        description: Filter resources by name using a regular expression pattern.
+        required: false
+        schema:
+          type: string
+      - name: include_eds
+        in: query
+        description: Include EDS endpoint assignment data in the config dump.
+        required: false
+        schema:
+          type: boolean
+          default: false
+      responses:
+        '200':
+          description: Configuration dump retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ConfigDump'
+components:
+  schemas:
+    ConfigDump:
+      type: object
+      description: Complete Envoy configuration dump containing all static and dynamic resource configurations
+      properties:
+        configs:
+          type: array
+          description: List of typed configuration objects
+          items:
+            type: object
+            properties:
+              '@type':
+                type: string
+                description: Protobuf type URL identifying the configuration type (e.g., type.googleapis.com/envoy.admin.v3.BootstrapConfigDump)
+    ConfigDump_2:
+      type: object
+      description: Complete Envoy configuration dump
+      properties:
+        configs:
+          type: array
+          items:
+            type: object
+            properties:
+              '@type':
+                type: string
+externalDocs:
+  description: Envoy Admin Interface Documentation
+  url: https://www.envoyproxy.io/docs/envoy/latest/operations/admin

@@ -1,0 +1,97 @@
+openapi: 3.1.0
+info:
+  title: Envoy Admin Certificates Runtime API
+  description: The Envoy Admin API provides local administrative access to a running Envoy proxy instance. It exposes endpoints for inspecting configuration, checking health, viewing statistics, managing log levels, and controlling the runtime state of the proxy. The Admin API is typically bound to a local interface (default port 9901) and is not intended for external exposure in production environments.
+  version: 1.31.0
+  contact:
+    name: Envoy Proxy Community
+    url: https://www.envoyproxy.io/community
+  termsOfService: https://www.envoyproxy.io/
+servers:
+- url: http://localhost:9901
+  description: Default Envoy Admin Interface
+tags:
+- name: Runtime
+  description: Runtime settings management endpoints
+paths:
+  /runtime:
+    get:
+      operationId: getRuntime
+      summary: Envoy Get runtime settings
+      description: Returns the current runtime settings showing all layers, their configured values, and the final merged value for each key. Runtime values control various Envoy behaviors without requiring a restart.
+      tags:
+      - Runtime
+      responses:
+        '200':
+          description: Runtime settings retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RuntimeResponse'
+  /runtime_modify:
+    post:
+      operationId: modifyRuntime
+      summary: Envoy Modify runtime settings
+      description: Adds or modifies runtime values in the admin overriding layer. Values are passed as query parameters where the key is the runtime feature flag name and the value is the new setting. Use the value - (dash) to remove a previously set override.
+      tags:
+      - Runtime
+      responses:
+        '200':
+          description: Runtime settings modified successfully
+          content:
+            text/plain:
+              schema:
+                type: string
+        '400':
+          description: Invalid runtime key or value specified
+          content:
+            text/plain:
+              schema:
+                type: string
+components:
+  schemas:
+    RuntimeResponse:
+      type: object
+      description: Runtime settings showing all layers and merged values
+      properties:
+        layers:
+          type: array
+          description: Ordered list of runtime layer names
+          items:
+            type: string
+        entries:
+          type: object
+          description: Map of runtime key to merged and per-layer values
+          additionalProperties:
+            type: object
+            properties:
+              final_value:
+                type: string
+                description: The final merged value after applying all layers
+              layer_values:
+                type: array
+                description: Values from each layer in order
+                items:
+                  type: string
+    RuntimeResponse_2:
+      type: object
+      description: Runtime settings and layers
+      properties:
+        layers:
+          type: array
+          items:
+            type: string
+        entries:
+          type: object
+          additionalProperties:
+            type: object
+            properties:
+              final_value:
+                type: string
+              layer_values:
+                type: array
+                items:
+                  type: string
+externalDocs:
+  description: Envoy Admin Interface Documentation
+  url: https://www.envoyproxy.io/docs/envoy/latest/operations/admin

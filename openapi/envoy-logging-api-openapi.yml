@@ -1,0 +1,73 @@
+openapi: 3.1.0
+info:
+  title: Envoy Admin Certificates Logging API
+  description: The Envoy Admin API provides local administrative access to a running Envoy proxy instance. It exposes endpoints for inspecting configuration, checking health, viewing statistics, managing log levels, and controlling the runtime state of the proxy. The Admin API is typically bound to a local interface (default port 9901) and is not intended for external exposure in production environments.
+  version: 1.31.0
+  contact:
+    name: Envoy Proxy Community
+    url: https://www.envoyproxy.io/community
+  termsOfService: https://www.envoyproxy.io/
+servers:
+- url: http://localhost:9901
+  description: Default Envoy Admin Interface
+tags:
+- name: Logging
+  description: Log level management endpoints
+paths:
+  /logging:
+    get:
+      operationId: getLogging
+      summary: Envoy Get current log levels
+      description: Returns the current logging levels for all named loggers configured in the Envoy instance. Logger names correspond to subsystems such as http, router, upstream, conn_handler, and others.
+      tags:
+      - Logging
+      responses:
+        '200':
+          description: Current log levels for all loggers
+          content:
+            text/plain:
+              schema:
+                type: string
+    post:
+      operationId: setLogging
+      summary: Envoy Change log levels
+      description: Dynamically changes the logging level for one or all loggers without restarting Envoy. Use the level query parameter to set all loggers or the paths parameter to set a specific logger at logger_name:level format.
+      tags:
+      - Logging
+      parameters:
+      - name: level
+        in: query
+        description: Set log level for all loggers simultaneously. One of trace, debug, info, warning, error, critical, or off.
+        required: false
+        schema:
+          type: string
+          enum:
+          - trace
+          - debug
+          - info
+          - warning
+          - error
+          - critical
+          - 'off'
+      - name: paths
+        in: query
+        description: Set log level for a specific logger using logger_name:level format. Can be specified multiple times for multiple loggers.
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Log levels updated successfully
+          content:
+            text/plain:
+              schema:
+                type: string
+        '400':
+          description: Invalid log level or logger name specified
+          content:
+            text/plain:
+              schema:
+                type: string
+externalDocs:
+  description: Envoy Admin Interface Documentation
+  url: https://www.envoyproxy.io/docs/envoy/latest/operations/admin

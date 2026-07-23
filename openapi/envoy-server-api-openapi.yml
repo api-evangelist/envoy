@@ -1,0 +1,239 @@
+openapi: 3.1.0
+info:
+  title: Envoy Admin Certificates Server API
+  description: The Envoy Admin API provides local administrative access to a running Envoy proxy instance. It exposes endpoints for inspecting configuration, checking health, viewing statistics, managing log levels, and controlling the runtime state of the proxy. The Admin API is typically bound to a local interface (default port 9901) and is not intended for external exposure in production environments.
+  version: 1.31.0
+  contact:
+    name: Envoy Proxy Community
+    url: https://www.envoyproxy.io/community
+  termsOfService: https://www.envoyproxy.io/
+servers:
+- url: http://localhost:9901
+  description: Default Envoy Admin Interface
+tags:
+- name: Server
+  description: Server management, lifecycle, and information endpoints
+paths:
+  /server_info:
+    get:
+      operationId: getServerInfo
+      summary: Envoy Get server information
+      description: Returns information about the running Envoy server including version string, current state, uptime for the current epoch and all epochs, hot restart compatibility version, and command line options used at startup.
+      tags:
+      - Server
+      responses:
+        '200':
+          description: Server information retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServerInfo'
+  /quitquitquit:
+    post:
+      operationId: shutdownServer
+      summary: Shutdown Envoy server
+      description: Initiates a clean shutdown of the Envoy server process. The server will drain connections and exit. This endpoint requires the admin interface to have this feature enabled in configuration.
+      tags:
+      - Server
+      responses:
+        '200':
+          description: Server shutdown initiated
+          content:
+            text/plain:
+              schema:
+                type: string
+  /memory:
+    get:
+      operationId: getMemory
+      summary: Envoy Get memory allocation information
+      description: Returns current memory usage statistics for the Envoy process including allocated memory, heap size, and physical memory used. Useful for monitoring memory consumption and debugging memory issues.
+      tags:
+      - Server
+      responses:
+        '200':
+          description: Memory usage information retrieved
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MemoryResponse'
+  /hot_restart_version:
+    get:
+      operationId: getHotRestartVersion
+      summary: Envoy Get hot restart compatibility version
+      description: Returns the hot restart compatibility version string. Two Envoy instances can perform a hot restart if their hot restart versions match.
+      tags:
+      - Server
+      responses:
+        '200':
+          description: Hot restart version string
+          content:
+            text/plain:
+              schema:
+                type: string
+  /drain_listeners:
+    post:
+      operationId: drainListeners
+      summary: Envoy Drain listeners
+      description: Drains all listeners, preventing new connections from being accepted. Existing connections are allowed to complete.
+      tags:
+      - Server
+      parameters:
+      - name: inboundonly
+        in: query
+        description: Only drain inbound listeners
+        schema:
+          type: boolean
+          default: false
+      - name: graceful
+        in: query
+        description: Perform graceful drain
+        schema:
+          type: boolean
+          default: false
+      responses:
+        '200':
+          description: Listeners drain initiated
+          content:
+            text/plain:
+              schema:
+                type: string
+components:
+  schemas:
+    ServerInfo:
+      type: object
+      description: Information about the running Envoy server instance
+      properties:
+        version:
+          type: string
+          description: Envoy version string including build hash
+        state:
+          type: string
+          description: Current operational state of the server
+          enum:
+          - LIVE
+          - DRAINING
+          - PRE_INITIALIZING
+          - INITIALIZING
+        uptime_current_epoch:
+          type: string
+          description: Uptime of the current Envoy epoch in seconds since last hot restart
+        uptime_all_epochs:
+          type: string
+          description: Total uptime in seconds across all hot restart epochs since the process started
+        hot_restart_version:
+          type: string
+          description: Hot restart compatibility version string used to verify compatibility between old and new Envoy instances
+        command_line_options:
+          type: object
+          description: Command line options used when starting the Envoy process
+          properties:
+            restart_epoch:
+              type: integer
+              description: Hot restart epoch number
+            config_path:
+              type: string
+              description: Path to the bootstrap configuration file
+            log_level:
+              type: string
+              description: Initial log level setting
+            service_cluster:
+              type: string
+              description: Service cluster name
+            service_node:
+              type: string
+              description: Service node identifier
+            concurrency:
+              type: integer
+              description: Number of worker threads
+        node:
+          type: object
+          description: Node identity information
+          properties:
+            id:
+              type: string
+              description: Node identifier string
+            cluster:
+              type: string
+              description: Cluster name this node belongs to
+            metadata:
+              type: object
+              description: Opaque metadata associated with this node
+            locality:
+              type: object
+              description: Geographic locality information for this node
+    MemoryResponse:
+      type: object
+      description: Memory usage statistics for the Envoy process
+      properties:
+        allocated:
+          type: string
+          description: Total bytes allocated by the process
+        heap_size:
+          type: string
+          description: Current heap size in bytes
+        pageheap_unmapped:
+          type: string
+          description: Bytes in the page heap that are unmapped
+        pageheap_free:
+          type: string
+          description: Bytes in the page heap that are free
+        total_thread_cache:
+          type: string
+          description: Total bytes in all thread caches
+    ServerInfo_2:
+      type: object
+      description: Information about the running Envoy server instance
+      properties:
+        version:
+          type: string
+          description: Envoy version string
+        state:
+          type: string
+          description: Current server state
+          enum:
+          - LIVE
+          - DRAINING
+          - PRE_INITIALIZING
+          - INITIALIZING
+        uptime_current_epoch:
+          type: string
+          description: Uptime of the current Envoy epoch in seconds
+        uptime_all_epochs:
+          type: string
+          description: Uptime across all hot restart epochs in seconds
+        hot_restart_version:
+          type: string
+          description: Hot restart compatibility version
+        command_line_options:
+          type: object
+          description: Command line options used to start Envoy
+          properties:
+            restart_epoch:
+              type: integer
+            config_path:
+              type: string
+            log_level:
+              type: string
+            service_cluster:
+              type: string
+            service_node:
+              type: string
+            concurrency:
+              type: integer
+            admin_address_path:
+              type: string
+        node:
+          type: object
+          description: Node identification information
+          properties:
+            id:
+              type: string
+            cluster:
+              type: string
+            metadata:
+              type: object
+            locality:
+              type: object
+externalDocs:
+  description: Envoy Admin Interface Documentation
+  url: https://www.envoyproxy.io/docs/envoy/latest/operations/admin

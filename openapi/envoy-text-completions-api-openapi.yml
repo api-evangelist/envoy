@@ -1,0 +1,157 @@
+openapi: 3.1.0
+info:
+  title: Envoy Admin Certificates Text Completions API
+  description: The Envoy Admin API provides local administrative access to a running Envoy proxy instance. It exposes endpoints for inspecting configuration, checking health, viewing statistics, managing log levels, and controlling the runtime state of the proxy. The Admin API is typically bound to a local interface (default port 9901) and is not intended for external exposure in production environments.
+  version: 1.31.0
+  contact:
+    name: Envoy Proxy Community
+    url: https://www.envoyproxy.io/community
+  termsOfService: https://www.envoyproxy.io/
+servers:
+- url: http://localhost:9901
+  description: Default Envoy Admin Interface
+tags:
+- name: Text Completions
+  description: Legacy text completions endpoints compatible with the OpenAI completions API.
+paths:
+  /v1/completions:
+    post:
+      operationId: createCompletion
+      summary: Envoy Create a text completion
+      description: Creates a text completion for the provided prompt using an AI model routed through the gateway. The request format is compatible with the OpenAI legacy Completions API. This endpoint is primarily provided for backward compatibility; the chat completions endpoint is preferred for modern applications.
+      tags:
+      - Text Completions
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CompletionRequest'
+      responses:
+        '200':
+          description: Text completion response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Completion'
+        '400':
+          description: Bad request due to malformed input or invalid parameters
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Unauthorized due to missing or invalid bearer token
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '429':
+          description: Rate limit or token quota exceeded
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+components:
+  schemas:
+    ErrorResponse:
+      type: object
+      description: Error response returned when an API request fails
+      properties:
+        error:
+          type: object
+          description: Error details
+          properties:
+            message:
+              type: string
+              description: Human-readable error message describing what went wrong
+            type:
+              type: string
+              description: Error type identifier
+            code:
+              type: string
+              description: Error code for programmatic handling
+    Completion:
+      type: object
+      description: A completed text completion response from the AI model
+      properties:
+        id:
+          type: string
+          description: Unique identifier for this completion
+        object:
+          type: string
+          description: Object type, always text_completion
+          enum:
+          - text_completion
+        created:
+          type: integer
+          description: Unix timestamp of when the completion was created
+        model:
+          type: string
+          description: The model that generated the completion
+        choices:
+          type: array
+          description: List of completion choices generated
+          items:
+            type: object
+            properties:
+              text:
+                type: string
+                description: The generated text
+              index:
+                type: integer
+                description: Index of this choice
+              finish_reason:
+                type: string
+                description: Reason the model stopped generating
+                enum:
+                - stop
+                - length
+        usage:
+          $ref: '#/components/schemas/UsageInfo'
+    CompletionRequest:
+      type: object
+      description: Request body for the legacy text completions endpoint
+      required:
+      - model
+      - prompt
+      properties:
+        model:
+          type: string
+          description: ID of the model to use for text completion
+        prompt:
+          description: The prompt text to generate completion for
+          oneOf:
+          - type: string
+          - type: array
+            items:
+              type: string
+        max_tokens:
+          type: integer
+          description: Maximum number of tokens to generate
+          minimum: 1
+        temperature:
+          type: number
+          description: Sampling temperature
+          minimum: 0
+          maximum: 2
+        stream:
+          type: boolean
+          description: If true, partial completions are streamed as server-sent events
+          default: false
+    UsageInfo:
+      type: object
+      description: Token usage statistics for the API request
+      properties:
+        prompt_tokens:
+          type: integer
+          description: Number of tokens in the input prompt
+        completion_tokens:
+          type: integer
+          description: Number of tokens in the generated completion
+        total_tokens:
+          type: integer
+          description: Total number of tokens used (prompt + completion)
+externalDocs:
+  description: Envoy Admin Interface Documentation
+  url: https://www.envoyproxy.io/docs/envoy/latest/operations/admin

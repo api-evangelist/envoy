@@ -1,0 +1,129 @@
+openapi: 3.1.0
+info:
+  title: Envoy Admin Certificates API
+  description: The Envoy Admin API provides local administrative access to a running Envoy proxy instance. It exposes endpoints for inspecting configuration, checking health, viewing statistics, managing log levels, and controlling the runtime state of the proxy. The Admin API is typically bound to a local interface (default port 9901) and is not intended for external exposure in production environments.
+  version: 1.31.0
+  contact:
+    name: Envoy Proxy Community
+    url: https://www.envoyproxy.io/community
+  termsOfService: https://www.envoyproxy.io/
+servers:
+- url: http://localhost:9901
+  description: Default Envoy Admin Interface
+tags:
+- name: Certificates
+  description: TLS certificate inspection endpoints
+paths:
+  /certs:
+    get:
+      operationId: getCertificates
+      summary: Envoy Get TLS certificate information
+      description: Returns information about all TLS certificates currently loaded by Envoy including certificate paths, serial numbers, subject alternative names, validity dates, and days until expiration.
+      tags:
+      - Certificates
+      responses:
+        '200':
+          description: TLS certificate information retrieved
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CertificatesResponse'
+components:
+  schemas:
+    CertificatesResponse:
+      type: object
+      description: Information about all TLS certificates loaded by Envoy
+      properties:
+        certificates:
+          type: array
+          description: List of certificate chain entries
+          items:
+            type: object
+            properties:
+              ca_cert:
+                type: array
+                description: CA certificate details
+                items:
+                  $ref: '#/components/schemas/CertificateDetails'
+              cert_chain:
+                type: array
+                description: Certificate chain details
+                items:
+                  $ref: '#/components/schemas/CertificateDetails'
+    CertificateDetails:
+      type: object
+      description: Details of a single TLS certificate
+      properties:
+        path:
+          type: string
+          description: Filesystem path to the certificate file
+        serial_number:
+          type: string
+          description: Certificate serial number in hex
+        subject_alt_names:
+          type: array
+          description: Subject alternative names in the certificate
+          items:
+            type: object
+            properties:
+              dns:
+                type: string
+                description: DNS SAN entry
+              uri:
+                type: string
+                description: URI SAN entry
+              ip_address:
+                type: string
+                description: IP address SAN entry
+        days_until_expiration:
+          type: string
+          description: Number of days until the certificate expires
+        valid_from:
+          type: string
+          description: Certificate validity start date in ISO 8601 format
+        expiration_time:
+          type: string
+          description: Certificate expiration date in ISO 8601 format
+    CertificatesResponse_2:
+      type: object
+      description: Information about loaded TLS certificates
+      properties:
+        certificates:
+          type: array
+          items:
+            type: object
+            properties:
+              ca_cert:
+                type: array
+                items:
+                  $ref: '#/components/schemas/CertificateDetails_2'
+              cert_chain:
+                type: array
+                items:
+                  $ref: '#/components/schemas/CertificateDetails_2'
+    CertificateDetails_2:
+      type: object
+      description: Details of a TLS certificate
+      properties:
+        path:
+          type: string
+        serial_number:
+          type: string
+        subject_alt_names:
+          type: array
+          items:
+            type: object
+            properties:
+              dns:
+                type: string
+              uri:
+                type: string
+        days_until_expiration:
+          type: string
+        valid_from:
+          type: string
+        expiration_time:
+          type: string
+externalDocs:
+  description: Envoy Admin Interface Documentation
+  url: https://www.envoyproxy.io/docs/envoy/latest/operations/admin

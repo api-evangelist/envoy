@@ -1,0 +1,134 @@
+openapi: 3.1.0
+info:
+  title: Envoy Admin Certificates Listeners API
+  description: The Envoy Admin API provides local administrative access to a running Envoy proxy instance. It exposes endpoints for inspecting configuration, checking health, viewing statistics, managing log levels, and controlling the runtime state of the proxy. The Admin API is typically bound to a local interface (default port 9901) and is not intended for external exposure in production environments.
+  version: 1.31.0
+  contact:
+    name: Envoy Proxy Community
+    url: https://www.envoyproxy.io/community
+  termsOfService: https://www.envoyproxy.io/
+servers:
+- url: http://localhost:9901
+  description: Default Envoy Admin Interface
+tags:
+- name: Listeners
+  description: Listener inspection and drain endpoints
+paths:
+  /listeners:
+    get:
+      operationId: getListeners
+      summary: Envoy Get listener information
+      description: Returns information about all configured listeners including their names, bound addresses and ports, and associated statistics. Supports JSON or text output format.
+      tags:
+      - Listeners
+      parameters:
+      - $ref: '#/components/parameters/FormatParam'
+      responses:
+        '200':
+          description: Listener information retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListenersResponse'
+            text/plain:
+              schema:
+                type: string
+  /drain_listeners:
+    post:
+      operationId: drainListeners
+      summary: Envoy Drain listeners
+      description: Initiates graceful draining of all listeners, stopping new connections from being accepted while allowing existing connections to complete. Useful before shutting down an Envoy instance or removing it from a load balancer.
+      tags:
+      - Listeners
+      parameters:
+      - name: inboundonly
+        in: query
+        description: When true, only drain inbound listeners.
+        required: false
+        schema:
+          type: boolean
+          default: false
+      - name: graceful
+        in: query
+        description: When true, perform a graceful drain that allows time for connections to complete.
+        required: false
+        schema:
+          type: boolean
+          default: false
+      responses:
+        '200':
+          description: Listener drain initiated
+          content:
+            text/plain:
+              schema:
+                type: string
+components:
+  parameters:
+    FormatParam:
+      name: format
+      in: query
+      description: Output format for the response data.
+      required: false
+      schema:
+        type: string
+        enum:
+        - json
+        - text
+        default: text
+  schemas:
+    ListenersResponse:
+      type: object
+      description: Information about all configured listeners
+      properties:
+        listener_statuses:
+          type: array
+          description: List of listener status objects
+          items:
+            type: object
+            properties:
+              name:
+                type: string
+                description: Listener name
+              local_address:
+                type: object
+                description: Address this listener is bound to
+                properties:
+                  socket_address:
+                    type: object
+                    properties:
+                      address:
+                        type: string
+                        description: IP address or hostname
+                      port_value:
+                        type: integer
+                        description: Port number
+              additional_local_addresses:
+                type: array
+                description: Additional addresses this listener is bound to
+                items:
+                  type: object
+    ListenersResponse_2:
+      type: object
+      description: Information about configured listeners
+      properties:
+        listener_statuses:
+          type: array
+          items:
+            type: object
+            properties:
+              name:
+                type: string
+                description: Listener name
+              local_address:
+                type: object
+                properties:
+                  socket_address:
+                    type: object
+                    properties:
+                      address:
+                        type: string
+                      port_value:
+                        type: integer
+externalDocs:
+  description: Envoy Admin Interface Documentation
+  url: https://www.envoyproxy.io/docs/envoy/latest/operations/admin

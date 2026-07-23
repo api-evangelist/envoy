@@ -1,0 +1,216 @@
+openapi: 3.1.0
+info:
+  title: Envoy Admin Certificates Chat API
+  description: The Envoy Admin API provides local administrative access to a running Envoy proxy instance. It exposes endpoints for inspecting configuration, checking health, viewing statistics, managing log levels, and controlling the runtime state of the proxy. The Admin API is typically bound to a local interface (default port 9901) and is not intended for external exposure in production environments.
+  version: 1.31.0
+  contact:
+    name: Envoy Proxy Community
+    url: https://www.envoyproxy.io/community
+  termsOfService: https://www.envoyproxy.io/
+servers:
+- url: http://localhost:9901
+  description: Default Envoy Admin Interface
+tags:
+- name: Chat
+  description: Chat completions endpoints compatible with the OpenAI Chat API. Routes requests to configured AI backends based on AIGatewayRoute rules.
+paths:
+  /v1/chat/completions:
+    post:
+      operationId: createChatCompletion
+      summary: Envoy Create a chat completion
+      description: Creates a chat completion response for the provided messages using an AI model routed through the gateway. The request format is compatible with the OpenAI Chat Completions API. The gateway selects a backend based on the AIGatewayRoute rules, which may include header-based routing, model-based routing, and backend traffic policies for rate limiting and token quota management. Supports streaming via server-sent events when stream is set to true.
+      tags:
+      - Chat
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ChatCompletionRequest'
+      responses:
+        '200':
+          description: Chat completion response. When stream is false, returns a complete ChatCompletion object. When stream is true, returns a stream of server-sent events with ChatCompletionChunk objects.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ChatCompletion'
+            text/event-stream:
+              schema:
+                type: string
+                description: 'Server-sent events stream where each event contains a ChatCompletionChunk JSON object prefixed with data:'
+        '400':
+          description: Bad request. The request body is malformed, required fields are missing, or the model name is invalid.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Unauthorized. The bearer token is missing or invalid.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '429':
+          description: Rate limit exceeded. The request was rejected due to backend rate limiting or token quota policies configured in the BackendTrafficPolicy.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '502':
+          description: Bad gateway. The upstream AI backend returned an error or was unreachable.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+components:
+  schemas:
+    ErrorResponse:
+      type: object
+      description: Error response returned when an API request fails
+      properties:
+        error:
+          type: object
+          description: Error details
+          properties:
+            message:
+              type: string
+              description: Human-readable error message describing what went wrong
+            type:
+              type: string
+              description: Error type identifier
+            code:
+              type: string
+              description: Error code for programmatic handling
+    ChatCompletionRequest:
+      type: object
+      description: Request body for the chat completions endpoint, compatible with the OpenAI Chat Completions API format.
+      required:
+      - model
+      - messages
+      properties:
+        model:
+          type: string
+          description: ID of the model to use. The gateway routes requests based on this model name to the appropriate AI backend as configured in AIGatewayRoute rules.
+          example: gpt-4
+        messages:
+          type: array
+          description: List of messages comprising the conversation so far. The messages are forwarded to the upstream AI backend in order.
+          minItems: 1
+          items:
+            $ref: '#/components/schemas/ChatMessage'
+        temperature:
+          type: number
+          description: Sampling temperature between 0 and 2. Higher values make output more random; lower values make it more deterministic.
+          minimum: 0
+          maximum: 2
+        top_p:
+          type: number
+          description: Nucleus sampling parameter. The model considers tokens with top_p probability mass.
+          minimum: 0
+          maximum: 1
+        n:
+          type: integer
+          description: Number of chat completion choices to generate for each input message.
+          minimum: 1
+          default: 1
+        stream:
+          type: boolean
+          description: 'If true, partial message deltas are sent as server-sent events as they become available. The stream ends with data: [DONE].'
+          default: false
+        max_tokens:
+          type: integer
+          description: Maximum number of tokens to generate in the chat completion. The total token count of messages plus max_tokens cannot exceed the model's context length.
+          minimum: 1
+        presence_penalty:
+          type: number
+          description: Penalty for using tokens that appear in the text so far. Positive values increase the model's likelihood to discuss new topics.
+          minimum: -2
+          maximum: 2
+        frequency_penalty:
+          type: number
+          description: Penalty for using tokens based on their frequency in the text so far. Positive values decrease the model's tendency to repeat the same lines.
+          minimum: -2
+          maximum: 2
+        user:
+          type: string
+          description: A unique identifier representing the end user. Passed through to the upstream AI provider for abuse monitoring.
+    UsageInfo:
+      type: object
+      description: Token usage statistics for the API request
+      properties:
+        prompt_tokens:
+          type: integer
+          description: Number of tokens in the input prompt
+        completion_tokens:
+          type: integer
+          description: Number of tokens in the generated completion
+        total_tokens:
+          type: integer
+          description: Total number of tokens used (prompt + completion)
+    ChatCompletion:
+      type: object
+      description: A completed chat response from the AI model
+      properties:
+        id:
+          type: string
+          description: Unique identifier for this chat completion
+        object:
+          type: string
+          description: Object type, always chat.completion
+          enum:
+          - chat.completion
+        created:
+          type: integer
+          description: Unix timestamp of when the completion was created
+        model:
+          type: string
+          description: The model that generated the completion
+        choices:
+          type: array
+          description: List of completion choices generated
+          items:
+            type: object
+            properties:
+              index:
+                type: integer
+                description: Index of this choice in the list
+              message:
+                $ref: '#/components/schemas/ChatMessage'
+              finish_reason:
+                type: string
+                description: Reason the model stopped generating tokens. stop means the model hit a natural stop point, length means the max_tokens limit was reached, and tool_calls means the model called a tool.
+                enum:
+                - stop
+                - length
+                - tool_calls
+                - content_filter
+        usage:
+          $ref: '#/components/schemas/UsageInfo'
+    ChatMessage:
+      type: object
+      description: A single message in a chat conversation
+      required:
+      - role
+      - content
+      properties:
+        role:
+          type: string
+          description: The role of the message author. System messages provide instructions, user messages are from the human, and assistant messages are prior model responses.
+          enum:
+          - system
+          - user
+          - assistant
+          - tool
+        content:
+          description: The text content of the message. May be a string or an array of content parts for multi-modal inputs.
+          oneOf:
+          - type: string
+          - type: array
+            items:
+              type: object
+        name:
+          type: string
+          description: An optional name for the participant. Provides the model information to differentiate between participants of the same role.
+externalDocs:
+  description: Envoy Admin Interface Documentation
+  url: https://www.envoyproxy.io/docs/envoy/latest/operations/admin
