@@ -5,7 +5,20 @@ description: >-
   microservice architectures. It provides advanced load balancing, observability, and traffic management features, and
   serves as the data plane for many service mesh implementations including Istio.
 type: Index
-image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
+accessModel:
+  pricing: freemium
+  onboarding: self-serve
+  trial: false
+  try_now: true
+  public: false
+  label: Freemium · Self-serve signup
+  confidence: high
+  source:
+  - plans
+  - authentication
+  generated: '2026-07-22'
+  method: derived
+image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/icons/envoy.png
 tags:
   - Cloud Native
   - Load Balancing
@@ -18,111 +31,327 @@ position: Consumer
 access: 3rd-Party
 specificationVersion: '0.19'
 apis:
-  - aid: envoy:envoy-admin-api
-    name: Envoy Admin API
-    description: >-
-      The Envoy Admin API provides local administrative access to a running Envoy proxy instance, exposing endpoints for
-      inspecting clusters, listeners, configuration, statistics, health status, and runtime settings.
-    humanURL: https://www.envoyproxy.io/docs/envoy/latest/operations/admin
-    tags:
-      - Admin
-      - Management
-      - Observability
-    properties:
-      - type: Documentation
-        url: https://www.envoyproxy.io/docs/envoy/latest/operations/admin
-      - type: OpenAPI
-        url: openapi/envoy-admin-api-openapi.yml
-  - aid: envoy:envoy-xds-api
-    name: Envoy xDS APIs
-    description: >-
-      The xDS (x Discovery Service) APIs provide dynamic configuration for Envoy proxies via a management server,
-      including LDS, RDS, CDS, EDS, SDS, and ADS. xDS APIs are served over gRPC or REST and allow management servers to
-      push Listener, Route, Cluster, Endpoint, and Secret configurations to Envoy proxies at runtime without restarts.
-    humanURL: https://www.envoyproxy.io/docs/envoy/latest/api-docs/xds_protocol
-    tags:
-      - Discovery Service
-      - Dynamic Configuration
-      - gRPC
-      - xDS
-    properties:
-      - type: Documentation
-        url: https://www.envoyproxy.io/docs/envoy/latest/api-docs/xds_protocol
-      - type: Reference
-        url: https://www.envoyproxy.io/docs/envoy/latest/configuration/overview/xds_api
-      - type: GitHubRepository
-        url: https://github.com/envoyproxy/envoy
-  - aid: envoy:envoy-api-v3
-    name: Envoy API V3
-    description: >-
-      The Envoy API v3 is the current stable protobuf-based configuration and extension API for Envoy proxy. It defines
-      the configuration types for all Envoy subsystems including listeners, clusters, routes, endpoints, HTTP filters,
-      network filters, transport sockets, and access logging. The API is defined using Protocol Buffers and published in
-      the envoy-api repository.
-    humanURL: https://www.envoyproxy.io/docs/envoy/latest/api/api
-    tags:
-      - Configuration
-      - Extensions
-      - Filters
-      - Protobuf
-    properties:
-      - type: Documentation
-        url: https://www.envoyproxy.io/docs/envoy/latest/api/api
-      - type: GitHubRepository
-        url: https://github.com/envoyproxy/envoy
-      - type: JSONSchema
-        url: json-schema/envoy-cluster.json
-      - type: JSONSchema
-        url: json-schema/envoy-listener.json
-      - type: JSONSchema
-        url: json-schema/envoy-route-configuration.json
-  - aid: envoy:envoy-gateway-api
-    name: Envoy Gateway API
-    description: >-
-      Envoy Gateway manages Envoy Proxy as a standalone or Kubernetes-based application gateway, implementing and
-      extending the Kubernetes Gateway API. It provides Gateway API extensions including BackendTrafficPolicy,
-      ClientTrafficPolicy, SecurityPolicy, and EnvoyPatchPolicy for advanced traffic management without requiring direct
-      Envoy configuration knowledge.
-    humanURL: https://gateway.envoyproxy.io/
-    tags:
-      - Cloud Native
-      - Gateway
-      - Kubernetes
-      - Traffic Management
-    properties:
-      - type: Documentation
-        url: https://gateway.envoyproxy.io/docs/
-      - type: Reference
-        url: https://gateway.envoyproxy.io/docs/concepts/gateway-api/
-      - type: GettingStarted
-        url: https://gateway.envoyproxy.io/docs/
-      - type: GitHubRepository
-        url: https://github.com/envoyproxy/gateway
-  - aid: envoy:envoy-ai-gateway-api
-    name: Envoy AI Gateway API
-    description: >-
-      The Envoy AI Gateway manages unified access to Generative AI services built on Envoy Gateway. It provides
-      OpenAI-compatible and Anthropic-compatible API endpoints for routing LLM traffic across multiple AI backends with
-      backend rate limiting, policy control, and security configuration via Kubernetes custom resources.
-    humanURL: https://aigateway.envoyproxy.io/
-    tags:
-      - AI
-      - Cloud Native
-      - Gateway
-      - LLM
-    properties:
-      - type: Documentation
-        url: https://aigateway.envoyproxy.io/docs/
-      - type: Reference
-        url: https://aigateway.envoyproxy.io/docs/api/
-      - type: GettingStarted
-        url: https://aigateway.envoyproxy.io/docs/getting-started/basic-usage/
-      - type: GitHubRepository
-        url: https://github.com/envoyproxy/ai-gateway
-      - type: ChangeLog
-        url: https://aigateway.envoyproxy.io/release-notes/
-      - type: OpenAPI
-        url: openapi/envoy-ai-gateway-openapi.yml
+- aid: envoy:envoy-xds-api
+  name: Envoy xDS APIs
+  description: >-
+    The xDS (x Discovery Service) APIs provide dynamic configuration for Envoy proxies via a management
+    server, including LDS, RDS, CDS, EDS, SDS, and ADS. xDS APIs are served over gRPC or REST and allow
+    management servers to push Listener, Route, Cluster, Endpoint, and Secret configurations to Envoy
+    proxies at runtime without restarts.
+  humanURL: https://www.envoyproxy.io/docs/envoy/latest/api-docs/xds_protocol
+  tags:
+  - Discovery Service
+  - Dynamic Configuration
+  - gRPC
+  - xDS
+  properties:
+  - type: Documentation
+    url: https://www.envoyproxy.io/docs/envoy/latest/api-docs/xds_protocol
+  - type: Reference
+    url: https://www.envoyproxy.io/docs/envoy/latest/configuration/overview/xds_api
+  - type: GitHubRepository
+    url: https://github.com/envoyproxy/envoy
+- aid: envoy:envoy-api-v3
+  name: Envoy API V3
+  description: >-
+    The Envoy API v3 is the current stable protobuf-based configuration and extension API for Envoy proxy.
+    It defines the configuration types for all Envoy subsystems including listeners, clusters, routes,
+    endpoints, HTTP filters, network filters, transport sockets, and access logging. The API is defined
+    using Protocol Buffers and published in the envoy-api repository.
+  humanURL: https://www.envoyproxy.io/docs/envoy/latest/api/api
+  tags:
+  - Configuration
+  - Extensions
+  - Filters
+  - Protobuf
+  properties:
+  - type: Documentation
+    url: https://www.envoyproxy.io/docs/envoy/latest/api/api
+  - type: GitHubRepository
+    url: https://github.com/envoyproxy/envoy
+  - type: JSONSchema
+    url: json-schema/envoy-cluster.json
+  - type: JSONSchema
+    url: json-schema/envoy-listener.json
+  - type: JSONSchema
+    url: json-schema/envoy-route-configuration.json
+- aid: envoy:envoy-gateway-api
+  name: Envoy Gateway API
+  description: >-
+    Envoy Gateway manages Envoy Proxy as a standalone or Kubernetes-based application gateway, implementing
+    and extending the Kubernetes Gateway API. It provides Gateway API extensions including BackendTrafficPolicy,
+    ClientTrafficPolicy, SecurityPolicy, and EnvoyPatchPolicy for advanced traffic management without
+    requiring direct Envoy configuration knowledge.
+  humanURL: https://gateway.envoyproxy.io/
+  tags:
+  - Cloud Native
+  - Gateway
+  - Kubernetes
+  - Traffic Management
+  properties:
+  - type: Documentation
+    url: https://gateway.envoyproxy.io/docs/
+  - type: Reference
+    url: https://gateway.envoyproxy.io/docs/concepts/gateway-api/
+  - type: GettingStarted
+    url: https://gateway.envoyproxy.io/docs/
+  - type: GitHubRepository
+    url: https://github.com/envoyproxy/gateway
+- aid: envoy:envoy-certificates-api
+  name: Envoy Certificates API
+  description: TLS certificate inspection endpoints
+  humanURL: https://www.envoyproxy.io/docs/envoy/latest/operations/admin
+  tags:
+  - Certificates
+  properties:
+  - type: OpenAPI
+    url: openapi/envoy-certificates-api-openapi.yml
+  - type: Documentation
+    url: https://www.envoyproxy.io/docs/envoy/latest/operations/admin
+  - type: Documentation
+    url: https://aigateway.envoyproxy.io/docs/
+  - type: Reference
+    url: https://aigateway.envoyproxy.io/docs/api/
+  - type: GettingStarted
+    url: https://aigateway.envoyproxy.io/docs/getting-started/basic-usage/
+  - type: GitHubRepository
+    url: https://github.com/envoyproxy/ai-gateway
+  - type: ChangeLog
+    url: https://aigateway.envoyproxy.io/release-notes/
+- aid: envoy:envoy-chat-api
+  name: Envoy Chat API
+  description: >-
+    Chat completions endpoints compatible with the OpenAI Chat API. Routes requests to configured AI backends
+    based on AIGatewayRoute rules.
+  humanURL: https://www.envoyproxy.io/docs/envoy/latest/operations/admin
+  tags:
+  - Chat
+  properties:
+  - type: OpenAPI
+    url: openapi/envoy-chat-api-openapi.yml
+  - type: Documentation
+    url: https://www.envoyproxy.io/docs/envoy/latest/operations/admin
+  - type: Documentation
+    url: https://aigateway.envoyproxy.io/docs/
+  - type: Reference
+    url: https://aigateway.envoyproxy.io/docs/api/
+  - type: GettingStarted
+    url: https://aigateway.envoyproxy.io/docs/getting-started/basic-usage/
+  - type: GitHubRepository
+    url: https://github.com/envoyproxy/ai-gateway
+  - type: ChangeLog
+    url: https://aigateway.envoyproxy.io/release-notes/
+- aid: envoy:envoy-clusters-api
+  name: Envoy Clusters API
+  description: Upstream cluster inspection and status endpoints
+  humanURL: https://www.envoyproxy.io/docs/envoy/latest/operations/admin
+  tags:
+  - Clusters
+  properties:
+  - type: OpenAPI
+    url: openapi/envoy-clusters-api-openapi.yml
+  - type: Documentation
+    url: https://www.envoyproxy.io/docs/envoy/latest/operations/admin
+  - type: Documentation
+    url: https://aigateway.envoyproxy.io/docs/
+  - type: Reference
+    url: https://aigateway.envoyproxy.io/docs/api/
+  - type: GettingStarted
+    url: https://aigateway.envoyproxy.io/docs/getting-started/basic-usage/
+  - type: GitHubRepository
+    url: https://github.com/envoyproxy/ai-gateway
+  - type: ChangeLog
+    url: https://aigateway.envoyproxy.io/release-notes/
+- aid: envoy:envoy-configuration-api
+  name: Envoy Configuration API
+  description: Configuration dump and inspection endpoints
+  humanURL: https://www.envoyproxy.io/docs/envoy/latest/operations/admin
+  tags:
+  - Configuration
+  properties:
+  - type: OpenAPI
+    url: openapi/envoy-configuration-api-openapi.yml
+  - type: Documentation
+    url: https://www.envoyproxy.io/docs/envoy/latest/operations/admin
+  - type: Documentation
+    url: https://aigateway.envoyproxy.io/docs/
+  - type: Reference
+    url: https://aigateway.envoyproxy.io/docs/api/
+  - type: GettingStarted
+    url: https://aigateway.envoyproxy.io/docs/getting-started/basic-usage/
+  - type: GitHubRepository
+    url: https://github.com/envoyproxy/ai-gateway
+  - type: ChangeLog
+    url: https://aigateway.envoyproxy.io/release-notes/
+- aid: envoy:envoy-health-api
+  name: Envoy Health API
+  description: Health check management endpoints
+  humanURL: https://www.envoyproxy.io/docs/envoy/latest/operations/admin
+  tags:
+  - Health
+  properties:
+  - type: OpenAPI
+    url: openapi/envoy-health-api-openapi.yml
+  - type: Documentation
+    url: https://www.envoyproxy.io/docs/envoy/latest/operations/admin
+  - type: Documentation
+    url: https://aigateway.envoyproxy.io/docs/
+  - type: Reference
+    url: https://aigateway.envoyproxy.io/docs/api/
+  - type: GettingStarted
+    url: https://aigateway.envoyproxy.io/docs/getting-started/basic-usage/
+  - type: GitHubRepository
+    url: https://github.com/envoyproxy/ai-gateway
+  - type: ChangeLog
+    url: https://aigateway.envoyproxy.io/release-notes/
+- aid: envoy:envoy-listeners-api
+  name: Envoy Listeners API
+  description: Listener inspection and drain endpoints
+  humanURL: https://www.envoyproxy.io/docs/envoy/latest/operations/admin
+  tags:
+  - Listeners
+  properties:
+  - type: OpenAPI
+    url: openapi/envoy-listeners-api-openapi.yml
+  - type: Documentation
+    url: https://www.envoyproxy.io/docs/envoy/latest/operations/admin
+  - type: Documentation
+    url: https://aigateway.envoyproxy.io/docs/
+  - type: Reference
+    url: https://aigateway.envoyproxy.io/docs/api/
+  - type: GettingStarted
+    url: https://aigateway.envoyproxy.io/docs/getting-started/basic-usage/
+  - type: GitHubRepository
+    url: https://github.com/envoyproxy/ai-gateway
+  - type: ChangeLog
+    url: https://aigateway.envoyproxy.io/release-notes/
+- aid: envoy:envoy-logging-api
+  name: Envoy Logging API
+  description: Log level management endpoints
+  humanURL: https://www.envoyproxy.io/docs/envoy/latest/operations/admin
+  tags:
+  - Logging
+  properties:
+  - type: OpenAPI
+    url: openapi/envoy-logging-api-openapi.yml
+  - type: Documentation
+    url: https://www.envoyproxy.io/docs/envoy/latest/operations/admin
+  - type: Documentation
+    url: https://aigateway.envoyproxy.io/docs/
+  - type: Reference
+    url: https://aigateway.envoyproxy.io/docs/api/
+  - type: GettingStarted
+    url: https://aigateway.envoyproxy.io/docs/getting-started/basic-usage/
+  - type: GitHubRepository
+    url: https://github.com/envoyproxy/ai-gateway
+  - type: ChangeLog
+    url: https://aigateway.envoyproxy.io/release-notes/
+- aid: envoy:envoy-models-api
+  name: Envoy Models API
+  description: >-
+    Model listing endpoints for discovering available AI models configured in the gateway routes.
+  humanURL: https://www.envoyproxy.io/docs/envoy/latest/operations/admin
+  tags:
+  - Models
+  properties:
+  - type: OpenAPI
+    url: openapi/envoy-models-api-openapi.yml
+  - type: Documentation
+    url: https://www.envoyproxy.io/docs/envoy/latest/operations/admin
+  - type: Documentation
+    url: https://aigateway.envoyproxy.io/docs/
+  - type: Reference
+    url: https://aigateway.envoyproxy.io/docs/api/
+  - type: GettingStarted
+    url: https://aigateway.envoyproxy.io/docs/getting-started/basic-usage/
+  - type: GitHubRepository
+    url: https://github.com/envoyproxy/ai-gateway
+  - type: ChangeLog
+    url: https://aigateway.envoyproxy.io/release-notes/
+- aid: envoy:envoy-runtime-api
+  name: Envoy Runtime API
+  description: Runtime settings management endpoints
+  humanURL: https://www.envoyproxy.io/docs/envoy/latest/operations/admin
+  tags:
+  - Runtime
+  properties:
+  - type: OpenAPI
+    url: openapi/envoy-runtime-api-openapi.yml
+  - type: Documentation
+    url: https://www.envoyproxy.io/docs/envoy/latest/operations/admin
+  - type: Documentation
+    url: https://aigateway.envoyproxy.io/docs/
+  - type: Reference
+    url: https://aigateway.envoyproxy.io/docs/api/
+  - type: GettingStarted
+    url: https://aigateway.envoyproxy.io/docs/getting-started/basic-usage/
+  - type: GitHubRepository
+    url: https://github.com/envoyproxy/ai-gateway
+  - type: ChangeLog
+    url: https://aigateway.envoyproxy.io/release-notes/
+- aid: envoy:envoy-server-api
+  name: Envoy Server API
+  description: Server management, lifecycle, and information endpoints
+  humanURL: https://www.envoyproxy.io/docs/envoy/latest/operations/admin
+  tags:
+  - Server
+  properties:
+  - type: OpenAPI
+    url: openapi/envoy-server-api-openapi.yml
+  - type: Documentation
+    url: https://www.envoyproxy.io/docs/envoy/latest/operations/admin
+  - type: Documentation
+    url: https://aigateway.envoyproxy.io/docs/
+  - type: Reference
+    url: https://aigateway.envoyproxy.io/docs/api/
+  - type: GettingStarted
+    url: https://aigateway.envoyproxy.io/docs/getting-started/basic-usage/
+  - type: GitHubRepository
+    url: https://github.com/envoyproxy/ai-gateway
+  - type: ChangeLog
+    url: https://aigateway.envoyproxy.io/release-notes/
+- aid: envoy:envoy-statistics-api
+  name: Envoy Statistics API
+  description: Statistics, metrics, and Prometheus endpoints
+  humanURL: https://www.envoyproxy.io/docs/envoy/latest/operations/admin
+  tags:
+  - Statistics
+  properties:
+  - type: OpenAPI
+    url: openapi/envoy-statistics-api-openapi.yml
+  - type: Documentation
+    url: https://www.envoyproxy.io/docs/envoy/latest/operations/admin
+  - type: Documentation
+    url: https://aigateway.envoyproxy.io/docs/
+  - type: Reference
+    url: https://aigateway.envoyproxy.io/docs/api/
+  - type: GettingStarted
+    url: https://aigateway.envoyproxy.io/docs/getting-started/basic-usage/
+  - type: GitHubRepository
+    url: https://github.com/envoyproxy/ai-gateway
+  - type: ChangeLog
+    url: https://aigateway.envoyproxy.io/release-notes/
+- aid: envoy:envoy-text-completions-api
+  name: Envoy Text Completions API
+  description: Legacy text completions endpoints compatible with the OpenAI completions API.
+  humanURL: https://www.envoyproxy.io/docs/envoy/latest/operations/admin
+  tags:
+  - Text Completions
+  properties:
+  - type: OpenAPI
+    url: openapi/envoy-text-completions-api-openapi.yml
+  - type: Documentation
+    url: https://www.envoyproxy.io/docs/envoy/latest/operations/admin
+  - type: Documentation
+    url: https://aigateway.envoyproxy.io/docs/
+  - type: Reference
+    url: https://aigateway.envoyproxy.io/docs/api/
+  - type: GettingStarted
+    url: https://aigateway.envoyproxy.io/docs/getting-started/basic-usage/
+  - type: GitHubRepository
+    url: https://github.com/envoyproxy/ai-gateway
+  - type: ChangeLog
+    url: https://aigateway.envoyproxy.io/release-notes/
 common:
   - type: AgenticAccess
     url: agentic-access/envoy-agentic-access.yml
