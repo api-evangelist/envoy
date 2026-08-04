@@ -1,0 +1,41 @@
+{
+  "provider": "envoy",
+  "sources": [
+    "envoy-certificates-api-openapi.yml",
+    "envoy-chat-api-openapi.yml",
+    "envoy-clusters-api-openapi.yml",
+    "envoy-configuration-api-openapi.yml",
+    "envoy-health-api-openapi.yml",
+    "envoy-listeners-api-openapi.yml",
+    "envoy-logging-api-openapi.yml",
+    "envoy-models-api-openapi.yml",
+    "envoy-runtime-api-openapi.yml",
+    "envoy-server-api-openapi.yml",
+    "envoy-statistics-api-openapi.yml",
+    "envoy-text-completions-api-openapi.yml",
+    "properties/envoy-admin-api-openapi.yml"
+  ],
+  "outputs": [
+    "envoy-certificates-api-openapi.yml",
+    "envoy-chat-api-openapi.yml",
+    "envoy-clusters-api-openapi.yml",
+    "envoy-configuration-api-openapi.yml",
+    "envoy-health-api-openapi.yml",
+    "envoy-listeners-api-openapi.yml",
+    "envoy-logging-api-openapi.yml",
+    "envoy-models-api-openapi.yml",
+    "envoy-runtime-api-openapi.yml",
+    "envoy-server-api-openapi.yml",
+    "envoy-statistics-api-openapi.yml",
+    "envoy-text-completions-api-openapi.yml"
+  ],
+  "archived": [
+    "archived properties/envoy-admin-api-openapi.yml"
+  ],
+  "errors": [],
+  "warnings": [],
+  "notes": [
+    "discovered stray spec: properties/envoy-admin-api-openapi.yml"
+  ],
+  "skipped": []
+}
