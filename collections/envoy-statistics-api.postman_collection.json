@@ -1,0 +1,380 @@
+{
+  "item": [
+    {
+      "id": "0bfc930a-ebe2-48d5-9dc7-f3f4dc6180ba",
+      "name": "Statistics",
+      "description": {
+        "content": "Statistics, metrics, and Prometheus endpoints",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "a55c6bc2-0f34-4fce-8e92-263030168a2c",
+          "name": "Get Envoy statistics",
+          "request": {
+            "name": "Get Envoy statistics",
+            "description": {
+              "content": "Returns all recorded statistics including counters, gauges, and histograms for the Envoy instance. Supports filtering by stat name pattern and type, and can return data in text, JSON, or Prometheus exposition format.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "stats"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "format",
+                  "value": "text",
+                  "description": "Output format for statistics data."
+                },
+                {
+                  "disabled": false,
+                  "key": "filter",
+                  "value": "<string>",
+                  "description": "Regex pattern to filter stat names."
+                },
+                {
+                  "disabled": false,
+                  "key": "type",
+                  "value": "<string>",
+                  "description": "Filter statistics by type."
+                },
+                {
+                  "disabled": false,
+                  "key": "usedonly",
+                  "value": "false",
+                  "description": "When true, only return statistics that have been written to at least once."
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "c1b76e60-2a56-4030-bd6b-0c5c883255c5",
+              "name": "Statistics retrieved successfully",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "stats"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "format",
+                      "value": "text"
+                    },
+                    {
+                      "key": "filter",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "type",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "usedonly",
+                      "value": "false"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"stats\": [\n    {\n      \"name\": \"string\",\n      \"value\": 9359,\n      \"type\": \"Counter\"\n    },\n    {\n      \"name\": \"string\",\n      \"value\": 7073,\n      \"type\": \"Counter\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "53aabb52-c05b-422c-b975-d8de15a0fe0c",
+          "name": "Envoy Get statistics in Prometheus format",
+          "request": {
+            "name": "Envoy Get statistics in Prometheus format",
+            "description": {
+              "content": "Returns all statistics formatted for Prometheus scraping using the standard Prometheus text exposition format. Supports filtering and can optionally return only stats that have been used.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "stats",
+                "prometheus"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "usedonly",
+                  "value": "false",
+                  "description": "When true, only return statistics that have been written to at least once."
+                },
+                {
+                  "disabled": false,
+                  "key": "filter",
+                  "value": "<string>",
+                  "description": "Regex pattern to filter stat names."
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "text/plain"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "eb8b539e-eefc-4a73-b6de-9ec5bf94d2bd",
+              "name": "Prometheus-formatted statistics",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "stats",
+                    "prometheus"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "usedonly",
+                      "value": "false"
+                    },
+                    {
+                      "key": "filter",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "text/plain"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "string",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "ae0db357-5b9f-4b5a-8c14-32edd5902bf4",
+          "name": "Envoy Get recently looked-up stat names",
+          "request": {
+            "name": "Envoy Get recently looked-up stat names",
+            "description": {
+              "content": "Returns a list of the most recently looked-up stat names along with lookup counts. Useful for debugging stat name patterns.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "stats",
+                "recentlookups"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "text/plain"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "0b72ec88-548a-4798-8336-2d97ca5162a1",
+              "name": "Recently looked-up stat names",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "stats",
+                    "recentlookups"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "text/plain"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "string",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "1aca70ca-6101-478b-a6c0-8358b27bc8dc",
+          "name": "Envoy Reset all statistics counters",
+          "request": {
+            "name": "Envoy Reset all statistics counters",
+            "description": {
+              "content": "Resets all statistics counters to zero. Does not affect gauges or histograms. Useful for testing and debugging scenarios where you want a clean baseline for counter metrics.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "reset_counters"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "text/plain"
+              }
+            ],
+            "method": "POST",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "23082f0c-c65b-4a84-9f95-ff6ef30009d5",
+              "name": "Counters reset successfully",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "reset_counters"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "text/plain"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "string",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "http://localhost:9901",
+      "key": "baseUrl"
+    }
+  ],
+  "info": {
+    "_postman_id": "959fbc6a-b5ab-47cb-8c65-16eb05f3fda4",
+    "name": "Envoy Admin Certificates Statistics API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "The Envoy Admin API provides local administrative access to a running Envoy proxy instance. It exposes endpoints for inspecting configuration, checking health, viewing statistics, managing log levels, and controlling the runtime state of the proxy. The Admin API is typically bound to a local interface (default port 9901) and is not intended for external exposure in production environments.\n\nContact Support:\n Name: Envoy Proxy Community",
+      "type": "text/plain"
+    }
+  }
+}

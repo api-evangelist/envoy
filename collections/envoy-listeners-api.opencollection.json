@@ -1,0 +1,62 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Envoy Admin Certificates Listeners API",
+    "version": "1.31.0"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Listeners",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Envoy Get listener information",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "http://localhost:9901/listeners",
+            "params": [
+              {
+                "name": "format",
+                "value": "",
+                "type": "query",
+                "description": "Output format for the response data."
+              }
+            ]
+          },
+          "docs": "Returns information about all configured listeners including their names, bound addresses and ports, and associated statistics. Supports JSON or text output format."
+        },
+        {
+          "info": {
+            "name": "Envoy Drain listeners",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "http://localhost:9901/drain_listeners",
+            "params": [
+              {
+                "name": "inboundonly",
+                "value": "",
+                "type": "query",
+                "description": "When true, only drain inbound listeners."
+              },
+              {
+                "name": "graceful",
+                "value": "",
+                "type": "query",
+                "description": "When true, perform a graceful drain that allows time for connections to complete."
+              }
+            ]
+          },
+          "docs": "Initiates graceful draining of all listeners, stopping new connections from being accepted while allowing existing connections to complete. Useful before shutting down an Envoy instance or removing it from a load balancer."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

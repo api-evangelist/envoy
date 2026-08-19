@@ -1,0 +1,33 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Envoy Admin Certificates Chat API",
+    "version": "1.31.0"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Chat",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Envoy Create a chat completion",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "http://localhost:9901/v1/chat/completions",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Creates a chat completion response for the provided messages using an AI model routed through the gateway. The request format is compatible with the OpenAI Chat Completions API. The gateway selects a backend based on the AIGatewayRoute rules, which may include header-based routing, model-based routing, and backend traffic policies for rate limiting and token quota management. Supports streaming via server-sent events when stream is set to true."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

@@ -1,0 +1,207 @@
+{
+  "item": [
+    {
+      "id": "e0040825-ad42-4893-bcb8-9201a2a804e5",
+      "name": "Runtime",
+      "description": {
+        "content": "Runtime settings management endpoints",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "6a05658d-a96f-49fc-b6c3-dfb6fdd044df",
+          "name": "Envoy Get runtime settings",
+          "request": {
+            "name": "Envoy Get runtime settings",
+            "description": {
+              "content": "Returns the current runtime settings showing all layers, their configured values, and the final merged value for each key. Runtime values control various Envoy behaviors without requiring a restart.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "runtime"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "4a1e869f-e9d3-4d8d-8ce9-391e07facf35",
+              "name": "Runtime settings retrieved successfully",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "runtime"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"layers\": [\n    \"string\",\n    \"string\"\n  ],\n  \"entries\": {\n    \"key_0\": {\n      \"final_value\": \"string\",\n      \"layer_values\": [\n        \"string\",\n        \"string\"\n      ]\n    },\n    \"key_1\": {\n      \"final_value\": \"string\",\n      \"layer_values\": [\n        \"string\",\n        \"string\"\n      ]\n    },\n    \"key_2\": {\n      \"final_value\": \"string\",\n      \"layer_values\": [\n        \"string\",\n        \"string\"\n      ]\n    }\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "b3b0badd-3e38-41f1-b4c1-0ee2096c9f9f",
+          "name": "Envoy Modify runtime settings",
+          "request": {
+            "name": "Envoy Modify runtime settings",
+            "description": {
+              "content": "Adds or modifies runtime values in the admin overriding layer. Values are passed as query parameters where the key is the runtime feature flag name and the value is the new setting. Use the value - (dash) to remove a previously set override.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "runtime_modify"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "text/plain"
+              }
+            ],
+            "method": "POST",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "076eab99-424f-472d-9e12-4253fdc176ca",
+              "name": "Runtime settings modified successfully",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "runtime_modify"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "text/plain"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "string",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "a34aa4d9-27cb-479e-822b-cc36cc5f1b97",
+              "name": "Invalid runtime key or value specified",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "runtime_modify"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "text/plain"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "string",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "http://localhost:9901",
+      "key": "baseUrl"
+    }
+  ],
+  "info": {
+    "_postman_id": "a2aed6fa-1fbd-44ab-9326-4c2ede40dcf4",
+    "name": "Envoy Admin Certificates Runtime API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "The Envoy Admin API provides local administrative access to a running Envoy proxy instance. It exposes endpoints for inspecting configuration, checking health, viewing statistics, managing log levels, and controlling the runtime state of the proxy. The Admin API is typically bound to a local interface (default port 9901) and is not intended for external exposure in production environments.\n\nContact Support:\n Name: Envoy Proxy Community",
+      "type": "text/plain"
+    }
+  }
+}

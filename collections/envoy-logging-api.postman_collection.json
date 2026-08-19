@@ -1,0 +1,238 @@
+{
+  "item": [
+    {
+      "id": "a54d4dd4-dfca-4506-8510-ff0bfe22d3d7",
+      "name": "Logging",
+      "description": {
+        "content": "Log level management endpoints",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "cdc1a068-0269-4f09-84e3-88e75e220d49",
+          "name": "Envoy Get current log levels",
+          "request": {
+            "name": "Envoy Get current log levels",
+            "description": {
+              "content": "Returns the current logging levels for all named loggers configured in the Envoy instance. Logger names correspond to subsystems such as http, router, upstream, conn_handler, and others.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "logging"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "text/plain"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "4700c72d-81f3-44b0-b75e-430d93d91fb6",
+              "name": "Current log levels for all loggers",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "logging"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "text/plain"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "string",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "6ca971bb-91b7-45c5-a8cf-3127670a135a",
+          "name": "Envoy Change log levels",
+          "request": {
+            "name": "Envoy Change log levels",
+            "description": {
+              "content": "Dynamically changes the logging level for one or all loggers without restarting Envoy. Use the level query parameter to set all loggers or the paths parameter to set a specific logger at logger_name:level format.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "logging"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "level",
+                  "value": "<string>",
+                  "description": "Set log level for all loggers simultaneously. One of trace, debug, info, warning, error, critical, or off."
+                },
+                {
+                  "disabled": false,
+                  "key": "paths",
+                  "value": "<string>",
+                  "description": "Set log level for a specific logger using logger_name:level format. Can be specified multiple times for multiple loggers."
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "text/plain"
+              }
+            ],
+            "method": "POST",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "28392948-2f7a-41c5-b95e-a7505a7a4633",
+              "name": "Log levels updated successfully",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "logging"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "level",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "paths",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "text/plain"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "string",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "7b85e06d-5a3e-4aaf-a23d-cdd96d62b4d2",
+              "name": "Invalid log level or logger name specified",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "logging"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "level",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "paths",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "text/plain"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "string",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "http://localhost:9901",
+      "key": "baseUrl"
+    }
+  ],
+  "info": {
+    "_postman_id": "d030d1dd-c96c-4c16-8dbd-e1d6db2dd7ac",
+    "name": "Envoy Admin Certificates Logging API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "The Envoy Admin API provides local administrative access to a running Envoy proxy instance. It exposes endpoints for inspecting configuration, checking health, viewing statistics, managing log levels, and controlling the runtime state of the proxy. The Admin API is typically bound to a local interface (default port 9901) and is not intended for external exposure in production environments.\n\nContact Support:\n Name: Envoy Proxy Community",
+      "type": "text/plain"
+    }
+  }
+}

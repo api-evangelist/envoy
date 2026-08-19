@@ -1,0 +1,102 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Envoy Admin Certificates Statistics API",
+    "version": "1.31.0"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Statistics",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get Envoy statistics",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "http://localhost:9901/stats",
+            "params": [
+              {
+                "name": "format",
+                "value": "",
+                "type": "query",
+                "description": "Output format for statistics data."
+              },
+              {
+                "name": "filter",
+                "value": "",
+                "type": "query",
+                "description": "Regex pattern to filter stat names."
+              },
+              {
+                "name": "type",
+                "value": "",
+                "type": "query",
+                "description": "Filter statistics by type."
+              },
+              {
+                "name": "usedonly",
+                "value": "",
+                "type": "query",
+                "description": "When true, only return statistics that have been written to at least once."
+              }
+            ]
+          },
+          "docs": "Returns all recorded statistics including counters, gauges, and histograms for the Envoy instance. Supports filtering by stat name pattern and type, and can return data in text, JSON, or Prometheus exposition format."
+        },
+        {
+          "info": {
+            "name": "Envoy Get statistics in Prometheus format",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "http://localhost:9901/stats/prometheus",
+            "params": [
+              {
+                "name": "usedonly",
+                "value": "",
+                "type": "query",
+                "description": "When true, only return statistics that have been written to at least once."
+              },
+              {
+                "name": "filter",
+                "value": "",
+                "type": "query",
+                "description": "Regex pattern to filter stat names."
+              }
+            ]
+          },
+          "docs": "Returns all statistics formatted for Prometheus scraping using the standard Prometheus text exposition format. Supports filtering and can optionally return only stats that have been used."
+        },
+        {
+          "info": {
+            "name": "Envoy Get recently looked-up stat names",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "http://localhost:9901/stats/recentlookups"
+          },
+          "docs": "Returns a list of the most recently looked-up stat names along with lookup counts. Useful for debugging stat name patterns."
+        },
+        {
+          "info": {
+            "name": "Envoy Reset all statistics counters",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "http://localhost:9901/reset_counters"
+          },
+          "docs": "Resets all statistics counters to zero. Does not affect gauges or histograms. Useful for testing and debugging scenarios where you want a clean baseline for counter metrics."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

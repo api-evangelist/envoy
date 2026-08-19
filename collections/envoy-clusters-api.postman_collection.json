@@ -1,0 +1,114 @@
+{
+  "item": [
+    {
+      "id": "a26a670c-7a5d-4a8a-bc39-a003856de3f5",
+      "name": "Clusters",
+      "description": {
+        "content": "Upstream cluster inspection and status endpoints",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "998dc200-2798-4b5c-8f34-5ddae3d44241",
+          "name": "Envoy Get upstream cluster information",
+          "request": {
+            "name": "Envoy Get upstream cluster information",
+            "description": {
+              "content": "Returns information about all configured upstream clusters including host addresses, health status, statistics counters and gauges, and load balancing weights. Supports JSON or text output format.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "clusters"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "format",
+                  "value": "text",
+                  "description": "Output format for the response data."
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "cd88fc40-641c-481e-a5dd-b6da237764ce",
+              "name": "Cluster information retrieved successfully",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "clusters"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "format",
+                      "value": "text"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"cluster_statuses\": [\n    {\n      \"name\": \"string\",\n      \"added_via_api\": false,\n      \"success_rate_ejection_threshold\": 8590.752844848503,\n      \"host_statuses\": [\n        {\n          \"address\": {\n            \"socket_address\": {\n              \"address\": \"string\",\n              \"port_value\": 7557\n            }\n          },\n          \"stats\": [\n            {\n              \"name\": \"string\",\n              \"value\": \"string\",\n              \"type\": \"string\"\n            },\n            {\n              \"name\": \"string\",\n              \"value\": \"string\",\n              \"type\": \"string\"\n            }\n          ],\n          \"health_status\": {\n            \"eds_health_status\": \"DRAINING\",\n            \"failed_active_health_check\": true,\n            \"failed_outlier_check\": false\n          },\n          \"weight\": 3702,\n          \"locality\": {\n            \"region\": \"string\",\n            \"zone\": \"string\",\n            \"sub_zone\": \"string\"\n          }\n        },\n        {\n          \"address\": {\n            \"socket_address\": {\n              \"address\": \"string\",\n              \"port_value\": 231\n            }\n          },\n          \"stats\": [\n            {\n              \"name\": \"string\",\n              \"value\": \"string\",\n              \"type\": \"string\"\n            },\n            {\n              \"name\": \"string\",\n              \"value\": \"string\",\n              \"type\": \"string\"\n            }\n          ],\n          \"health_status\": {\n            \"eds_health_status\": \"UNHEALTHY\",\n            \"failed_active_health_check\": false,\n            \"failed_outlier_check\": true\n          },\n          \"weight\": 9603,\n          \"locality\": {\n            \"region\": \"string\",\n            \"zone\": \"string\",\n            \"sub_zone\": \"string\"\n          }\n        }\n      ]\n    },\n    {\n      \"name\": \"string\",\n      \"added_via_api\": true,\n      \"success_rate_ejection_threshold\": 5049.837825700691,\n      \"host_statuses\": [\n        {\n          \"address\": {\n            \"socket_address\": {\n              \"address\": \"string\",\n              \"port_value\": 7209\n            }\n          },\n          \"stats\": [\n            {\n              \"name\": \"string\",\n              \"value\": \"string\",\n              \"type\": \"string\"\n            },\n            {\n              \"name\": \"string\",\n              \"value\": \"string\",\n              \"type\": \"string\"\n            }\n          ],\n          \"health_status\": {\n            \"eds_health_status\": \"DRAINING\",\n            \"failed_active_health_check\": false,\n            \"failed_outlier_check\": true\n          },\n          \"weight\": 4883,\n          \"locality\": {\n            \"region\": \"string\",\n            \"zone\": \"string\",\n            \"sub_zone\": \"string\"\n          }\n        },\n        {\n          \"address\": {\n            \"socket_address\": {\n              \"address\": \"string\",\n              \"port_value\": 1574\n            }\n          },\n          \"stats\": [\n            {\n              \"name\": \"string\",\n              \"value\": \"string\",\n              \"type\": \"string\"\n            },\n            {\n              \"name\": \"string\",\n              \"value\": \"string\",\n              \"type\": \"string\"\n            }\n          ],\n          \"health_status\": {\n            \"eds_health_status\": \"HEALTHY\",\n            \"failed_active_health_check\": true,\n            \"failed_outlier_check\": false\n          },\n          \"weight\": 5475,\n          \"locality\": {\n            \"region\": \"string\",\n            \"zone\": \"string\",\n            \"sub_zone\": \"string\"\n          }\n        }\n      ]\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "http://localhost:9901",
+      "key": "baseUrl"
+    }
+  ],
+  "info": {
+    "_postman_id": "4b2e9292-1836-46da-b780-60079f887ada",
+    "name": "Envoy Admin Certificates Clusters API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "The Envoy Admin API provides local administrative access to a running Envoy proxy instance. It exposes endpoints for inspecting configuration, checking health, viewing statistics, managing log levels, and controlling the runtime state of the proxy. The Admin API is typically bound to a local interface (default port 9901) and is not intended for external exposure in production environments.\n\nContact Support:\n Name: Envoy Proxy Community",
+      "type": "text/plain"
+    }
+  }
+}

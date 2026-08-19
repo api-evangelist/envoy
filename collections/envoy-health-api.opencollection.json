@@ -1,0 +1,51 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Envoy Admin Certificates Health API",
+    "version": "1.31.0"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Health",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Envoy Force health check failure",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "http://localhost:9901/health_check/fail"
+          },
+          "docs": "Forces the Envoy server to fail all health checks from upstream load balancers. This is useful for draining traffic before a planned shutdown. The server continues to proxy existing connections."
+        },
+        {
+          "info": {
+            "name": "Envoy Restore health check passing",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "http://localhost:9901/health_check/ok"
+          },
+          "docs": "Restores the Envoy server to pass health checks from upstream load balancers after a prior call to /health_check/fail. The server will resume receiving new traffic."
+        },
+        {
+          "info": {
+            "name": "Envoy Get server readiness status",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "http://localhost:9901/ready"
+          },
+          "docs": "Returns whether the Envoy server is ready to accept connections and proxy traffic. Returns HTTP 200 when ready and HTTP 503 when the server is not yet initialized or is shutting down."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

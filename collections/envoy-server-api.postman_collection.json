@@ -1,0 +1,404 @@
+{
+  "item": [
+    {
+      "id": "a7aac5ca-856d-4a1d-92db-704c36005998",
+      "name": "Server",
+      "description": {
+        "content": "Server management, lifecycle, and information endpoints",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "ffc80da7-0823-4b68-8487-062a546a84b3",
+          "name": "Envoy Get server information",
+          "request": {
+            "name": "Envoy Get server information",
+            "description": {
+              "content": "Returns information about the running Envoy server including version string, current state, uptime for the current epoch and all epochs, hot restart compatibility version, and command line options used at startup.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "server_info"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "1532643b-013e-4e55-9766-6f2a0606652e",
+              "name": "Server information retrieved successfully",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "server_info"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"version\": \"string\",\n  \"state\": \"INITIALIZING\",\n  \"uptime_current_epoch\": \"string\",\n  \"uptime_all_epochs\": \"string\",\n  \"hot_restart_version\": \"string\",\n  \"command_line_options\": {\n    \"restart_epoch\": 4471,\n    \"config_path\": \"string\",\n    \"log_level\": \"string\",\n    \"service_cluster\": \"string\",\n    \"service_node\": \"string\",\n    \"concurrency\": 7813\n  },\n  \"node\": {\n    \"id\": \"string\",\n    \"cluster\": \"string\",\n    \"metadata\": {},\n    \"locality\": {}\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "ab13e41a-d020-47ab-88f2-7078e0360335",
+          "name": "Shutdown Envoy server",
+          "request": {
+            "name": "Shutdown Envoy server",
+            "description": {
+              "content": "Initiates a clean shutdown of the Envoy server process. The server will drain connections and exit. This endpoint requires the admin interface to have this feature enabled in configuration.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "quitquitquit"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "text/plain"
+              }
+            ],
+            "method": "POST",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "8cbb273a-ee6b-4ffa-94c9-4f91b4c927f1",
+              "name": "Server shutdown initiated",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "quitquitquit"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "text/plain"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "string",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "ab39b919-b5a1-4812-939a-585bd5168335",
+          "name": "Envoy Get memory allocation information",
+          "request": {
+            "name": "Envoy Get memory allocation information",
+            "description": {
+              "content": "Returns current memory usage statistics for the Envoy process including allocated memory, heap size, and physical memory used. Useful for monitoring memory consumption and debugging memory issues.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "memory"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "57f754f0-997b-4d90-aea5-930aaaa50a48",
+              "name": "Memory usage information retrieved",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "memory"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"allocated\": \"string\",\n  \"heap_size\": \"string\",\n  \"pageheap_unmapped\": \"string\",\n  \"pageheap_free\": \"string\",\n  \"total_thread_cache\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "9a14249b-5a28-4ee4-a642-1a1c53dacb7e",
+          "name": "Envoy Get hot restart compatibility version",
+          "request": {
+            "name": "Envoy Get hot restart compatibility version",
+            "description": {
+              "content": "Returns the hot restart compatibility version string. Two Envoy instances can perform a hot restart if their hot restart versions match.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "hot_restart_version"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "text/plain"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "5669554b-42e6-470e-9a59-7ddf47fb1da3",
+              "name": "Hot restart version string",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "hot_restart_version"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "text/plain"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "string",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "7c444786-65c2-40a0-b1bc-8843fa56fb72",
+          "name": "Envoy Drain listeners",
+          "request": {
+            "name": "Envoy Drain listeners",
+            "description": {
+              "content": "Drains all listeners, preventing new connections from being accepted. Existing connections are allowed to complete.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "drain_listeners"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "inboundonly",
+                  "value": "false",
+                  "description": "Only drain inbound listeners"
+                },
+                {
+                  "disabled": false,
+                  "key": "graceful",
+                  "value": "false",
+                  "description": "Perform graceful drain"
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "text/plain"
+              }
+            ],
+            "method": "POST",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "5c34c152-2c4e-4e0a-990e-419191b93e5e",
+              "name": "Listeners drain initiated",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "drain_listeners"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "inboundonly",
+                      "value": "false"
+                    },
+                    {
+                      "key": "graceful",
+                      "value": "false"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "text/plain"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "string",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "http://localhost:9901",
+      "key": "baseUrl"
+    }
+  ],
+  "info": {
+    "_postman_id": "657cb22f-3591-40ca-ba1a-805f1f94a620",
+    "name": "Envoy Admin Certificates Server API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "The Envoy Admin API provides local administrative access to a running Envoy proxy instance. It exposes endpoints for inspecting configuration, checking health, viewing statistics, managing log levels, and controlling the runtime state of the proxy. The Admin API is typically bound to a local interface (default port 9901) and is not intended for external exposure in production environments.\n\nContact Support:\n Name: Envoy Proxy Community",
+      "type": "text/plain"
+    }
+  }
+}

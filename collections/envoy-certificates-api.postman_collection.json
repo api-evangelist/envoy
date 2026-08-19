@@ -1,0 +1,102 @@
+{
+  "item": [
+    {
+      "id": "20dd82ee-9919-4bd7-93fc-8314e1b15870",
+      "name": "Certificates",
+      "description": {
+        "content": "TLS certificate inspection endpoints",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "060463df-9ba4-41b7-81e8-2623907eeaf6",
+          "name": "Envoy Get TLS certificate information",
+          "request": {
+            "name": "Envoy Get TLS certificate information",
+            "description": {
+              "content": "Returns information about all TLS certificates currently loaded by Envoy including certificate paths, serial numbers, subject alternative names, validity dates, and days until expiration.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "certs"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "55297e76-f8ed-43ad-983d-ab4df0a3320f",
+              "name": "TLS certificate information retrieved",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "certs"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"certificates\": [\n    {\n      \"ca_cert\": [\n        {\n          \"path\": \"string\",\n          \"serial_number\": \"string\",\n          \"subject_alt_names\": [\n            {\n              \"dns\": \"string\",\n              \"uri\": \"string\",\n              \"ip_address\": \"string\"\n            },\n            {\n              \"dns\": \"string\",\n              \"uri\": \"string\",\n              \"ip_address\": \"string\"\n            }\n          ],\n          \"days_until_expiration\": \"string\",\n          \"valid_from\": \"string\",\n          \"expiration_time\": \"string\"\n        },\n        {\n          \"path\": \"string\",\n          \"serial_number\": \"string\",\n          \"subject_alt_names\": [\n            {\n              \"dns\": \"string\",\n              \"uri\": \"string\",\n              \"ip_address\": \"string\"\n            },\n            {\n              \"dns\": \"string\",\n              \"uri\": \"string\",\n              \"ip_address\": \"string\"\n            }\n          ],\n          \"days_until_expiration\": \"string\",\n          \"valid_from\": \"string\",\n          \"expiration_time\": \"string\"\n        }\n      ],\n      \"cert_chain\": [\n        {\n          \"path\": \"string\",\n          \"serial_number\": \"string\",\n          \"subject_alt_names\": [\n            {\n              \"dns\": \"string\",\n              \"uri\": \"string\",\n              \"ip_address\": \"string\"\n            },\n            {\n              \"dns\": \"string\",\n              \"uri\": \"string\",\n              \"ip_address\": \"string\"\n            }\n          ],\n          \"days_until_expiration\": \"string\",\n          \"valid_from\": \"string\",\n          \"expiration_time\": \"string\"\n        },\n        {\n          \"path\": \"string\",\n          \"serial_number\": \"string\",\n          \"subject_alt_names\": [\n            {\n              \"dns\": \"string\",\n              \"uri\": \"string\",\n              \"ip_address\": \"string\"\n            },\n            {\n              \"dns\": \"string\",\n              \"uri\": \"string\",\n              \"ip_address\": \"string\"\n            }\n          ],\n          \"days_until_expiration\": \"string\",\n          \"valid_from\": \"string\",\n          \"expiration_time\": \"string\"\n        }\n      ]\n    },\n    {\n      \"ca_cert\": [\n        {\n          \"path\": \"string\",\n          \"serial_number\": \"string\",\n          \"subject_alt_names\": [\n            {\n              \"dns\": \"string\",\n              \"uri\": \"string\",\n              \"ip_address\": \"string\"\n            },\n            {\n              \"dns\": \"string\",\n              \"uri\": \"string\",\n              \"ip_address\": \"string\"\n            }\n          ],\n          \"days_until_expiration\": \"string\",\n          \"valid_from\": \"string\",\n          \"expiration_time\": \"string\"\n        },\n        {\n          \"path\": \"string\",\n          \"serial_number\": \"string\",\n          \"subject_alt_names\": [\n            {\n              \"dns\": \"string\",\n              \"uri\": \"string\",\n              \"ip_address\": \"string\"\n            },\n            {\n              \"dns\": \"string\",\n              \"uri\": \"string\",\n              \"ip_address\": \"string\"\n            }\n          ],\n          \"days_until_expiration\": \"string\",\n          \"valid_from\": \"string\",\n          \"expiration_time\": \"string\"\n        }\n      ],\n      \"cert_chain\": [\n        {\n          \"path\": \"string\",\n          \"serial_number\": \"string\",\n          \"subject_alt_names\": [\n            {\n              \"dns\": \"string\",\n              \"uri\": \"string\",\n              \"ip_address\": \"string\"\n            },\n            {\n              \"dns\": \"string\",\n              \"uri\": \"string\",\n              \"ip_address\": \"string\"\n            }\n          ],\n          \"days_until_expiration\": \"string\",\n          \"valid_from\": \"string\",\n          \"expiration_time\": \"string\"\n        },\n        {\n          \"path\": \"string\",\n          \"serial_number\": \"string\",\n          \"subject_alt_names\": [\n            {\n              \"dns\": \"string\",\n              \"uri\": \"string\",\n              \"ip_address\": \"string\"\n            },\n            {\n              \"dns\": \"string\",\n              \"uri\": \"string\",\n              \"ip_address\": \"string\"\n            }\n          ],\n          \"days_until_expiration\": \"string\",\n          \"valid_from\": \"string\",\n          \"expiration_time\": \"string\"\n        }\n      ]\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "http://localhost:9901",
+      "key": "baseUrl"
+    }
+  ],
+  "info": {
+    "_postman_id": "c50f0465-a04f-43f2-a724-3b091d08c30c",
+    "name": "Envoy Admin Certificates API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "The Envoy Admin API provides local administrative access to a running Envoy proxy instance. It exposes endpoints for inspecting configuration, checking health, viewing statistics, managing log levels, and controlling the runtime state of the proxy. The Admin API is typically bound to a local interface (default port 9901) and is not intended for external exposure in production environments.\n\nContact Support:\n Name: Envoy Proxy Community",
+      "type": "text/plain"
+    }
+  }
+}

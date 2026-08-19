@@ -1,0 +1,33 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Envoy Admin Certificates Text Completions API",
+    "version": "1.31.0"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Text Completions",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Envoy Create a text completion",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "http://localhost:9901/v1/completions",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Creates a text completion for the provided prompt using an AI model routed through the gateway. The request format is compatible with the OpenAI legacy Completions API. This endpoint is primarily provided for backward compatibility; the chat completions endpoint is preferred for modern applications."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

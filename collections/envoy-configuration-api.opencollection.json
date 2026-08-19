@@ -1,0 +1,49 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Envoy Admin Certificates Configuration API",
+    "version": "1.31.0"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Configuration",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Dump current Envoy configuration",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "http://localhost:9901/config_dump",
+            "params": [
+              {
+                "name": "resource",
+                "value": "",
+                "type": "query",
+                "description": "Filter by resource type. Valid values include static_clusters, dynamic_active_clusters, static_listeners, dynamic_active_listeners, dynamic_route_configs, static_route_configs, and bootstrap."
+              },
+              {
+                "name": "name_regex",
+                "value": "",
+                "type": "query",
+                "description": "Filter resources by name using a regular expression pattern."
+              },
+              {
+                "name": "include_eds",
+                "value": "",
+                "type": "query",
+                "description": "Include EDS endpoint assignment data in the config dump."
+              }
+            ]
+          },
+          "docs": "Returns the currently loaded Envoy configuration as a JSON object containing bootstrap, clusters, listeners, routes, secrets, and endpoints. Supports filtering by resource type and name regex to reduce output size."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

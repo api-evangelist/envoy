@@ -1,0 +1,37 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Envoy Admin Certificates Clusters API",
+    "version": "1.31.0"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Clusters",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Envoy Get upstream cluster information",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "http://localhost:9901/clusters",
+            "params": [
+              {
+                "name": "format",
+                "value": "",
+                "type": "query",
+                "description": "Output format for the response data."
+              }
+            ]
+          },
+          "docs": "Returns information about all configured upstream clusters including host addresses, health status, statistics counters and gauges, and load balancing weights. Supports JSON or text output format."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

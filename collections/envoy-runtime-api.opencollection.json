@@ -1,0 +1,40 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Envoy Admin Certificates Runtime API",
+    "version": "1.31.0"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Runtime",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Envoy Get runtime settings",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "http://localhost:9901/runtime"
+          },
+          "docs": "Returns the current runtime settings showing all layers, their configured values, and the final merged value for each key. Runtime values control various Envoy behaviors without requiring a restart."
+        },
+        {
+          "info": {
+            "name": "Envoy Modify runtime settings",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "http://localhost:9901/runtime_modify"
+          },
+          "docs": "Adds or modifies runtime values in the admin overriding layer. Values are passed as query parameters where the key is the runtime feature flag name and the value is the new setting. Use the value - (dash) to remove a previously set override."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

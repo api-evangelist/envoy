@@ -1,0 +1,87 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Envoy Admin Certificates Server API",
+    "version": "1.31.0"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Server",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Envoy Get server information",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "http://localhost:9901/server_info"
+          },
+          "docs": "Returns information about the running Envoy server including version string, current state, uptime for the current epoch and all epochs, hot restart compatibility version, and command line options used at startup."
+        },
+        {
+          "info": {
+            "name": "Shutdown Envoy server",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "http://localhost:9901/quitquitquit"
+          },
+          "docs": "Initiates a clean shutdown of the Envoy server process. The server will drain connections and exit. This endpoint requires the admin interface to have this feature enabled in configuration."
+        },
+        {
+          "info": {
+            "name": "Envoy Get memory allocation information",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "http://localhost:9901/memory"
+          },
+          "docs": "Returns current memory usage statistics for the Envoy process including allocated memory, heap size, and physical memory used. Useful for monitoring memory consumption and debugging memory issues."
+        },
+        {
+          "info": {
+            "name": "Envoy Get hot restart compatibility version",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "http://localhost:9901/hot_restart_version"
+          },
+          "docs": "Returns the hot restart compatibility version string. Two Envoy instances can perform a hot restart if their hot restart versions match."
+        },
+        {
+          "info": {
+            "name": "Envoy Drain listeners",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "http://localhost:9901/drain_listeners",
+            "params": [
+              {
+                "name": "inboundonly",
+                "value": "",
+                "type": "query",
+                "description": "Only drain inbound listeners"
+              },
+              {
+                "name": "graceful",
+                "value": "",
+                "type": "query",
+                "description": "Perform graceful drain"
+              }
+            ]
+          },
+          "docs": "Drains all listeners, preventing new connections from being accepted. Existing connections are allowed to complete."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

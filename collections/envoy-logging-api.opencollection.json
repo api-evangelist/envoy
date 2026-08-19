@@ -1,0 +1,54 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Envoy Admin Certificates Logging API",
+    "version": "1.31.0"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Logging",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Envoy Get current log levels",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "http://localhost:9901/logging"
+          },
+          "docs": "Returns the current logging levels for all named loggers configured in the Envoy instance. Logger names correspond to subsystems such as http, router, upstream, conn_handler, and others."
+        },
+        {
+          "info": {
+            "name": "Envoy Change log levels",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "http://localhost:9901/logging",
+            "params": [
+              {
+                "name": "level",
+                "value": "",
+                "type": "query",
+                "description": "Set log level for all loggers simultaneously. One of trace, debug, info, warning, error, critical, or off."
+              },
+              {
+                "name": "paths",
+                "value": "",
+                "type": "query",
+                "description": "Set log level for a specific logger using logger_name:level format. Can be specified multiple times for multiple loggers."
+              }
+            ]
+          },
+          "docs": "Dynamically changes the logging level for one or all loggers without restarting Envoy. Use the level query parameter to set all loggers or the paths parameter to set a specific logger at logger_name:level format."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}
