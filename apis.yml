@@ -33,6 +33,11 @@ accessModel:
   method: derived
 image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/icons/envoy.png
 tags:
+  - Cloud-Native
+  - Load Balancing
+  - Proxy
+  - Service Mesh
+tags_raw:
   - Cloud Native
   - Load Balancing
   - Proxy
@@ -97,6 +102,11 @@ apis:
     requiring direct Envoy configuration knowledge.
   humanURL: https://gateway.envoyproxy.io/
   tags:
+  - Cloud-Native
+  - Gateway
+  - Kubernetes
+  - Traffic Management
+  tags_raw:
   - Cloud Native
   - Gateway
   - Kubernetes
@@ -159,6 +169,8 @@ apis:
   description: Upstream cluster inspection and status endpoints
   humanURL: https://www.envoyproxy.io/docs/envoy/latest/operations/admin
   tags:
+  - Cluster
+  tags_raw:
   - Clusters
   properties:
   - type: OpenAPI
