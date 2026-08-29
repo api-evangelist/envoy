@@ -1,41 +1,54 @@
 {
   "provider": "envoy",
   "sources": [
-    "envoy-certificates-api-openapi.yml",
-    "envoy-chat-api-openapi.yml",
-    "envoy-clusters-api-openapi.yml",
-    "envoy-configuration-api-openapi.yml",
-    "envoy-health-api-openapi.yml",
-    "envoy-listeners-api-openapi.yml",
-    "envoy-logging-api-openapi.yml",
-    "envoy-models-api-openapi.yml",
-    "envoy-runtime-api-openapi.yml",
-    "envoy-server-api-openapi.yml",
-    "envoy-statistics-api-openapi.yml",
-    "envoy-text-completions-api-openapi.yml",
-    "properties/envoy-admin-api-openapi.yml"
+    "_original/envoy-admin-api-openapi.yml",
+    "_original/envoy-admin-api-openapi_2.yml",
+    "_original/envoy-ai-gateway-openapi.yml"
   ],
   "outputs": [
     "envoy-certificates-api-openapi.yml",
-    "envoy-chat-api-openapi.yml",
     "envoy-clusters-api-openapi.yml",
     "envoy-configuration-api-openapi.yml",
     "envoy-health-api-openapi.yml",
     "envoy-listeners-api-openapi.yml",
     "envoy-logging-api-openapi.yml",
-    "envoy-models-api-openapi.yml",
     "envoy-runtime-api-openapi.yml",
     "envoy-server-api-openapi.yml",
     "envoy-statistics-api-openapi.yml",
+    "envoy-chat-api-openapi.yml",
+    "envoy-models-api-openapi.yml",
     "envoy-text-completions-api-openapi.yml"
   ],
-  "archived": [
-    "archived properties/envoy-admin-api-openapi.yml"
-  ],
+  "archived": [],
   "errors": [],
   "warnings": [],
   "notes": [
-    "discovered stray spec: properties/envoy-admin-api-openapi.yml"
+    "sourced from openapi/_original/ (3 archived document(s)); previously refined output at the top level was skipped rather than re-split",
+    "envoy-admin-api-openapi.yml: upgraded openapi 3.1.0 -> OpenAPI 3.2.0",
+    "envoy-admin-api-openapi_2.yml: upgraded openapi 3.0.3 -> OpenAPI 3.2.0",
+    "envoy-ai-gateway-openapi.yml: upgraded openapi 3.1.0 -> OpenAPI 3.2.0",
+    "tag 'Certificates' spans 2 source specs (envoy-admin-api-openapi.yml, envoy-admin-api-openapi_2.yml): per-path servers applied",
+    "tag 'Clusters' spans 2 source specs (envoy-admin-api-openapi.yml, envoy-admin-api-openapi_2.yml): per-path servers applied",
+    "tag 'Configuration' spans 2 source specs (envoy-admin-api-openapi.yml, envoy-admin-api-openapi_2.yml): per-path servers applied",
+    "tag 'Health' spans 2 source specs (envoy-admin-api-openapi.yml, envoy-admin-api-openapi_2.yml): per-path servers applied",
+    "tag 'Listeners' spans 2 source specs (envoy-admin-api-openapi.yml, envoy-admin-api-openapi_2.yml): per-path servers applied",
+    "tag 'Logging' spans 2 source specs (envoy-admin-api-openapi.yml, envoy-admin-api-openapi_2.yml): per-path servers applied",
+    "tag 'Runtime' spans 2 source specs (envoy-admin-api-openapi.yml, envoy-admin-api-openapi_2.yml): per-path servers applied",
+    "tag 'Server' spans 2 source specs (envoy-admin-api-openapi.yml, envoy-admin-api-openapi_2.yml): per-path servers applied",
+    "tag 'Statistics' spans 2 source specs (envoy-admin-api-openapi.yml, envoy-admin-api-openapi_2.yml): per-path servers applied"
   ],
-  "skipped": []
+  "skipped": [
+    "envoy-certificates-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "envoy-chat-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "envoy-clusters-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "envoy-configuration-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "envoy-health-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "envoy-listeners-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "envoy-logging-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "envoy-models-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "envoy-runtime-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "envoy-server-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "envoy-statistics-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "envoy-text-completions-api-openapi.yml: previously refined output, superseded by openapi/_original/"
+  ]
 }
