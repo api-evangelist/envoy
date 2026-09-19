@@ -38,8 +38,8 @@ tags:
   - Load Balancing
   - Proxy
   - Service Mesh
-  - Envoy
 tags_raw:
+  - Envoy
   - Cloud Native
   - Load Balancing
   - Proxy
@@ -105,7 +105,7 @@ apis:
   humanURL: https://gateway.envoyproxy.io/
   tags:
   - Cloud-Native
-  - Gateway
+  - Gateways
   - Kubernetes
   - Traffic Management
   tags_raw:
@@ -321,6 +321,8 @@ apis:
   description: Server management, lifecycle, and information endpoints
   humanURL: https://www.envoyproxy.io/docs/envoy/latest/operations/admin
   tags:
+  - Servers
+  tags_raw:
   - Server
   properties:
   - type: OpenAPI
