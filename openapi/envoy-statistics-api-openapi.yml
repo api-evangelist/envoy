@@ -1,8 +1,12 @@
 openapi: 3.2.0
 info:
-  title: Envoy Statistics API
+  title: Envoy Admin Statistics API
+  description: The Envoy Admin API provides local administrative access to a running Envoy proxy instance. It exposes endpoints for inspecting configuration, checking health, viewing statistics, managing log levels, and controlling the runtime state of the proxy. The Admin API is typically bound to a local interface (default port 9901) and is not intended for external exposure in production environments.
   version: 1.31.0
-  description: 'Operations tagged Statistics across 2 of this provider''s published API definitions: envoy-admin-api-openapi.yml, envoy-admin-api-openapi_2.yml. Each path carries the servers of the definition it was published in.'
+  contact:
+    name: Envoy Proxy Community
+    url: https://www.envoyproxy.io/community
+  termsOfService: https://www.envoyproxy.io/
 servers:
 - url: http://localhost:9901
   description: Default Envoy Admin Interface
@@ -62,9 +66,6 @@ paths:
             text/plain:
               schema:
                 type: string
-    servers:
-    - url: http://localhost:9901
-      description: Default Envoy Admin Interface
   /stats/prometheus:
     get:
       operationId: getStatsPrometheus
@@ -93,9 +94,6 @@ paths:
             text/plain:
               schema:
                 type: string
-    servers:
-    - url: http://localhost:9901
-      description: Default Envoy Admin Interface
   /stats/recentlookups:
     get:
       operationId: getRecentLookups
@@ -110,9 +108,6 @@ paths:
             text/plain:
               schema:
                 type: string
-    servers:
-    - url: http://localhost:9901
-      description: Default Envoy Admin Interface
   /reset_counters:
     post:
       operationId: resetCounters
@@ -127,9 +122,6 @@ paths:
             text/plain:
               schema:
                 type: string
-    servers:
-    - url: http://localhost:9901
-      description: Default Envoy Admin Interface
 components:
   schemas:
     StatsResponse:
@@ -155,28 +147,6 @@ components:
                 - Counter
                 - Gauge
                 - Histogram
-    StatsResponse_2:
-      type: object
-      description: Envoy statistics
-      properties:
-        stats:
-          type: array
-          items:
-            type: object
-            properties:
-              name:
-                type: string
-              value:
-                type: integer
-              type:
-                type: string
-                enum:
-                - Counter
-                - Gauge
-                - Histogram
 externalDocs:
   description: Envoy Admin Interface Documentation
   url: https://www.envoyproxy.io/docs/envoy/latest/operations/admin
-x-refined-from:
-- envoy-admin-api-openapi.yml
-- envoy-admin-api-openapi_2.yml

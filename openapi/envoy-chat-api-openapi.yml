@@ -70,36 +70,6 @@ paths:
                 $ref: '#/components/schemas/ErrorResponse'
 components:
   schemas:
-    UsageInfo:
-      type: object
-      description: Token usage statistics for the API request
-      properties:
-        prompt_tokens:
-          type: integer
-          description: Number of tokens in the input prompt
-        completion_tokens:
-          type: integer
-          description: Number of tokens in the generated completion
-        total_tokens:
-          type: integer
-          description: Total number of tokens used (prompt + completion)
-    ErrorResponse:
-      type: object
-      description: Error response returned when an API request fails
-      properties:
-        error:
-          type: object
-          description: Error details
-          properties:
-            message:
-              type: string
-              description: Human-readable error message describing what went wrong
-            type:
-              type: string
-              description: Error type identifier
-            code:
-              type: string
-              description: Error code for programmatic handling
     ChatCompletionRequest:
       type: object
       description: Request body for the chat completions endpoint, compatible with the OpenAI Chat Completions API format.
@@ -153,6 +123,36 @@ components:
         user:
           type: string
           description: A unique identifier representing the end user. Passed through to the upstream AI provider for abuse monitoring.
+    UsageInfo:
+      type: object
+      description: Token usage statistics for the API request
+      properties:
+        prompt_tokens:
+          type: integer
+          description: Number of tokens in the input prompt
+        completion_tokens:
+          type: integer
+          description: Number of tokens in the generated completion
+        total_tokens:
+          type: integer
+          description: Total number of tokens used (prompt + completion)
+    ErrorResponse:
+      type: object
+      description: Error response returned when an API request fails
+      properties:
+        error:
+          type: object
+          description: Error details
+          properties:
+            message:
+              type: string
+              description: Human-readable error message describing what went wrong
+            type:
+              type: string
+              description: Error type identifier
+            code:
+              type: string
+              description: Error code for programmatic handling
     ChatCompletion:
       type: object
       description: A completed chat response from the AI model

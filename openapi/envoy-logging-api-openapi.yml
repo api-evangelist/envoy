@@ -1,8 +1,12 @@
 openapi: 3.2.0
 info:
-  title: Envoy Logging API
+  title: Envoy Admin Logging API
+  description: The Envoy Admin API provides local administrative access to a running Envoy proxy instance. It exposes endpoints for inspecting configuration, checking health, viewing statistics, managing log levels, and controlling the runtime state of the proxy. The Admin API is typically bound to a local interface (default port 9901) and is not intended for external exposure in production environments.
   version: 1.31.0
-  description: 'Operations tagged Logging across 2 of this provider''s published API definitions: envoy-admin-api-openapi.yml, envoy-admin-api-openapi_2.yml. Each path carries the servers of the definition it was published in.'
+  contact:
+    name: Envoy Proxy Community
+    url: https://www.envoyproxy.io/community
+  termsOfService: https://www.envoyproxy.io/
 servers:
 - url: http://localhost:9901
   description: Default Envoy Admin Interface
@@ -64,12 +68,6 @@ paths:
             text/plain:
               schema:
                 type: string
-    servers:
-    - url: http://localhost:9901
-      description: Default Envoy Admin Interface
 externalDocs:
   description: Envoy Admin Interface Documentation
   url: https://www.envoyproxy.io/docs/envoy/latest/operations/admin
-x-refined-from:
-- envoy-admin-api-openapi.yml
-- envoy-admin-api-openapi_2.yml

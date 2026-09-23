@@ -60,19 +60,6 @@ paths:
                 $ref: '#/components/schemas/ErrorResponse'
 components:
   schemas:
-    UsageInfo:
-      type: object
-      description: Token usage statistics for the API request
-      properties:
-        prompt_tokens:
-          type: integer
-          description: Number of tokens in the input prompt
-        completion_tokens:
-          type: integer
-          description: Number of tokens in the generated completion
-        total_tokens:
-          type: integer
-          description: Total number of tokens used (prompt + completion)
     ErrorResponse:
       type: object
       description: Error response returned when an API request fails
@@ -90,6 +77,49 @@ components:
             code:
               type: string
               description: Error code for programmatic handling
+    CompletionRequest:
+      type: object
+      description: Request body for the legacy text completions endpoint
+      required:
+      - model
+      - prompt
+      properties:
+        model:
+          type: string
+          description: ID of the model to use for text completion
+        prompt:
+          description: The prompt text to generate completion for
+          oneOf:
+          - type: string
+          - type: array
+            items:
+              type: string
+        max_tokens:
+          type: integer
+          description: Maximum number of tokens to generate
+          minimum: 1
+        temperature:
+          type: number
+          description: Sampling temperature
+          minimum: 0
+          maximum: 2
+        stream:
+          type: boolean
+          description: If true, partial completions are streamed as server-sent events
+          default: false
+    UsageInfo:
+      type: object
+      description: Token usage statistics for the API request
+      properties:
+        prompt_tokens:
+          type: integer
+          description: Number of tokens in the input prompt
+        completion_tokens:
+          type: integer
+          description: Number of tokens in the generated completion
+        total_tokens:
+          type: integer
+          description: Total number of tokens used (prompt + completion)
     Completion:
       type: object
       description: A completed text completion response from the AI model
@@ -128,36 +158,6 @@ components:
                 - length
         usage:
           $ref: '#/components/schemas/UsageInfo'
-    CompletionRequest:
-      type: object
-      description: Request body for the legacy text completions endpoint
-      required:
-      - model
-      - prompt
-      properties:
-        model:
-          type: string
-          description: ID of the model to use for text completion
-        prompt:
-          description: The prompt text to generate completion for
-          oneOf:
-          - type: string
-          - type: array
-            items:
-              type: string
-        max_tokens:
-          type: integer
-          description: Maximum number of tokens to generate
-          minimum: 1
-        temperature:
-          type: number
-          description: Sampling temperature
-          minimum: 0
-          maximum: 2
-        stream:
-          type: boolean
-          description: If true, partial completions are streamed as server-sent events
-          default: false
   securitySchemes:
     bearerAuth:
       type: http

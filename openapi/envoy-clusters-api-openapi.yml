@@ -1,8 +1,12 @@
 openapi: 3.2.0
 info:
-  title: Envoy Clusters API
+  title: Envoy Admin Clusters API
+  description: The Envoy Admin API provides local administrative access to a running Envoy proxy instance. It exposes endpoints for inspecting configuration, checking health, viewing statistics, managing log levels, and controlling the runtime state of the proxy. The Admin API is typically bound to a local interface (default port 9901) and is not intended for external exposure in production environments.
   version: 1.31.0
-  description: 'Operations tagged Clusters across 2 of this provider''s published API definitions: envoy-admin-api-openapi.yml, envoy-admin-api-openapi_2.yml. Each path carries the servers of the definition it was published in.'
+  contact:
+    name: Envoy Proxy Community
+    url: https://www.envoyproxy.io/community
+  termsOfService: https://www.envoyproxy.io/
 servers:
 - url: http://localhost:9901
   description: Default Envoy Admin Interface
@@ -29,29 +33,17 @@ paths:
             text/plain:
               schema:
                 type: string
-    servers:
-    - url: http://localhost:9901
-      description: Default Envoy Admin Interface
 components:
   schemas:
-    ClusterStatus:
+    ClustersResponse:
       type: object
-      description: Status of an individual upstream cluster
+      description: Information about all configured upstream clusters
       properties:
-        name:
-          type: string
-          description: Cluster name
-        added_via_api:
-          type: boolean
-          description: Whether the cluster was dynamically added via xDS API
-        success_rate_ejection_threshold:
-          type: number
-          description: Success rate outlier detection ejection threshold as a percentage
-        host_statuses:
+        cluster_statuses:
           type: array
-          description: Status of individual hosts within the cluster
+          description: List of cluster status objects
           items:
-            $ref: '#/components/schemas/HostStatus'
+            $ref: '#/components/schemas/ClusterStatus'
     HostStatus:
       type: object
       description: Status of an individual upstream host within a cluster
@@ -116,16 +108,7 @@ components:
               type: string
             sub_zone:
               type: string
-    ClustersResponse:
-      type: object
-      description: Information about all configured upstream clusters
-      properties:
-        cluster_statuses:
-          type: array
-          description: List of cluster status objects
-          items:
-            $ref: '#/components/schemas/ClusterStatus'
-    ClusterStatus_2:
+    ClusterStatus:
       type: object
       description: Status of an individual upstream cluster
       properties:
@@ -134,74 +117,15 @@ components:
           description: Cluster name
         added_via_api:
           type: boolean
-          description: Whether the cluster was added via xDS API
+          description: Whether the cluster was dynamically added via xDS API
         success_rate_ejection_threshold:
           type: number
-          description: Success rate ejection threshold percentage
+          description: Success rate outlier detection ejection threshold as a percentage
         host_statuses:
           type: array
+          description: Status of individual hosts within the cluster
           items:
-            $ref: '#/components/schemas/HostStatus_2'
-    HostStatus_2:
-      type: object
-      description: Status of an individual host within a cluster
-      properties:
-        address:
-          type: object
-          properties:
-            socket_address:
-              type: object
-              properties:
-                address:
-                  type: string
-                port_value:
-                  type: integer
-        stats:
-          type: array
-          items:
-            type: object
-            properties:
-              name:
-                type: string
-              value:
-                type: string
-              type:
-                type: string
-        health_status:
-          type: object
-          properties:
-            eds_health_status:
-              type: string
-              enum:
-              - HEALTHY
-              - UNHEALTHY
-              - DRAINING
-              - TIMEOUT
-              - DEGRADED
-            failed_active_health_check:
-              type: boolean
-            failed_outlier_check:
-              type: boolean
-        weight:
-          type: integer
-          description: Load balancing weight
-        locality:
-          type: object
-          properties:
-            region:
-              type: string
-            zone:
-              type: string
-            sub_zone:
-              type: string
-    ClustersResponse_2:
-      type: object
-      description: Information about upstream clusters
-      properties:
-        cluster_statuses:
-          type: array
-          items:
-            $ref: '#/components/schemas/ClusterStatus_2'
+            $ref: '#/components/schemas/HostStatus'
   parameters:
     FormatParam:
       name: format
@@ -217,6 +141,3 @@ components:
 externalDocs:
   description: Envoy Admin Interface Documentation
   url: https://www.envoyproxy.io/docs/envoy/latest/operations/admin
-x-refined-from:
-- envoy-admin-api-openapi.yml
-- envoy-admin-api-openapi_2.yml

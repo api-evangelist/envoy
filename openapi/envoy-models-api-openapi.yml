@@ -42,6 +42,23 @@ paths:
                 $ref: '#/components/schemas/ErrorResponse'
 components:
   schemas:
+    ErrorResponse:
+      type: object
+      description: Error response returned when an API request fails
+      properties:
+        error:
+          type: object
+          description: Error details
+          properties:
+            message:
+              type: string
+              description: Human-readable error message describing what went wrong
+            type:
+              type: string
+              description: Error type identifier
+            code:
+              type: string
+              description: Error code for programmatic handling
     Model:
       type: object
       description: An AI model available through the gateway
@@ -74,23 +91,6 @@ components:
           description: List of model objects
           items:
             $ref: '#/components/schemas/Model'
-    ErrorResponse:
-      type: object
-      description: Error response returned when an API request fails
-      properties:
-        error:
-          type: object
-          description: Error details
-          properties:
-            message:
-              type: string
-              description: Human-readable error message describing what went wrong
-            type:
-              type: string
-              description: Error type identifier
-            code:
-              type: string
-              description: Error code for programmatic handling
   securitySchemes:
     bearerAuth:
       type: http
