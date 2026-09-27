@@ -42,6 +42,20 @@ paths:
                 $ref: '#/components/schemas/ErrorResponse'
 components:
   schemas:
+    ModelList:
+      type: object
+      description: List of models available through the AI Gateway
+      properties:
+        object:
+          type: string
+          description: Object type, always list
+          enum:
+          - list
+        data:
+          type: array
+          description: List of model objects
+          items:
+            $ref: '#/components/schemas/Model'
     ErrorResponse:
       type: object
       description: Error response returned when an API request fails
@@ -77,20 +91,6 @@ components:
         owned_by:
           type: string
           description: Organization that owns the model
-    ModelList:
-      type: object
-      description: List of models available through the AI Gateway
-      properties:
-        object:
-          type: string
-          description: Object type, always list
-          enum:
-          - list
-        data:
-          type: array
-          description: List of model objects
-          items:
-            $ref: '#/components/schemas/Model'
   securitySchemes:
     bearerAuth:
       type: http
