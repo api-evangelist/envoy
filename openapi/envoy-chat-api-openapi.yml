@@ -70,100 +70,6 @@ paths:
                 $ref: '#/components/schemas/ErrorResponse'
 components:
   schemas:
-    ChatMessage:
-      type: object
-      description: A single message in a chat conversation
-      required:
-      - role
-      - content
-      properties:
-        role:
-          type: string
-          description: The role of the message author. System messages provide instructions, user messages are from the human, and assistant messages are prior model responses.
-          enum:
-          - system
-          - user
-          - assistant
-          - tool
-        content:
-          description: The text content of the message. May be a string or an array of content parts for multi-modal inputs.
-          oneOf:
-          - type: string
-          - type: array
-            items:
-              type: object
-        name:
-          type: string
-          description: An optional name for the participant. Provides the model information to differentiate between participants of the same role.
-    ChatCompletion:
-      type: object
-      description: A completed chat response from the AI model
-      properties:
-        id:
-          type: string
-          description: Unique identifier for this chat completion
-        object:
-          type: string
-          description: Object type, always chat.completion
-          enum:
-          - chat.completion
-        created:
-          type: integer
-          description: Unix timestamp of when the completion was created
-        model:
-          type: string
-          description: The model that generated the completion
-        choices:
-          type: array
-          description: List of completion choices generated
-          items:
-            type: object
-            properties:
-              index:
-                type: integer
-                description: Index of this choice in the list
-              message:
-                $ref: '#/components/schemas/ChatMessage'
-              finish_reason:
-                type: string
-                description: Reason the model stopped generating tokens. stop means the model hit a natural stop point, length means the max_tokens limit was reached, and tool_calls means the model called a tool.
-                enum:
-                - stop
-                - length
-                - tool_calls
-                - content_filter
-        usage:
-          $ref: '#/components/schemas/UsageInfo'
-    UsageInfo:
-      type: object
-      description: Token usage statistics for the API request
-      properties:
-        prompt_tokens:
-          type: integer
-          description: Number of tokens in the input prompt
-        completion_tokens:
-          type: integer
-          description: Number of tokens in the generated completion
-        total_tokens:
-          type: integer
-          description: Total number of tokens used (prompt + completion)
-    ErrorResponse:
-      type: object
-      description: Error response returned when an API request fails
-      properties:
-        error:
-          type: object
-          description: Error details
-          properties:
-            message:
-              type: string
-              description: Human-readable error message describing what went wrong
-            type:
-              type: string
-              description: Error type identifier
-            code:
-              type: string
-              description: Error code for programmatic handling
     ChatCompletionRequest:
       type: object
       description: Request body for the chat completions endpoint, compatible with the OpenAI Chat Completions API format.
@@ -217,6 +123,100 @@ components:
         user:
           type: string
           description: A unique identifier representing the end user. Passed through to the upstream AI provider for abuse monitoring.
+    ChatCompletion:
+      type: object
+      description: A completed chat response from the AI model
+      properties:
+        id:
+          type: string
+          description: Unique identifier for this chat completion
+        object:
+          type: string
+          description: Object type, always chat.completion
+          enum:
+          - chat.completion
+        created:
+          type: integer
+          description: Unix timestamp of when the completion was created
+        model:
+          type: string
+          description: The model that generated the completion
+        choices:
+          type: array
+          description: List of completion choices generated
+          items:
+            type: object
+            properties:
+              index:
+                type: integer
+                description: Index of this choice in the list
+              message:
+                $ref: '#/components/schemas/ChatMessage'
+              finish_reason:
+                type: string
+                description: Reason the model stopped generating tokens. stop means the model hit a natural stop point, length means the max_tokens limit was reached, and tool_calls means the model called a tool.
+                enum:
+                - stop
+                - length
+                - tool_calls
+                - content_filter
+        usage:
+          $ref: '#/components/schemas/UsageInfo'
+    UsageInfo:
+      type: object
+      description: Token usage statistics for the API request
+      properties:
+        prompt_tokens:
+          type: integer
+          description: Number of tokens in the input prompt
+        completion_tokens:
+          type: integer
+          description: Number of tokens in the generated completion
+        total_tokens:
+          type: integer
+          description: Total number of tokens used (prompt + completion)
+    ChatMessage:
+      type: object
+      description: A single message in a chat conversation
+      required:
+      - role
+      - content
+      properties:
+        role:
+          type: string
+          description: The role of the message author. System messages provide instructions, user messages are from the human, and assistant messages are prior model responses.
+          enum:
+          - system
+          - user
+          - assistant
+          - tool
+        content:
+          description: The text content of the message. May be a string or an array of content parts for multi-modal inputs.
+          oneOf:
+          - type: string
+          - type: array
+            items:
+              type: object
+        name:
+          type: string
+          description: An optional name for the participant. Provides the model information to differentiate between participants of the same role.
+    ErrorResponse:
+      type: object
+      description: Error response returned when an API request fails
+      properties:
+        error:
+          type: object
+          description: Error details
+          properties:
+            message:
+              type: string
+              description: Human-readable error message describing what went wrong
+            type:
+              type: string
+              description: Error type identifier
+            code:
+              type: string
+              description: Error code for programmatic handling
   securitySchemes:
     bearerAuth:
       type: http

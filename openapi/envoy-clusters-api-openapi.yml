@@ -35,6 +35,24 @@ paths:
                 type: string
 components:
   schemas:
+    ClusterStatus:
+      type: object
+      description: Status of an individual upstream cluster
+      properties:
+        name:
+          type: string
+          description: Cluster name
+        added_via_api:
+          type: boolean
+          description: Whether the cluster was dynamically added via xDS API
+        success_rate_ejection_threshold:
+          type: number
+          description: Success rate outlier detection ejection threshold as a percentage
+        host_statuses:
+          type: array
+          description: Status of individual hosts within the cluster
+          items:
+            $ref: '#/components/schemas/HostStatus'
     ClustersResponse:
       type: object
       description: Information about all configured upstream clusters
@@ -108,24 +126,6 @@ components:
               type: string
             sub_zone:
               type: string
-    ClusterStatus:
-      type: object
-      description: Status of an individual upstream cluster
-      properties:
-        name:
-          type: string
-          description: Cluster name
-        added_via_api:
-          type: boolean
-          description: Whether the cluster was dynamically added via xDS API
-        success_rate_ejection_threshold:
-          type: number
-          description: Success rate outlier detection ejection threshold as a percentage
-        host_statuses:
-          type: array
-          description: Status of individual hosts within the cluster
-          items:
-            $ref: '#/components/schemas/HostStatus'
   parameters:
     FormatParam:
       name: format
