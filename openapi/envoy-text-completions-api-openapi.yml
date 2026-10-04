@@ -90,23 +90,6 @@ components:
           type: boolean
           description: If true, partial completions are streamed as server-sent events
           default: false
-    ErrorResponse:
-      type: object
-      description: Error response returned when an API request fails
-      properties:
-        error:
-          type: object
-          description: Error details
-          properties:
-            message:
-              type: string
-              description: Human-readable error message describing what went wrong
-            type:
-              type: string
-              description: Error type identifier
-            code:
-              type: string
-              description: Error code for programmatic handling
     Completion:
       type: object
       description: A completed text completion response from the AI model
@@ -158,6 +141,23 @@ components:
         total_tokens:
           type: integer
           description: Total number of tokens used (prompt + completion)
+    ErrorResponse:
+      type: object
+      description: Error response returned when an API request fails
+      properties:
+        error:
+          type: object
+          description: Error details
+          properties:
+            message:
+              type: string
+              description: Human-readable error message describing what went wrong
+            type:
+              type: string
+              description: Error type identifier
+            code:
+              type: string
+              description: Error code for programmatic handling
   securitySchemes:
     bearerAuth:
       type: http

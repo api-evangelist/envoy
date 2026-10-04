@@ -17,7 +17,7 @@ servers:
 security:
 - bearerAuth: []
 tags:
-- name: Chat
+- name: Chat Completions
   description: Chat completions endpoints compatible with the OpenAI Chat API. Routes requests to configured AI backends based on AIGatewayRoute rules.
 paths:
   /v1/chat/completions:
@@ -26,7 +26,7 @@ paths:
       summary: Envoy Create a chat completion
       description: Creates a chat completion response for the provided messages using an AI model routed through the gateway. The request format is compatible with the OpenAI Chat Completions API. The gateway selects a backend based on the AIGatewayRoute rules, which may include header-based routing, model-based routing, and backend traffic policies for rate limiting and token quota management. Supports streaming via server-sent events when stream is set to true.
       tags:
-      - Chat
+      - Chat Completions
       requestBody:
         required: true
         content:
@@ -123,58 +123,6 @@ components:
         user:
           type: string
           description: A unique identifier representing the end user. Passed through to the upstream AI provider for abuse monitoring.
-    ChatCompletion:
-      type: object
-      description: A completed chat response from the AI model
-      properties:
-        id:
-          type: string
-          description: Unique identifier for this chat completion
-        object:
-          type: string
-          description: Object type, always chat.completion
-          enum:
-          - chat.completion
-        created:
-          type: integer
-          description: Unix timestamp of when the completion was created
-        model:
-          type: string
-          description: The model that generated the completion
-        choices:
-          type: array
-          description: List of completion choices generated
-          items:
-            type: object
-            properties:
-              index:
-                type: integer
-                description: Index of this choice in the list
-              message:
-                $ref: '#/components/schemas/ChatMessage'
-              finish_reason:
-                type: string
-                description: Reason the model stopped generating tokens. stop means the model hit a natural stop point, length means the max_tokens limit was reached, and tool_calls means the model called a tool.
-                enum:
-                - stop
-                - length
-                - tool_calls
-                - content_filter
-        usage:
-          $ref: '#/components/schemas/UsageInfo'
-    UsageInfo:
-      type: object
-      description: Token usage statistics for the API request
-      properties:
-        prompt_tokens:
-          type: integer
-          description: Number of tokens in the input prompt
-        completion_tokens:
-          type: integer
-          description: Number of tokens in the generated completion
-        total_tokens:
-          type: integer
-          description: Total number of tokens used (prompt + completion)
     ChatMessage:
       type: object
       description: A single message in a chat conversation
@@ -217,6 +165,58 @@ components:
             code:
               type: string
               description: Error code for programmatic handling
+    UsageInfo:
+      type: object
+      description: Token usage statistics for the API request
+      properties:
+        prompt_tokens:
+          type: integer
+          description: Number of tokens in the input prompt
+        completion_tokens:
+          type: integer
+          description: Number of tokens in the generated completion
+        total_tokens:
+          type: integer
+          description: Total number of tokens used (prompt + completion)
+    ChatCompletion:
+      type: object
+      description: A completed chat response from the AI model
+      properties:
+        id:
+          type: string
+          description: Unique identifier for this chat completion
+        object:
+          type: string
+          description: Object type, always chat.completion
+          enum:
+          - chat.completion
+        created:
+          type: integer
+          description: Unix timestamp of when the completion was created
+        model:
+          type: string
+          description: The model that generated the completion
+        choices:
+          type: array
+          description: List of completion choices generated
+          items:
+            type: object
+            properties:
+              index:
+                type: integer
+                description: Index of this choice in the list
+              message:
+                $ref: '#/components/schemas/ChatMessage'
+              finish_reason:
+                type: string
+                description: Reason the model stopped generating tokens. stop means the model hit a natural stop point, length means the max_tokens limit was reached, and tool_calls means the model called a tool.
+                enum:
+                - stop
+                - length
+                - tool_calls
+                - content_filter
+        usage:
+          $ref: '#/components/schemas/UsageInfo'
   securitySchemes:
     bearerAuth:
       type: http

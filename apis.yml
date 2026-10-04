@@ -144,29 +144,6 @@ apis:
     url: https://github.com/envoyproxy/ai-gateway
   - type: ChangeLog
     url: https://aigateway.envoyproxy.io/release-notes/
-- aid: envoy:envoy-chat-api
-  name: Envoy Chat API
-  description: >-
-    Chat completions endpoints compatible with the OpenAI Chat API. Routes requests to configured AI backends
-    based on AIGatewayRoute rules.
-  humanURL: https://www.envoyproxy.io/docs/envoy/latest/operations/admin
-  tags:
-  - Chat
-  properties:
-  - type: OpenAPI
-    url: openapi/envoy-chat-api-openapi.yml
-  - type: Documentation
-    url: https://www.envoyproxy.io/docs/envoy/latest/operations/admin
-  - type: Documentation
-    url: https://aigateway.envoyproxy.io/docs/
-  - type: Reference
-    url: https://aigateway.envoyproxy.io/docs/api/
-  - type: GettingStarted
-    url: https://aigateway.envoyproxy.io/docs/getting-started/basic-usage/
-  - type: GitHubRepository
-    url: https://github.com/envoyproxy/ai-gateway
-  - type: ChangeLog
-    url: https://aigateway.envoyproxy.io/release-notes/
 - aid: envoy:envoy-clusters-api
   name: Envoy Clusters API
   description: Upstream cluster inspection and status endpoints
@@ -370,6 +347,29 @@ apis:
   properties:
   - type: OpenAPI
     url: openapi/envoy-text-completions-api-openapi.yml
+  - type: Documentation
+    url: https://www.envoyproxy.io/docs/envoy/latest/operations/admin
+  - type: Documentation
+    url: https://aigateway.envoyproxy.io/docs/
+  - type: Reference
+    url: https://aigateway.envoyproxy.io/docs/api/
+  - type: GettingStarted
+    url: https://aigateway.envoyproxy.io/docs/getting-started/basic-usage/
+  - type: GitHubRepository
+    url: https://github.com/envoyproxy/ai-gateway
+  - type: ChangeLog
+    url: https://aigateway.envoyproxy.io/release-notes/
+- aid: envoy:envoy-chat-completions-api
+  name: Envoy Chat Completions API
+  description: >-
+    Chat completions endpoints compatible with the OpenAI Chat API. Routes requests to configured AI backends
+    based on AIGatewayRoute rules.
+  humanURL: https://www.envoyproxy.io/docs/envoy/latest/api-docs/xds_protocol
+  tags:
+  - Chat Completions
+  properties:
+  - type: OpenAPI
+    url: openapi/envoy-chat-completions-api-openapi.yml
   - type: Documentation
     url: https://www.envoyproxy.io/docs/envoy/latest/operations/admin
   - type: Documentation
