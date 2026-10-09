@@ -7,14 +7,18 @@ front_door_ai:
   probed_at: '2026-09-17'
   host: www.envoyproxy.io
   final_host: www.envoyproxy.io
-  ownership: own
-  owner: envoy
-  shares_host_with: null
+  ownership: shared
+  owner: envoy-proxy
+  shares_host_with:
+  - envoy-proxy
   inherited_from: null
+  alias_of: null
   verdict: scored
-  score: 26
+  score: null
+  band: null
+  band_label: null
   host_score: 26
-  density: 33.29
+  density: null
   words: 781
   tiers:
     agentic: 5
