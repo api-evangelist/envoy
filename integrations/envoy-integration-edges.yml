@@ -27,6 +27,25 @@ edges:
     detected: '2026-10-13'
   detected_by: sweep-observability.py
   detected: '2026-10-13'
+- partner_name: OpenAI
+  partner: openai
+  partner_match: domain
+  type: contract
+  channel: provider-built
+  relationship: compatible
+  direction: provider-built
+  evidence: https://github.com/api-evangelist/envoy/blob/main/openapi/envoy-chat-completions-api-openapi.yml#L4
+  contract_reference:
+    repo: envoy
+    spec_file: envoy-chat-completions-api-openapi.yml
+    property: description
+    value: OpenAI-compatible
+    note: 'envoy declares OpenAI compatibility: ''description: The Envoy AI Gateway provides a unified proxy layer
+      for accessing Generative AI services built on top of Envoy Gateway. It exposes OpenAI-compatibl'''
+    detected_by: sweep-model-routing.py
+    detected: '2026-10-13'
+  detected_by: sweep-model-routing.py
+  first_seen: '2026-10-13'
 source:
 - https://github.com/open-telemetry/opentelemetry.io/blob/main/data/ecosystem/vendors.yaml
 - https://github.com/open-telemetry/opentelemetry.io/blob/main/data/registry/
