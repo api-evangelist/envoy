@@ -42,20 +42,23 @@ paths:
                 $ref: '#/components/schemas/ErrorResponse'
 components:
   schemas:
-    ModelList:
+    ErrorResponse:
       type: object
-      description: List of models available through the AI Gateway
+      description: Error response returned when an API request fails
       properties:
-        object:
-          type: string
-          description: Object type, always list
-          enum:
-          - list
-        data:
-          type: array
-          description: List of model objects
-          items:
-            $ref: '#/components/schemas/Model'
+        error:
+          type: object
+          description: Error details
+          properties:
+            message:
+              type: string
+              description: Human-readable error message describing what went wrong
+            type:
+              type: string
+              description: Error type identifier
+            code:
+              type: string
+              description: Error code for programmatic handling
     Model:
       type: object
       description: An AI model available through the gateway
@@ -74,23 +77,20 @@ components:
         owned_by:
           type: string
           description: Organization that owns the model
-    ErrorResponse:
+    ModelList:
       type: object
-      description: Error response returned when an API request fails
+      description: List of models available through the AI Gateway
       properties:
-        error:
-          type: object
-          description: Error details
-          properties:
-            message:
-              type: string
-              description: Human-readable error message describing what went wrong
-            type:
-              type: string
-              description: Error type identifier
-            code:
-              type: string
-              description: Error code for programmatic handling
+        object:
+          type: string
+          description: Object type, always list
+          enum:
+          - list
+        data:
+          type: array
+          description: List of model objects
+          items:
+            $ref: '#/components/schemas/Model'
   securitySchemes:
     bearerAuth:
       type: http

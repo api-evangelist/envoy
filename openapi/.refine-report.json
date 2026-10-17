@@ -18,7 +18,9 @@
     "envoy-models-api-openapi.yml",
     "envoy-text-completions-api-openapi.yml"
   ],
-  "archived": [],
+  "archived": [
+    "deleted 1 superseded output(s) from the previous generation"
+  ],
   "errors": [],
   "warnings": [],
   "notes": [
@@ -26,12 +28,13 @@
     "sourced from openapi/_original/ (2 archived document(s)); previously refined output at the top level was skipped rather than re-split",
     "envoy-admin-api-openapi.yml: upgraded openapi 3.1.0 -> OpenAPI 3.2.0",
     "envoy-ai-gateway-openapi.yml: upgraded openapi 3.1.0 -> OpenAPI 3.2.0",
-    "apis.yml register: already-registered"
+    "superseded outputs removed: envoy-chat-completions-api-openapi.yml",
+    "apis.yml register: written (+1 apis, 15 total)"
   ],
   "skipped": [
     "_original/envoy-admin-api-openapi_2.yml: archived document superseded by a larger archived document",
     "envoy-certificates-api-openapi.yml: previously refined output, superseded by openapi/_original/",
-    "envoy-chat-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "envoy-chat-completions-api-openapi.yml: previously refined output, superseded by openapi/_original/",
     "envoy-clusters-api-openapi.yml: previously refined output, superseded by openapi/_original/",
     "envoy-configuration-api-openapi.yml: previously refined output, superseded by openapi/_original/",
     "envoy-health-api-openapi.yml: previously refined output, superseded by openapi/_original/",

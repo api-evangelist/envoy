@@ -60,36 +60,6 @@ paths:
                 $ref: '#/components/schemas/ErrorResponse'
 components:
   schemas:
-    CompletionRequest:
-      type: object
-      description: Request body for the legacy text completions endpoint
-      required:
-      - model
-      - prompt
-      properties:
-        model:
-          type: string
-          description: ID of the model to use for text completion
-        prompt:
-          description: The prompt text to generate completion for
-          oneOf:
-          - type: string
-          - type: array
-            items:
-              type: string
-        max_tokens:
-          type: integer
-          description: Maximum number of tokens to generate
-          minimum: 1
-        temperature:
-          type: number
-          description: Sampling temperature
-          minimum: 0
-          maximum: 2
-        stream:
-          type: boolean
-          description: If true, partial completions are streamed as server-sent events
-          default: false
     Completion:
       type: object
       description: A completed text completion response from the AI model
@@ -158,6 +128,36 @@ components:
             code:
               type: string
               description: Error code for programmatic handling
+    CompletionRequest:
+      type: object
+      description: Request body for the legacy text completions endpoint
+      required:
+      - model
+      - prompt
+      properties:
+        model:
+          type: string
+          description: ID of the model to use for text completion
+        prompt:
+          description: The prompt text to generate completion for
+          oneOf:
+          - type: string
+          - type: array
+            items:
+              type: string
+        max_tokens:
+          type: integer
+          description: Maximum number of tokens to generate
+          minimum: 1
+        temperature:
+          type: number
+          description: Sampling temperature
+          minimum: 0
+          maximum: 2
+        stream:
+          type: boolean
+          description: If true, partial completions are streamed as server-sent events
+          default: false
   securitySchemes:
     bearerAuth:
       type: http

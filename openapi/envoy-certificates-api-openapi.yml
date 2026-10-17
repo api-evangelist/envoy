@@ -30,6 +30,26 @@ paths:
                 $ref: '#/components/schemas/CertificatesResponse'
 components:
   schemas:
+    CertificatesResponse:
+      type: object
+      description: Information about all TLS certificates loaded by Envoy
+      properties:
+        certificates:
+          type: array
+          description: List of certificate chain entries
+          items:
+            type: object
+            properties:
+              ca_cert:
+                type: array
+                description: CA certificate details
+                items:
+                  $ref: '#/components/schemas/CertificateDetails'
+              cert_chain:
+                type: array
+                description: Certificate chain details
+                items:
+                  $ref: '#/components/schemas/CertificateDetails'
     CertificateDetails:
       type: object
       description: Details of a single TLS certificate
@@ -64,26 +84,6 @@ components:
         expiration_time:
           type: string
           description: Certificate expiration date in ISO 8601 format
-    CertificatesResponse:
-      type: object
-      description: Information about all TLS certificates loaded by Envoy
-      properties:
-        certificates:
-          type: array
-          description: List of certificate chain entries
-          items:
-            type: object
-            properties:
-              ca_cert:
-                type: array
-                description: CA certificate details
-                items:
-                  $ref: '#/components/schemas/CertificateDetails'
-              cert_chain:
-                type: array
-                description: Certificate chain details
-                items:
-                  $ref: '#/components/schemas/CertificateDetails'
 externalDocs:
   description: Envoy Admin Interface Documentation
   url: https://www.envoyproxy.io/docs/envoy/latest/operations/admin
