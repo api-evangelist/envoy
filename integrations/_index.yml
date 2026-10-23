@@ -84,3 +84,39 @@
     detected: '2026-10-19'
   status: not-a-workflow
   arazzo: null
+- slug: envoy-openssf-best-practices-badge-bestpractices-dev
+  label: OpenSSF Best Practices Badge (bestpractices.dev)
+  partner_name: OpenSSF Best Practices Badge (bestpractices.dev)
+  category: OpenSSF Best Practices badge (open-source project security practices)
+  type: register
+  channel: standard-directory
+  evidence: https://www.bestpractices.dev/en/projects/1266
+  source: edge
+  relationship: standard-participant
+  contract_reference:
+    register: OpenSSF Best Practices Badge projects (www.bestpractices.dev/en/projects.json)
+    standard: OpenSSF Best Practices Badge criteria (passing / silver / gold)
+    spec_file: null
+    role: badged-project-owner
+    registered_name: C++ front/service proxy
+    matched_domain: null
+    matched_by: github-org+name-among-claimants
+    certified_products:
+    - product: open-source project
+      product_type: open-source project
+      standard: OpenSSF Best Practices Badge criteria (passing / silver / gold)
+      partner_tier: passing
+      lapsed: false
+      badge_date: '2017-09-19'
+    badged_projects:
+    - name: C++ front/service proxy
+      id: 1266
+      badge: passing
+      url: https://www.bestpractices.dev/en/projects/1266
+    signal_note: 'certified_products = ONE entry per provider (product type open-source project): highest current
+      OpenSSF Best Practices badge level in partner_tier, earliest date at that level; lapsed: true when every linked
+      project lost its badge. badged_projects is context, never counted'
+    detected_by: sweep-openssf-best-practices-badges.py
+    detected: '2026-10-22'
+  status: not-a-workflow
+  arazzo: null
