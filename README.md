@@ -1,4 +1,4 @@
-# Envoy (envoy)
+# Envoy
 
 <!-- API-EVANGELIST-PROVENANCE:BEGIN -->
 > ### About this repository
@@ -66,161 +66,167 @@
 
 Envoy is a high-performance, open-source edge and service proxy designed for cloud-native applications and microservice architectures. It provides advanced load balancing, observability, and traffic management features, and serves as the data plane for many service mesh implementations including Istio.
 
-**APIs.json:** [https://www.envoyproxy.io/](https://www.envoyproxy.io/)
+**Areas:** Envoy · Cloud-Native · Load Balancing · Proxy · Service Mesh
 
-## Scope
+## Envoy on APIs.io
 
-- **Type:** Index
-- **Position:** Consumer
-- **Access:** 3rd-Party
+Everything profiled for Envoy is published on APIs.io rather than in this repository. Start at the provider page — **[apis.io/providers/envoy/](https://apis.io/providers/envoy/)** — or go straight to one of the APIs or properties below.
 
-## Tags
+### APIs (15)
 
-- Cloud Native
-- Load Balancing
-- Proxy
-- Service Mesh
+- [Envoy xDS APIs](https://apis.io/apis/envoy/envoy-xds-api/) — The xDS (x Discovery Service) APIs provide dynamic configuration for Envoy proxies via a management server, including LDS, RDS, CDS, EDS, SDS, and ADS. xDS…
+- [Envoy API V3](https://apis.io/apis/envoy/envoy-api-v3/) — The Envoy API v3 is the current stable protobuf-based configuration and extension API for Envoy proxy. It defines the configuration types for all Envoy…
+- [Envoy Gateway API](https://apis.io/apis/envoy/envoy-gateway-api/) — Envoy Gateway manages Envoy Proxy as a standalone or Kubernetes-based application gateway, implementing and extending the Kubernetes Gateway API. It…
+- [Envoy Certificates API](https://apis.io/apis/envoy/envoy-certificates-api/) — TLS certificate inspection endpoints
+- [Envoy Clusters API](https://apis.io/apis/envoy/envoy-clusters-api/) — Upstream cluster inspection and status endpoints
+- [Envoy Configuration API](https://apis.io/apis/envoy/envoy-configuration-api/) — Configuration dump and inspection endpoints
+- [Envoy Health API](https://apis.io/apis/envoy/envoy-health-api/) — Health check management endpoints
+- [Envoy Listeners API](https://apis.io/apis/envoy/envoy-listeners-api/) — Listener inspection and drain endpoints
+- [Envoy Logging API](https://apis.io/apis/envoy/envoy-logging-api/) — Log level management endpoints
+- [Envoy Models API](https://apis.io/apis/envoy/envoy-models-api/) — Model listing endpoints for discovering available AI models configured in the gateway routes.
+- [Envoy Runtime API](https://apis.io/apis/envoy/envoy-runtime-api/) — Runtime settings management endpoints
+- [Envoy Server API](https://apis.io/apis/envoy/envoy-server-api/) — Server management, lifecycle, and information endpoints
+- [Envoy Statistics API](https://apis.io/apis/envoy/envoy-statistics-api/) — Statistics, metrics, and Prometheus endpoints
+- [Envoy Text Completions API](https://apis.io/apis/envoy/envoy-text-completions-api/) — Legacy text completions endpoints compatible with the OpenAI completions API.
+- [Envoy Chat Completions API](https://apis.io/apis/envoy/envoy-chat-completions-api/) — Chat completions endpoints compatible with the OpenAI Chat API. Routes requests to configured AI backends based on AIGatewayRoute rules.
 
-## Timestamps
+### Published properties
 
-- **Created:** 2025-01-01
-- **Modified:** 2026-05-19
+Each property below is a page on APIs.io carrying the machine-readable artifact and what it says.
 
-## APIs
+#### Agentic access (1)
 
-### Envoy Admin API
+Which operations an agent can call, which act, and which need a human in the loop.
 
-The Envoy Admin API provides local administrative access to a running Envoy proxy instance, exposing endpoints for inspecting clusters, listeners, configuration, statistics, health status, and runtime settings.
+- [Envoy Agentic Access](https://apis.io/agentic-access/envoy/envoy-agentic-access/)
 
-- **Human URL:** [https://www.envoyproxy.io/docs/envoy/latest/operations/admin](https://www.envoyproxy.io/docs/envoy/latest/operations/admin)
+#### JSON Schema (4)
 
-#### Tags
+The data models the API reads and writes.
 
-- Admin
-- Management
-- Observability
+- [Envoy Bootstrap Configuration](https://apis.io/schemas/envoy/envoy-bootstrap/)
+- [Envoy Cluster](https://apis.io/schemas/envoy/envoy-cluster/)
+- [Envoy Listener](https://apis.io/schemas/envoy/envoy-listener/)
+- [Envoy Route Configuration](https://apis.io/schemas/envoy/envoy-route-configuration/)
 
-#### Properties
+#### JSON-LD (1)
 
-- [Documentation](https://www.envoyproxy.io/docs/envoy/latest/operations/admin)
-- [OpenAPI](openapi/envoy-admin-api-openapi.yml) — [OpenAPI Specification](https://spec.openapis.org/oas/latest.html)
-- [Postman Collection](collections/envoy-admin-api.postman_collection.json) — [Postman Collection 2.1](https://schema.getpostman.com/json/collection/v2.1.0/collection.json)
-- [Open Collection](collections/envoy-admin-api.opencollection.json) — [Open Collection 1.0](https://schema.opencollection.com/opencollection/v1.0.0.json)
+Linked-data contexts for the provider's vocabulary.
 
-### Envoy xDS APIs
+- [Envoy Context](https://apis.io/jsonld/envoy/envoy-context/)
 
-The xDS (x Discovery Service) APIs provide dynamic configuration for Envoy proxies via a management server, including LDS, RDS, CDS, EDS, SDS, and ADS. xDS APIs are served over gRPC or REST and allow management servers to push Listener, Route, Cluster, Endpoint, and Secret configurations to Envoy proxies at runtime without restarts.
+#### Collections (14)
 
-- **Human URL:** [https://www.envoyproxy.io/docs/envoy/latest/api-docs/xds_protocol](https://www.envoyproxy.io/docs/envoy/latest/api-docs/xds_protocol)
+Postman and Open Collection request collections.
 
-#### Tags
+- [Envoy Admin API](https://apis.io/collections/envoy/open-envoy-admin-api/)
+- [Envoy AI Gateway API](https://apis.io/collections/envoy/open-envoy-ai-gateway/)
+- [Envoy Admin Certificates API](https://apis.io/collections/envoy/open-envoy-certificates-api/)
+- [Envoy Admin Certificates Chat API](https://apis.io/collections/envoy/open-envoy-chat-api/)
+- [Envoy Admin Certificates Clusters API](https://apis.io/collections/envoy/open-envoy-clusters-api/)
+- [Envoy Admin Certificates Configuration API](https://apis.io/collections/envoy/open-envoy-configuration-api/)
+- [Envoy Admin Certificates Health API](https://apis.io/collections/envoy/open-envoy-health-api/)
+- [Envoy Admin Certificates Listeners API](https://apis.io/collections/envoy/open-envoy-listeners-api/)
+- [Envoy Admin Certificates Logging API](https://apis.io/collections/envoy/open-envoy-logging-api/)
+- [Envoy Admin Certificates Models API](https://apis.io/collections/envoy/open-envoy-models-api/)
+- [Envoy Admin Certificates Runtime API](https://apis.io/collections/envoy/open-envoy-runtime-api/)
+- [Envoy Admin Certificates Server API](https://apis.io/collections/envoy/open-envoy-server-api/)
+- [Envoy Admin Certificates Statistics API](https://apis.io/collections/envoy/open-envoy-statistics-api/)
+- [Envoy Admin Certificates Text Completions API](https://apis.io/collections/envoy/open-envoy-text-completions-api/)
 
-- Discovery Service
-- Dynamic Configuration
-- gRPC
-- xDS
+#### Governance rules (1)
 
-#### Properties
+Spectral rulesets for the provider's contracts.
 
-- [Documentation](https://www.envoyproxy.io/docs/envoy/latest/api-docs/xds_protocol)
-- [Reference](https://www.envoyproxy.io/docs/envoy/latest/configuration/overview/xds_api)
-- [GitHub Repository](https://github.com/envoyproxy/envoy)
-- [Postman Collection](collections/envoy-admin-api.postman_collection.json) — [Postman Collection 2.1](https://schema.getpostman.com/json/collection/v2.1.0/collection.json)
-- [Open Collection](collections/envoy-admin-api.opencollection.json) — [Open Collection 1.0](https://schema.opencollection.com/opencollection/v1.0.0.json)
-- [Postman Collection](collections/envoy-ai-gateway.postman_collection.json) — [Postman Collection 2.1](https://schema.getpostman.com/json/collection/v2.1.0/collection.json)
-- [Open Collection](collections/envoy-ai-gateway.opencollection.json) — [Open Collection 1.0](https://schema.opencollection.com/opencollection/v1.0.0.json)
+- [Envoy — jsonschema rules](https://apis.io/rules/envoy/envoy-jsonschema-spectral-rules/)
 
-### Envoy API V3
+#### Security (2)
 
-The Envoy API v3 is the current stable protobuf-based configuration and extension API for Envoy proxy. It defines the configuration types for all Envoy subsystems including listeners, clusters, routes, endpoints, HTTP filters, network filters, transport sockets, and access logging. The API is defined using Protocol Buffers and published in the envoy-api repository.
+Authentication, trust centre, and vulnerability disclosure.
 
-- **Human URL:** [https://www.envoyproxy.io/docs/envoy/latest/api/api](https://www.envoyproxy.io/docs/envoy/latest/api/api)
+- [Envoy Authentication](https://apis.io/security/envoy/envoy-authentication/)
+- [Envoy Domain Security](https://apis.io/security/envoy/envoy-domain-security/)
 
-#### Tags
+#### Plans and pricing (1)
 
-- Configuration
-- Extensions
-- Filters
-- Protobuf
+Published plans, tiers and prices.
 
-#### Properties
+- [Envoy Plans Pricing](https://apis.io/plans/envoy/envoy-plans-pricing/)
 
-- [Documentation](https://www.envoyproxy.io/docs/envoy/latest/api/api)
-- [GitHub Repository](https://github.com/envoyproxy/envoy)
-- [JSON Schema](json-schema/envoy-cluster.json) — [JSON Schema](https://json-schema.org/specification)
-- [JSON Schema](json-schema/envoy-listener.json) — [JSON Schema](https://json-schema.org/specification)
-- [JSON Schema](json-schema/envoy-route-configuration.json) — [JSON Schema](https://json-schema.org/specification)
-- [Postman Collection](collections/envoy-admin-api.postman_collection.json) — [Postman Collection 2.1](https://schema.getpostman.com/json/collection/v2.1.0/collection.json)
-- [Open Collection](collections/envoy-admin-api.opencollection.json) — [Open Collection 1.0](https://schema.opencollection.com/opencollection/v1.0.0.json)
-- [Postman Collection](collections/envoy-ai-gateway.postman_collection.json) — [Postman Collection 2.1](https://schema.getpostman.com/json/collection/v2.1.0/collection.json)
-- [Open Collection](collections/envoy-ai-gateway.opencollection.json) — [Open Collection 1.0](https://schema.opencollection.com/opencollection/v1.0.0.json)
+#### Rate limits (1)
 
-### Envoy Gateway API
+Published request limits.
 
-Envoy Gateway manages Envoy Proxy as a standalone or Kubernetes-based application gateway, implementing and extending the Kubernetes Gateway API. It provides Gateway API extensions including BackendTrafficPolicy, ClientTrafficPolicy, SecurityPolicy, and EnvoyPatchPolicy for advanced traffic management without requiring direct Envoy configuration knowledge.
+- [Envoy Rate Limits](https://apis.io/rate-limits/envoy/envoy-rate-limits/)
 
-- **Human URL:** [https://gateway.envoyproxy.io/](https://gateway.envoyproxy.io/)
+#### FinOps (1)
 
-#### Tags
+What the API costs to run, by operation.
 
-- Cloud Native
-- Gateway
-- Kubernetes
-- Traffic Management
+- [Envoy Finops](https://apis.io/finops/envoy/envoy-finops/)
 
-#### Properties
+## Where to find this API
 
-- [Documentation](https://gateway.envoyproxy.io/docs/)
-- [Reference](https://gateway.envoyproxy.io/docs/concepts/gateway-api/)
-- [Getting Started](https://gateway.envoyproxy.io/docs/)
-- [GitHub Repository](https://github.com/envoyproxy/gateway)
-- [Postman Collection](collections/envoy-admin-api.postman_collection.json) — [Postman Collection 2.1](https://schema.getpostman.com/json/collection/v2.1.0/collection.json)
-- [Open Collection](collections/envoy-admin-api.opencollection.json) — [Open Collection 1.0](https://schema.opencollection.com/opencollection/v1.0.0.json)
-- [Postman Collection](collections/envoy-ai-gateway.postman_collection.json) — [Postman Collection 2.1](https://schema.getpostman.com/json/collection/v2.1.0/collection.json)
-- [Open Collection](collections/envoy-ai-gateway.opencollection.json) — [Open Collection 1.0](https://schema.opencollection.com/opencollection/v1.0.0.json)
+Links to the company's own pages. This repository publishes no copy of their specifications — the canonical document is theirs and lives at the URLs below.
 
-### Envoy AI Gateway API
-
-The Envoy AI Gateway manages unified access to Generative AI services built on Envoy Gateway. It provides OpenAI-compatible and Anthropic-compatible API endpoints for routing LLM traffic across multiple AI backends with backend rate limiting, policy control, and security configuration via Kubernetes custom resources.
-
-- **Human URL:** [https://aigateway.envoyproxy.io/](https://aigateway.envoyproxy.io/)
-
-#### Tags
-
-- AI
-- Cloud Native
-- Gateway
-- LLM
-
-#### Properties
-
-- [Documentation](https://aigateway.envoyproxy.io/docs/)
-- [Reference](https://aigateway.envoyproxy.io/docs/api/)
-- [Getting Started](https://aigateway.envoyproxy.io/docs/getting-started/basic-usage/)
-- [GitHub Repository](https://github.com/envoyproxy/ai-gateway)
-- [Changelog](https://aigateway.envoyproxy.io/release-notes/)
-- [OpenAPI](openapi/envoy-ai-gateway-openapi.yml) — [OpenAPI Specification](https://spec.openapis.org/oas/latest.html)
-- [Postman Collection](collections/envoy-ai-gateway.postman_collection.json) — [Postman Collection 2.1](https://schema.getpostman.com/json/collection/v2.1.0/collection.json)
-- [Open Collection](collections/envoy-ai-gateway.opencollection.json) — [Open Collection 1.0](https://schema.opencollection.com/opencollection/v1.0.0.json)
-
-## Common Properties
-
-- [LinkedIn](https://www.linkedin.com/company/envoy-inc)
 - [Website](https://www.envoyproxy.io/)
 - [Documentation](https://www.envoyproxy.io/docs/envoy/latest/)
-- [Getting Started](https://www.envoyproxy.io/docs/envoy/latest/start/start)
-- [Blog](https://blog.envoyproxy.io/)
+- [Getting started](https://www.envoyproxy.io/docs/envoy/latest/start/start)
 - [Changelog](https://github.com/envoyproxy/envoy/releases)
-- [GitHub Organization](https://github.com/envoyproxy)
-- [GitHub Repository](https://github.com/envoyproxy/envoy)
-- [Community](https://www.envoyproxy.io/community)
-- [JSON Schema](json-schema/envoy-bootstrap.json) — [JSON Schema](https://json-schema.org/specification)
-- [JSON Schema](json-schema/envoy-cluster.json) — [JSON Schema](https://json-schema.org/specification)
-- [JSON Schema](json-schema/envoy-listener.json) — [JSON Schema](https://json-schema.org/specification)
-- [JSON Schema](json-schema/envoy-route-configuration.json) — [JSON Schema](https://json-schema.org/specification)
-- [JSON-LD](json-ld/envoy-context.jsonld) — [JSON-LD](https://www.w3.org/TR/json-ld11/)
+- [Blog](https://blog.envoyproxy.io/)
+- [GitHub](https://github.com/envoyproxy)
 
-## Maintainers
+## API Evangelist rating
 
-**FN:** Kin Lane
-**Email:** kin@apievangelist.com
+**Kin Score 42.6** — developing · rubric 0.25.0 · scored 2026-10-23
+
+| Facet | Score |
+|---|---|
+| Discoverability | 69.6 |
+| Contract quality | 55.9 |
+| Contract governance | 9.8 |
+| Operational transparency | 36.8 |
+| Developer ergonomics | 44.0 |
+| Access clarity | 5.3 |
+
+**Agent readiness 26.0** — agent-aware
+
+| Agent-readiness dimension | Result |
+|---|---|
+| Spec Presence | yes |
+| Agentic Access | derived (partial credit) |
+| Reversibility Documented | documented (partial credit) |
+| MCP Server | — |
+| Auth Clarity | bearer (partial credit) |
+| Idempotency | — |
+| Error Semantics | verified |
+| OpenAPI Examples | — |
+| Rate Limit Signal | derived (partial credit) |
+| Event Surface Described | — |
+| Agent Skills | — |
+| Well Known Catalog | — |
+| Consent Identity | — |
+| Agent Card | — |
+| Dry Run Mode | — |
+| Delegated Identity | — |
+| Protected Resource Metadata | — |
+| Dynamic Client Registration | — |
+| Agentic Commerce | — |
+| Pagination Ratio | — |
+| Operation Distinctiveness | distinct |
+
+**Regulatory alignment 16.7** — Horizontal (data, software, accessibility, platform)
+
+The rubric is published at [github.com/api-evangelist/kin-score](https://github.com/api-evangelist/kin-score). The per-check breakdown behind these numbers — which checks were earned, partial or missed — along with score history and how this provider compares to its peers, is available at [apis.io/providers/envoy/](https://apis.io/providers/envoy/).
+
+## How this profile is made
+
+API Evangelist profiles a company's public API surface the way a developer would find it: the website, developer portal and documentation, the specifications it publishes, its public repositories, and its pricing, status and changelog pages. From that it derives the properties above — contracts split per API, workflows, schemas, collections, governance rules, plans and rate limits — and scores them against the published [Kin Score rubric](https://github.com/api-evangelist/kin-score).
+
+The artifacts are published on [APIs.io](https://apis.io), not in this repository. This repository is the public record for Envoy: the place to say something is wrong, missing or out of date, and to ask for a re-score or a removal.
+
+## Open an issue
+
+- **Something about this listing** — a wrong description, a missing API, a stale artifact or a question about the rating: [open an issue on this repository](https://github.com/api-evangelist/envoy/issues/new).
+- **A new API, or one that is not in the catalog yet** — [submit it on APIs.io](https://apis.io/add/).
+- **Anything else** — [the APIs.io inbox](https://github.com/api-search/inbox/issues/new) or [info@apievangelist.com](mailto:info@apievangelist.com).
